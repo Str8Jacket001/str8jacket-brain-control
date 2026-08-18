@@ -127,6 +127,19 @@ def fmt_date(dt, raw):
 def slug(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
+def gcal_quickadd_url(it):
+    text = it["label"]
+    dt = it["dueParsed"]
+    dates = ""
+    if dt:
+        start = dt.strftime("%Y%m%dT%H%M%S")
+        end = (dt).strftime("%Y%m%dT%H%M%S")
+        dates = f"&dates={start}Z/{end}Z"
+    details = it["context"]
+    import urllib.parse as up
+    return ("https://calendar.google.com/calendar/render?action=TEMPLATE"
+            f"&text={up.quote(text)}{dates}&details={up.quote(details)}")
+
 # ---------- Build task rows (My Top / All) ----------
 def task_row(it, idx):
     lane = it["lane"]
@@ -134,14 +147,20 @@ def task_row(it, idx):
     due_txt = fmt_date(it["dueParsed"], it["dueDate"])
     if it["overdue"]:
         due_txt = "OVERDUE · " + due_txt
+    due_iso = it["dueParsed"].isoformat() if it["dueParsed"] else ""
     detail = esc(it["context"])
-    return f'''<tr class="task-row" data-task-id="{esc(it['actionItemId'])}" data-lane="{esc(lane)}" data-priority="{it['priority']}" data-top="{1 if it['actionItemId'] in top_ids else 0}" data-search="{esc((it['label']+' '+it['context']+' '+it['recordingTitle']).lower())}">
+    at = it["actionType"]
+    if at in ("draft_email", "send_message"):
+        type_cell = f'<button class="type-jump" data-jump-tab="emails" data-jump-target="{esc(it["actionItemId"])}" type="button">{at.replace("_"," ").title()} ↗</button>'
+    else:
+        type_cell = f'<a class="type-jump" href="{esc(gcal_quickadd_url(it))}" target="_blank" rel="noopener">Create Reminder ↗</a>'
+    return f'''<tr class="task-row" data-task-id="{esc(it['actionItemId'])}" data-lane="{esc(lane)}" data-priority="{it['priority']}" data-top="{1 if it['actionItemId'] in top_ids else 0}" data-due="{due_iso}" data-search="{esc((it['label']+' '+it['context']+' '+it['recordingTitle']).lower())}">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark {esc(it['label'])} done"></td>
 <td data-label="Task"><span class="task-number">{idx:02d}</span><span class="task-name">{esc(it['label'])}</span><div class="task-detail">{detail}</div></td>
 <td data-label="Priority"><span class="priority {it['priority']}">{it['priority'].capitalize()}</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="{due_cls}">{due_txt}</span></td>
-<td data-label="Type">{it['actionType'].replace('_',' ').title()}</td>
+<td data-label="Due"><span class="{due_cls}">{due_txt}</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type">{type_cell}</td>
 <td data-label="Lane"><span class="event-dot" style="background:{LANES[lane]['color']}"></span>{esc(lane)}</td>
 </tr>'''
 
@@ -164,18 +183,57 @@ def dep_row(it):
 
 dep_rows_html = "\n".join(dep_row(it) for it in others)
 
-# ---------- Email drafts ----------
+# ---------- Email drafts (editable: inputs + contenteditable body) ----------
 def email_card(it, i):
     subj = esc(it.get("emailSubject") or it["label"])
     body = esc(it.get("emailBody") or "")
-    to = esc(it.get("emailTo") or "(add recipient)")
+    to = esc(it.get("emailTo") or "")
     kind = "Email" if it["actionType"] == "draft_email" else "Message"
-    return f'''<div class="email-row" data-task-id="{esc(it['actionItemId'])}" data-search="{esc((subj+' '+body).lower())}">
-<input type="checkbox" class="sent-check" aria-label="Mark {subj} as sent">
-<div><strong>{subj}</strong><span>{kind} · To: {to}</span><span>{body[:160]}{"…" if len(body)>160 else ""}</span></div>
-</div>'''
+    lane = it["lane"]
+    color = LANES[lane]["color"]
+    return f'''<article class="email-card" id="email-{esc(it['actionItemId'])}" data-task-id="{esc(it['actionItemId'])}" style="--event:{color}" data-search="{esc((subj+' '+body+' '+to).lower())}">
+<div class="email-card-head">
+  <span class="event-dot" style="background:{color}"></span>
+  <strong>{esc(it['label'])}</strong>
+  <span class="kind-badge">{kind}</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark {subj} as sent"> Sent</label>
+</div>
+<div class="email-field"><label>To</label><input class="field email-to" value="{to}" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="{subj}"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true">{body}</div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>'''
 
 email_cards_html = "\n".join(email_card(it, i) for i, it in enumerate(emails+messages))
+
+# ---------- Draft Materials (one editable brief per lane, generated from real tasks) ----------
+def material_card(lane, its):
+    color = LANES[lane]["color"]
+    upcoming = sorted([i for i in its if i["dueParsed"]], key=lambda x: x["dueParsed"])
+    next_due = fmt_date(upcoming[0]["dueParsed"], "") if upcoming else "No date set yet"
+    bullets = "\n".join(f"- {i['label']}" for i in its[:8])
+    headline = lane.upper()
+    subhead = f"{len(its)} open item{'s' if len(its)!=1 else ''} · next due {next_due}"
+    body = bullets
+    mid = slug(lane)
+    return f'''<article class="material-card" id="material-{mid}" style="--material:{color}" data-search="{esc(lane.lower())}">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">{esc(headline)}</h3>
+    <p class="material-subhead" contenteditable="true">{esc(subhead)}</p>
+    <div class="material-body" contenteditable="true">{esc(body)}</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>'''
+
+materials_by_lane = {}
+for it in mine:
+    materials_by_lane.setdefault(it["lane"], []).append(it)
+
+materials_html = "\n".join(material_card(l, its) for l, its in sorted(materials_by_lane.items(), key=lambda x: -len(x[1])))
+
+# ---------- Pomodoro task list (id/title only, used by the focus timer) ----------
+pomo_tasks = [{"id": it["actionItemId"], "title": it["label"], "lane": it["lane"]} for it in mine]
 
 # ---------- Lane filter chips ----------
 lane_counts = {}
@@ -195,7 +253,7 @@ lane_chips_html = "\n".join(lane_chip(l, c, i==0) for i, (l, c) in enumerate(sor
 # ---------- Side progress by lane ----------
 def progress_item(lane, count):
     color = LANES[lane]["color"]
-    return f'''<div class="event-progress-item" data-lane-progress="{esc(lane)}" style="--event:{color}">
+    return f'''<div class="event-progress-item" data-lane-progress="{esc(lane)}" role="button" tabindex="0" style="--event:{color}">
 <div class="progress-row"><strong>{esc(lane)}</strong><span><span class="lp-done">0</span>/{count}</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>'''
@@ -204,26 +262,27 @@ progress_html = "\n".join(progress_item(l, c) for l, c in sorted(lane_counts.ite
 
 # ---------- Calendar (Google Calendar, next ~5 weeks) ----------
 CALENDAR_EVENTS = [
-    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Aug 19 · 12:00 PM ET", lane="Internship", recurring=True),
-    dict(title="Navy Duties — NRC Atlanta", when="Fri, Aug 21 (all day)", lane="Navy Reserve"),
-    dict(title="Drill", when="Sat, Aug 22 (all day)", lane="Navy Reserve"),
-    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Aug 26 · 12:00 PM ET", lane="Internship", recurring=True),
-    dict(title="Monthly Avengers Assembly (EmpowerMEnt)", when="Tue, Sep 1 · 9:30 AM ET", lane="Org Ops & Finance"),
-    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Sep 2 · 12:00 PM ET", lane="Internship", recurring=True),
-    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Sep 9 · 12:00 PM ET", lane="Internship", recurring=True),
-    dict(title="New York trip", when="Sat, Sep 12 (all day)", lane="Vacation & Travel"),
-    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Sep 16 · 12:00 PM ET", lane="Internship", recurring=True),
-    dict(title="Anniversary", when="Thu, Sep 17 (all day)", lane="Personal & Home"),
-    dict(title="Drill Exam / PFA Make-up", when="Sat, Sep 19 (all day)", lane="Navy Reserve"),
-    dict(title="Stover monthly budget", when="Sat, Sep 19 · 8:00 AM ET", lane="Personal & Home"),
+    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Aug 19 · 12:00 PM ET", iso="2026-08-19T16:00:00", lane="Internship", recurring=True),
+    dict(title="Navy Duties — NRC Atlanta", when="Fri, Aug 21 (all day)", iso="2026-08-21T00:00:00", lane="Navy Reserve"),
+    dict(title="Drill", when="Sat, Aug 22 (all day)", iso="2026-08-22T00:00:00", lane="Navy Reserve"),
+    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Aug 26 · 12:00 PM ET", iso="2026-08-26T16:00:00", lane="Internship", recurring=True),
+    dict(title="Monthly Avengers Assembly (EmpowerMEnt)", when="Tue, Sep 1 · 9:30 AM ET", iso="2026-09-01T13:30:00", lane="Org Ops & Finance"),
+    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Sep 2 · 12:00 PM ET", iso="2026-09-02T16:00:00", lane="Internship", recurring=True),
+    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Sep 9 · 12:00 PM ET", iso="2026-09-09T16:00:00", lane="Internship", recurring=True),
+    dict(title="New York trip", when="Sat, Sep 12 (all day)", iso="2026-09-12T00:00:00", lane="Vacation & Travel"),
+    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Sep 16 · 12:00 PM ET", iso="2026-09-16T16:00:00", lane="Internship", recurring=True),
+    dict(title="Anniversary", when="Thu, Sep 17 (all day)", iso="2026-09-17T00:00:00", lane="Personal & Home"),
+    dict(title="Drill Exam / PFA Make-up", when="Sat, Sep 19 (all day)", iso="2026-09-19T00:00:00", lane="Navy Reserve"),
+    dict(title="Stover monthly budget", when="Sat, Sep 19 · 8:00 AM ET", iso="2026-09-19T12:00:00", lane="Personal & Home"),
 ]
 
 def cal_row(ev):
     color = LANES[ev["lane"]]["color"]
     tag = " · weekly" if ev.get("recurring") else ""
-    return f'''<div class="cal-row">
+    return f'''<div class="cal-row" data-due="{ev['iso']}">
 <span class="event-dot" style="background:{color}"></span>
 <div><strong>{esc(ev['title'])}</strong><span>{esc(ev['when'])}{tag} · {esc(ev['lane'])}</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>'''
 
 calendar_html = "\n".join(cal_row(e) for e in CALENDAR_EVENTS)
@@ -265,13 +324,16 @@ out = dict(
     task_rows=task_rows_html,
     dep_rows=dep_rows_html,
     email_cards=email_cards_html,
+    materials=materials_html,
     lane_chips=lane_chips_html,
     progress=progress_html,
     calendar=calendar_html,
     notes=notes_html,
+    pomo_tasks_json=json.dumps(pomo_tasks),
     total_mine=len(mine),
     total_others=len(others),
     total_emails=len(emails)+len(messages),
+    total_materials=len(materials_by_lane),
     overdue_count=sum(1 for it in mine if it["overdue"]),
 )
 

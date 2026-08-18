@@ -149,6 +149,67 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
 .note-summary {{ margin: 0 0 8px; color: var(--muted); font-size: 12px; line-height: 1.4; }}
 .note-card ul {{ margin: 0; padding-left: 18px; color: var(--ink); font-size: 12px; line-height: 1.5; }}
 .notes-legend {{ display: flex; gap: 14px; margin-bottom: 14px; color: var(--muted); font-size: 12px; flex-wrap: wrap; }}
+.event-progress-item[role="button"] {{ cursor: pointer; border-radius: 7px; padding-left: 6px; padding-right: 6px; margin: 0 -6px; transition: background .12s ease; }}
+.event-progress-item[role="button"]:hover {{ background: #eef4fb; }}
+.event-progress-item[aria-pressed="true"] {{ background: #e8f0fb; box-shadow: inset 3px 0 var(--event); }}
+.type-jump {{ display: inline-flex; align-items: center; gap: 4px; padding: 5px 9px; color: var(--navy); background: #eefbfe; border: 1px solid #b8eaf3; border-radius: 5px; font-size: 11px; font-weight: 800; white-space: nowrap; text-decoration: none; }}
+.type-jump:hover {{ background: #dcf3fb; }}
+.soon-badge {{ display: inline-block; margin-top: 4px; padding: 2px 7px; color: #8a5b00; background: #fff2cf; border: 1px solid #f0cf82; border-radius: 999px; font-size: 10px; font-weight: 800; white-space: nowrap; }}
+.task-row.is-soon {{ box-shadow: inset 3px 0 var(--yellow); }}
+.cal-row.is-soon {{ box-shadow: inset 3px 0 var(--yellow); }}
+.email-panel-list {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 14px; align-items: start; }}
+.email-card {{ --event: var(--navy); padding: 14px; background: white; border: 1px solid var(--line); border-left: 4px solid var(--event); border-radius: 10px; }}
+.email-card[data-local-hidden="true"] {{ display: none; }}
+.email-card-head {{ display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }}
+.email-card-head strong {{ flex: 1; color: var(--navy); font-size: 13px; line-height: 1.25; min-width: 120px; }}
+.kind-badge {{ padding: 2px 7px; color: var(--navy); background: var(--soft); border: 1px solid var(--line); border-radius: 999px; font-size: 10px; font-weight: 800; text-transform: uppercase; }}
+.sent-toggle {{ display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; cursor: pointer; }}
+.sent-toggle input {{ width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }}
+.email-card:has(.sent-check:checked) {{ opacity: .55; }}
+.email-field {{ margin-bottom: 9px; }}
+.email-field label {{ display: block; margin-bottom: 3px; color: var(--navy); font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }}
+.email-field .field {{ width: 100%; }}
+.email-body {{ min-height: 90px; line-height: 1.4; font-size: 12px; white-space: pre-wrap; }}
+.email-body:empty::before {{ content: attr(data-placeholder); color: var(--muted); }}
+.email-actions {{ margin-top: 6px; }}
+.materials-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 16px; }}
+.material-card {{ --material: var(--navy); overflow: hidden; border: 1px solid var(--line); border-radius: 10px 10px 3px 10px; background: white; box-shadow: 0 8px 20px rgba(6,27,77,.06); }}
+.material-card[data-local-hidden="true"] {{ display: none; }}
+.material-preview {{ position: relative; overflow: hidden; padding: 20px; color: white; background: linear-gradient(150deg, var(--navy) 0 60%, color-mix(in srgb, var(--material) 82%, #000) 60% 100%); }}
+.material-brand {{ display: block; color: var(--cyan); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }}
+.material-headline {{ margin: 10px 0 6px; font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: 26px; line-height: 1; letter-spacing: .01em; outline: none; }}
+.material-subhead {{ margin: 0 0 12px; color: var(--yellow); font-size: 12px; font-weight: 800; outline: none; }}
+.material-body {{ margin: 0; color: #e6eeff; font-size: 12px; line-height: 1.6; white-space: pre-wrap; outline: none; min-height: 60px; }}
+.material-actions {{ padding: 10px 14px; }}
+.focus-launch {{ position: fixed; z-index: 88; right: 20px; bottom: 20px; display: flex; align-items: center; gap: 10px; padding: 10px 15px 10px 10px; color: white; background: var(--navy); border: 2px solid var(--cyan); border-radius: 999px; box-shadow: 0 14px 32px rgba(6,27,77,.28); font-weight: 900; }}
+.focus-launch:hover {{ background: var(--navy-2); }}
+.focus-launch-icon {{ display: grid; place-items: center; width: 30px; height: 30px; color: var(--navy); background: var(--yellow); border-radius: 50%; font-size: 15px; }}
+.focus-backdrop {{ position: fixed; z-index: 109; inset: 0; background: rgba(6,20,52,.5); opacity: 0; pointer-events: none; transition: opacity .2s ease; }}
+.focus-backdrop.open {{ opacity: 1; pointer-events: auto; }}
+.focus-panel {{ position: fixed; z-index: 110; top: 0; right: 0; bottom: 0; width: min(400px,100vw); overflow-y: auto; color: var(--ink); background: white; box-shadow: -18px 0 50px rgba(6,27,77,.24); transform: translateX(105%); transition: transform .25s ease; }}
+.focus-panel.open {{ transform: translateX(0); }}
+.focus-head {{ display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; color: white; background: var(--navy); }}
+.focus-head h2 {{ margin: 0; font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: 24px; letter-spacing: .02em; text-transform: uppercase; }}
+.focus-head p {{ margin: 3px 0 0; color: var(--cyan); font-size: 11px; font-weight: 800; }}
+.focus-close {{ width: 32px; height: 32px; color: white; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 50%; font-size: 20px; line-height: 1; }}
+.focus-content {{ padding: 18px 20px 26px; }}
+.pomo-modes {{ display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }}
+.pomo-mode {{ min-height: 38px; padding: 7px; color: var(--navy); background: var(--soft); border: 1px solid var(--line); border-radius: 7px; font-size: 11px; font-weight: 900; }}
+.pomo-mode[aria-pressed="true"] {{ color: white; background: var(--navy); border-color: var(--navy); }}
+.timer-ring {{ --timer-pct: 0; display: grid; place-items: center; width: 200px; aspect-ratio: 1; margin: 22px auto 16px; border-radius: 50%; background: conic-gradient(var(--cyan) calc(var(--timer-pct)*1%), #e8edf5 0); }}
+.timer-ring::before {{ content: ""; grid-area: 1/1; width: 172px; aspect-ratio: 1; background: white; border-radius: 50%; }}
+.timer-display {{ z-index: 1; grid-area: 1/1; text-align: center; }}
+.timer-display strong {{ display: block; color: var(--navy); font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: 48px; line-height: 1; font-variant-numeric: tabular-nums; }}
+.timer-display span {{ display: block; margin-top: 6px; color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }}
+.focus-task-box {{ margin: 14px 0; padding: 12px; background: #f7fafd; border: 1px solid var(--line); border-left: 4px solid var(--yellow); border-radius: 8px; }}
+.focus-task-box label {{ display: block; margin-bottom: 6px; color: var(--navy); font-size: 10px; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }}
+.focus-task-box select {{ width: 100%; }}
+.focus-controls {{ display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 8px; }}
+.pomo-stats {{ display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin: 16px 0; }}
+.pomo-stat {{ padding: 10px 6px; background: var(--navy); border-radius: 7px 7px 2px 7px; color: white; text-align: center; }}
+.pomo-stat strong {{ display: block; color: var(--yellow); font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: 22px; }}
+.pomo-stat span {{ display: block; margin-top: 2px; color: #dce8ff; font-size: 9px; text-transform: uppercase; }}
+.focus-empty {{ padding: 14px; color: var(--muted); background: var(--soft); border-radius: 7px; text-align: center; font-size: 11px; }}
 .footer {{ display: flex; justify-content: space-between; gap: 20px; padding: 15px clamp(20px,3vw,48px); color: #dce8ff; background: var(--navy); font-size: 11px; flex-wrap: wrap; }}
 .footer strong {{ color: var(--yellow); }}
 .banner {{ display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 18px; padding: 11px 15px; background: #eefbfe; border: 1px solid #b8eaf3; border-radius: 8px; color: var(--navy); font-size: 12px; flex-wrap: wrap; }}
@@ -204,6 +265,7 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
     <button class="view-tab" id="tab-my" data-view="my" role="tab" aria-selected="true">My Tasks <span class="nav-count">{frag['total_mine']}</span></button>
     <button class="view-tab" id="tab-others" data-view="others" role="tab" aria-selected="false">Waiting on Others <span class="nav-count">{frag['total_others']}</span></button>
     <button class="view-tab" id="tab-emails" data-view="emails" role="tab" aria-selected="false">Follow-ups &amp; Emails <span class="nav-count">{frag['total_emails']}</span></button>
+    <button class="view-tab" id="tab-materials" data-view="materials" role="tab" aria-selected="false">Draft Materials <span class="nav-count">{frag['total_materials']}</span></button>
     <button class="view-tab" id="tab-calendar" data-view="calendar" role="tab" aria-selected="false">Calendar</button>
     <button class="view-tab" id="tab-notes" data-view="notes" role="tab" aria-selected="false">All Notes</button>
   </nav>
@@ -295,11 +357,25 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
       <div class="section-head">
         <div>
           <h2 class="section-title">Follow-ups &amp; Email Drafts</h2>
-          <p class="section-subtitle">Ready-to-send messages pulled from your notes. Check off once sent.</p>
+          <p class="section-subtitle">Edit To / Subject / Body right here — it saves as you type. Check "Sent" once it's out the door.</p>
         </div>
+        <label class="search-wrap"><input class="field" id="emailSearch" type="search" placeholder="Search drafts…"></label>
       </div>
       <div class="email-panel-list" id="emailList" artifact-sync>
 {frag['email_cards']}
+      </div>
+    </section>
+
+    <section class="view" id="view-materials" role="tabpanel" hidden>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Draft Materials</h2>
+          <p class="section-subtitle">One editable brief per lane, built from the real open tasks in it. Edit headline/subhead/body inline.</p>
+        </div>
+        <label class="search-wrap"><input class="field" id="materialSearch" type="search" placeholder="Search materials…"></label>
+      </div>
+      <div class="materials-grid" id="materialsGrid" artifact-sync>
+{frag['materials']}
       </div>
     </section>
 
@@ -341,6 +417,42 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
   </footer>
 </div>
 
+<button class="focus-launch" id="focusLaunch" aria-controls="focusPanel" aria-expanded="false">
+  <span class="focus-launch-icon" aria-hidden="true">⏱</span>
+  <span><span id="focusMiniTime">25:00</span></span>
+</button>
+<div class="focus-backdrop" id="focusBackdrop"></div>
+<aside class="focus-panel" id="focusPanel" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="focus-head">
+    <div><h2>Focus Station</h2><p>One task. One timer.</p></div>
+    <button class="focus-close" id="focusClose" aria-label="Close focus timer">×</button>
+  </div>
+  <div class="focus-content">
+    <div class="pomo-modes">
+      <button class="pomo-mode" data-pomo-mode="focus" aria-pressed="true">Focus • 25</button>
+      <button class="pomo-mode" data-pomo-mode="short" aria-pressed="false">Short • 5</button>
+      <button class="pomo-mode" data-pomo-mode="long" aria-pressed="false">Long • 15</button>
+    </div>
+    <div class="timer-ring" id="timerRing"><div class="timer-display"><strong id="timerText">25:00</strong><span id="timerModeLabel">Focus Session</span></div></div>
+    <div class="focus-task-box">
+      <label for="focusTaskSelect">Task for this session</label>
+      <select class="field" id="focusTaskSelect"></select>
+    </div>
+    <div class="focus-controls">
+      <button class="action-btn" id="timerStart">Start Focus</button>
+      <button class="action-btn secondary" id="timerReset">Reset</button>
+      <button class="action-btn secondary" id="timerSkip">Skip</button>
+    </div>
+    <button class="action-btn secondary" style="width:100%;margin-top:10px" id="completeFocusTask">Check off this task</button>
+    <div class="pomo-stats">
+      <div class="pomo-stat"><strong id="pomoSessionCount">0</strong><span>Sessions</span></div>
+      <div class="pomo-stat"><strong id="pomoMinuteCount">0</strong><span>Minutes</span></div>
+      <div class="pomo-stat"><strong id="pomoCycleCount">0/4</strong><span>Cycle</span></div>
+    </div>
+  </div>
+</aside>
+
+<script>window.__POMO_TASKS__ = {frag['pomo_tasks_json']};</script>
 <script>
 (function () {{
   var taskBody = document.getElementById('taskBody');
@@ -431,28 +543,182 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
     applyFilters();
   }});
 
-  document.querySelectorAll('.view-tab').forEach(function(tab) {{
-    tab.addEventListener('click', function() {{
-      document.querySelectorAll('.view-tab').forEach(function(t) {{ t.setAttribute('aria-selected', 'false'); }});
-      document.querySelectorAll('.view').forEach(function(v) {{ v.hidden = true; }});
-      tab.setAttribute('aria-selected', 'true');
-      document.getElementById('view-' + tab.dataset.view).hidden = false;
-    }});
-  }});
-
-  var notesSearch = document.getElementById('notesSearch');
-  if (notesSearch) {{
-    notesSearch.addEventListener('input', function() {{
-      var q = notesSearch.value.trim().toLowerCase();
-      document.querySelectorAll('.note-card').forEach(function(card) {{
+  function wireSearch(inputId, cardSelector) {{
+    var input = document.getElementById(inputId);
+    if (!input) return;
+    input.addEventListener('input', function() {{
+      var q = input.value.trim().toLowerCase();
+      document.querySelectorAll(cardSelector).forEach(function(card) {{
         card.dataset.localHidden = (!q || card.dataset.search.indexOf(q) !== -1) ? 'false' : 'true';
       }});
     }});
   }}
+  wireSearch('notesSearch', '.note-card');
+  wireSearch('emailSearch', '.email-card');
+  wireSearch('materialSearch', '.material-card');
 
   document.getElementById('refreshBtn').addEventListener('click', function() {{
     alert('This button flags the refresh for Claude to pick up. Automatic hourly refreshes already keep this page current — ask Claude in your session for an instant one if you need it sooner.');
   }});
+
+  // ---- Clickable "Progress by Lane" side panel: syncs with the lane rail filter ----
+  document.getElementById('eventProgress').addEventListener('click', function(e) {{
+    var item = e.target.closest('[data-lane-progress]');
+    if (!item) return;
+    activateLane(item.dataset.laneProgress);
+  }});
+  document.getElementById('eventProgress').addEventListener('keydown', function(e) {{
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var item = e.target.closest('[data-lane-progress]');
+    if (!item) return;
+    e.preventDefault();
+    activateLane(item.dataset.laneProgress);
+  }});
+  function activateLane(lane) {{
+    var chip = document.querySelector('.lane-filter[data-lane="' + CSS.escape(lane) + '"]');
+    var wasOn = chip && chip.getAttribute('aria-pressed') === 'true';
+    document.querySelectorAll('.lane-filter').forEach(function(b) {{ b.setAttribute('aria-pressed', 'false'); }});
+    if (chip && !wasOn) chip.setAttribute('aria-pressed', 'true');
+    document.querySelectorAll('[data-lane-progress]').forEach(function(el) {{
+      el.setAttribute('aria-pressed', String(el.dataset.laneProgress === lane && !wasOn));
+    }});
+    applyFilters();
+    setView('my');
+  }}
+
+  // ---- Tab switching + jump-to helper ----
+  function setView(view) {{
+    document.querySelectorAll('.view-tab').forEach(function(t) {{ t.setAttribute('aria-selected', String(t.dataset.view === view)); }});
+    document.querySelectorAll('.view').forEach(function(v) {{ v.hidden = (v.id !== 'view-' + view); }});
+  }}
+  document.querySelectorAll('.view-tab').forEach(function(tab) {{
+    tab.addEventListener('click', function() {{ setView(tab.dataset.view); }});
+  }});
+
+  // ---- "Type" jump: click a Draft Email / Send Message badge to jump straight to that draft ----
+  document.getElementById('taskBody').addEventListener('click', function(e) {{
+    var btn = e.target.closest('.type-jump[data-jump-tab]');
+    if (!btn) return;
+    setView(btn.dataset.jumpTab);
+    var target = document.getElementById('email-' + btn.dataset.jumpTarget);
+    if (target) {{
+      target.dataset.localHidden = 'false';
+      var search = document.getElementById('emailSearch'); if (search) search.value = '';
+      document.querySelectorAll('.email-card').forEach(function(c) {{ c.dataset.localHidden = 'false'; }});
+      target.scrollIntoView({{behavior: 'smooth', block: 'center'}});
+      target.animate([{{boxShadow: '0 0 0 4px rgba(8,191,230,.55)'}}, {{boxShadow: '0 0 0 0 rgba(8,191,230,0)'}}], {{duration: 1200}});
+    }}
+  }});
+
+  // ---- Coming-up highlight: computed fresh on every load, never synced ----
+  var SOON_DAYS = 14;
+  function markSoon(el) {{
+    var iso = el.dataset.due;
+    if (!iso) return;
+    var due = new Date(iso);
+    var now = new Date();
+    var diffDays = (due - now) / 86400000;
+    var badge = el.querySelector('.soon-badge');
+    if (diffDays >= 0 && diffDays <= SOON_DAYS) {{
+      el.classList.add('is-soon');
+      if (badge) {{ badge.hidden = false; badge.textContent = '⏳ ' + Math.ceil(diffDays) + 'd out'; }}
+    }}
+  }}
+  document.querySelectorAll('.task-row[data-due]').forEach(markSoon);
+  document.querySelectorAll('.cal-row[data-due]').forEach(markSoon);
+
+  // ---- Copy buttons (email + material) ----
+  function copyText(text, btn) {{
+    var done = function() {{ var old = btn.textContent; btn.textContent = 'Copied ✓'; setTimeout(function() {{ btn.textContent = old; }}, 1500); }};
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done); else done();
+  }}
+  document.getElementById('emailList').addEventListener('click', function(e) {{
+    var btn = e.target.closest('.copy-email-btn');
+    if (!btn) return;
+    var card = btn.closest('.email-card');
+    var to = card.querySelector('.email-to').value;
+    var subj = card.querySelector('.email-subject').value;
+    var body = card.querySelector('.email-body').innerText;
+    copyText('To: ' + to + '\\nSubject: ' + subj + '\\n\\n' + body, btn);
+  }});
+  document.getElementById('materialsGrid').addEventListener('click', function(e) {{
+    var btn = e.target.closest('.copy-material-btn');
+    if (!btn) return;
+    var card = btn.closest('.material-card');
+    var text = card.querySelector('.material-headline').innerText + '\\n' + card.querySelector('.material-subhead').innerText + '\\n\\n' + card.querySelector('.material-body').innerText;
+    copyText(text, btn);
+  }});
+
+  // ---- Pomodoro focus timer (per-browser via localStorage; not part of the shared doc) ----
+  (function () {{
+    var DURATIONS = {{focus: 25*60, short: 5*60, long: 15*60}};
+    var KEY = 'sjbc-pomo-v1';
+    var state = Object.assign({{mode: 'focus', remaining: DURATIONS.focus, running: false, endAt: null, sessions: 0, selectedTask: null}}, JSON.parse(localStorage.getItem(KEY) || '{{}}'));
+    var tasks = window.__POMO_TASKS__ || [];
+    var sel = document.getElementById('focusTaskSelect');
+    sel.innerHTML = tasks.map(function(t) {{ return '<option value="' + t.id + '">' + (t.title.length > 46 ? t.title.slice(0,46) + '…' : t.title) + '</option>'; }}).join('');
+    if (state.selectedTask && tasks.some(function(t) {{ return t.id === state.selectedTask; }})) sel.value = state.selectedTask;
+    else if (tasks.length) state.selectedTask = tasks[0].id;
+
+    function save() {{ localStorage.setItem(KEY, JSON.stringify(state)); }}
+    function fmt(sec) {{ sec = Math.max(0, Math.ceil(sec)); return String(Math.floor(sec/60)).padStart(2,'0') + ':' + String(sec%60).padStart(2,'0'); }}
+    function label(mode) {{ return mode === 'focus' ? 'Focus Session' : mode === 'short' ? 'Short Break' : 'Long Break'; }}
+    function render() {{
+      if (state.running && state.endAt) state.remaining = Math.max(0, Math.ceil((state.endAt - Date.now())/1000));
+      var total = DURATIONS[state.mode];
+      var pct = total ? Math.min(100, Math.max(0, (1 - state.remaining/total) * 100)) : 0;
+      var t = fmt(state.remaining);
+      document.getElementById('timerRing').style.setProperty('--timer-pct', pct);
+      document.getElementById('timerText').textContent = t;
+      document.getElementById('timerModeLabel').textContent = label(state.mode);
+      document.getElementById('focusMiniTime').textContent = t;
+      document.getElementById('timerStart').textContent = state.running ? 'Pause' : (state.mode === 'focus' ? 'Start Focus' : 'Start Break');
+      document.getElementById('pomoSessionCount').textContent = state.sessions;
+      document.getElementById('pomoMinuteCount').textContent = state.sessions * 25;
+      document.getElementById('pomoCycleCount').textContent = (state.sessions % 4) + '/4';
+      document.querySelectorAll('.pomo-mode').forEach(function(b) {{ b.setAttribute('aria-pressed', String(b.dataset.pomoMode === state.mode)); }});
+    }}
+    function setMode(mode) {{ state.mode = mode; state.running = false; state.endAt = null; state.remaining = DURATIONS[mode]; save(); render(); }}
+    function toggle() {{
+      if (state.running) {{ state.remaining = Math.max(0, Math.ceil((state.endAt - Date.now())/1000)); state.running = false; state.endAt = null; }}
+      else {{ if (state.remaining <= 0) state.remaining = DURATIONS[state.mode]; state.running = true; state.endAt = Date.now() + state.remaining*1000; }}
+      save(); render();
+    }}
+    function complete() {{
+      if (state.mode === 'focus') state.sessions += 1;
+      var next = state.mode === 'focus' ? (state.sessions % 4 === 0 ? 'long' : 'short') : 'focus';
+      state.mode = next; state.remaining = DURATIONS[next]; state.running = false; state.endAt = null;
+      save(); render();
+    }}
+    document.getElementById('focusLaunch').addEventListener('click', function() {{
+      document.getElementById('focusPanel').classList.add('open');
+      document.getElementById('focusBackdrop').classList.add('open');
+      document.getElementById('focusPanel').setAttribute('aria-hidden', 'false');
+    }});
+    function closeFocus() {{
+      document.getElementById('focusPanel').classList.remove('open');
+      document.getElementById('focusBackdrop').classList.remove('open');
+      document.getElementById('focusPanel').setAttribute('aria-hidden', 'true');
+    }}
+    document.getElementById('focusClose').addEventListener('click', closeFocus);
+    document.getElementById('focusBackdrop').addEventListener('click', closeFocus);
+    document.querySelectorAll('.pomo-mode').forEach(function(b) {{ b.addEventListener('click', function() {{ setMode(b.dataset.pomoMode); }}); }});
+    document.getElementById('timerStart').addEventListener('click', toggle);
+    document.getElementById('timerReset').addEventListener('click', function() {{ state.running = false; state.endAt = null; state.remaining = DURATIONS[state.mode]; save(); render(); }});
+    document.getElementById('timerSkip').addEventListener('click', complete);
+    sel.addEventListener('change', function() {{ state.selectedTask = sel.value; save(); }});
+    document.getElementById('completeFocusTask').addEventListener('click', function() {{
+      var row = document.querySelector('.task-row[data-task-id="' + sel.value + '"]');
+      if (row) {{ var cb = row.querySelector('.check'); if (cb && !cb.checked) {{ cb.checked = true; cb.dispatchEvent(new Event('change', {{bubbles: true}})); }} }}
+    }});
+    setInterval(function() {{
+      if (!state.running) return;
+      var remaining = Math.max(0, Math.ceil((state.endAt - Date.now())/1000));
+      if (remaining !== state.remaining) {{ state.remaining = remaining; render(); }}
+      if (remaining <= 0) complete();
+    }}, 250);
+    render();
+  }})();
 
   recompute();
   applyFilters();

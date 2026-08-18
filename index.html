@@ -144,6 +144,67 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 .note-summary { margin: 0 0 8px; color: var(--muted); font-size: 12px; line-height: 1.4; }
 .note-card ul { margin: 0; padding-left: 18px; color: var(--ink); font-size: 12px; line-height: 1.5; }
 .notes-legend { display: flex; gap: 14px; margin-bottom: 14px; color: var(--muted); font-size: 12px; flex-wrap: wrap; }
+.event-progress-item[role="button"] { cursor: pointer; border-radius: 7px; padding-left: 6px; padding-right: 6px; margin: 0 -6px; transition: background .12s ease; }
+.event-progress-item[role="button"]:hover { background: #eef4fb; }
+.event-progress-item[aria-pressed="true"] { background: #e8f0fb; box-shadow: inset 3px 0 var(--event); }
+.type-jump { display: inline-flex; align-items: center; gap: 4px; padding: 5px 9px; color: var(--navy); background: #eefbfe; border: 1px solid #b8eaf3; border-radius: 5px; font-size: 11px; font-weight: 800; white-space: nowrap; text-decoration: none; }
+.type-jump:hover { background: #dcf3fb; }
+.soon-badge { display: inline-block; margin-top: 4px; padding: 2px 7px; color: #8a5b00; background: #fff2cf; border: 1px solid #f0cf82; border-radius: 999px; font-size: 10px; font-weight: 800; white-space: nowrap; }
+.task-row.is-soon { box-shadow: inset 3px 0 var(--yellow); }
+.cal-row.is-soon { box-shadow: inset 3px 0 var(--yellow); }
+.email-panel-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 14px; align-items: start; }
+.email-card { --event: var(--navy); padding: 14px; background: white; border: 1px solid var(--line); border-left: 4px solid var(--event); border-radius: 10px; }
+.email-card[data-local-hidden="true"] { display: none; }
+.email-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.email-card-head strong { flex: 1; color: var(--navy); font-size: 13px; line-height: 1.25; min-width: 120px; }
+.kind-badge { padding: 2px 7px; color: var(--navy); background: var(--soft); border: 1px solid var(--line); border-radius: 999px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.sent-toggle { display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+.sent-toggle input { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
+.email-card:has(.sent-check:checked) { opacity: .55; }
+.email-field { margin-bottom: 9px; }
+.email-field label { display: block; margin-bottom: 3px; color: var(--navy); font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.email-field .field { width: 100%; }
+.email-body { min-height: 90px; line-height: 1.4; font-size: 12px; white-space: pre-wrap; }
+.email-body:empty::before { content: attr(data-placeholder); color: var(--muted); }
+.email-actions { margin-top: 6px; }
+.materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 16px; }
+.material-card { --material: var(--navy); overflow: hidden; border: 1px solid var(--line); border-radius: 10px 10px 3px 10px; background: white; box-shadow: 0 8px 20px rgba(6,27,77,.06); }
+.material-card[data-local-hidden="true"] { display: none; }
+.material-preview { position: relative; overflow: hidden; padding: 20px; color: white; background: linear-gradient(150deg, var(--navy) 0 60%, color-mix(in srgb, var(--material) 82%, #000) 60% 100%); }
+.material-brand { display: block; color: var(--cyan); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.material-headline { margin: 10px 0 6px; font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: 26px; line-height: 1; letter-spacing: .01em; outline: none; }
+.material-subhead { margin: 0 0 12px; color: var(--yellow); font-size: 12px; font-weight: 800; outline: none; }
+.material-body { margin: 0; color: #e6eeff; font-size: 12px; line-height: 1.6; white-space: pre-wrap; outline: none; min-height: 60px; }
+.material-actions { padding: 10px 14px; }
+.focus-launch { position: fixed; z-index: 88; right: 20px; bottom: 20px; display: flex; align-items: center; gap: 10px; padding: 10px 15px 10px 10px; color: white; background: var(--navy); border: 2px solid var(--cyan); border-radius: 999px; box-shadow: 0 14px 32px rgba(6,27,77,.28); font-weight: 900; }
+.focus-launch:hover { background: var(--navy-2); }
+.focus-launch-icon { display: grid; place-items: center; width: 30px; height: 30px; color: var(--navy); background: var(--yellow); border-radius: 50%; font-size: 15px; }
+.focus-backdrop { position: fixed; z-index: 109; inset: 0; background: rgba(6,20,52,.5); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.focus-backdrop.open { opacity: 1; pointer-events: auto; }
+.focus-panel { position: fixed; z-index: 110; top: 0; right: 0; bottom: 0; width: min(400px,100vw); overflow-y: auto; color: var(--ink); background: white; box-shadow: -18px 0 50px rgba(6,27,77,.24); transform: translateX(105%); transition: transform .25s ease; }
+.focus-panel.open { transform: translateX(0); }
+.focus-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; color: white; background: var(--navy); }
+.focus-head h2 { margin: 0; font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: 24px; letter-spacing: .02em; text-transform: uppercase; }
+.focus-head p { margin: 3px 0 0; color: var(--cyan); font-size: 11px; font-weight: 800; }
+.focus-close { width: 32px; height: 32px; color: white; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 50%; font-size: 20px; line-height: 1; }
+.focus-content { padding: 18px 20px 26px; }
+.pomo-modes { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+.pomo-mode { min-height: 38px; padding: 7px; color: var(--navy); background: var(--soft); border: 1px solid var(--line); border-radius: 7px; font-size: 11px; font-weight: 900; }
+.pomo-mode[aria-pressed="true"] { color: white; background: var(--navy); border-color: var(--navy); }
+.timer-ring { --timer-pct: 0; display: grid; place-items: center; width: 200px; aspect-ratio: 1; margin: 22px auto 16px; border-radius: 50%; background: conic-gradient(var(--cyan) calc(var(--timer-pct)*1%), #e8edf5 0); }
+.timer-ring::before { content: ""; grid-area: 1/1; width: 172px; aspect-ratio: 1; background: white; border-radius: 50%; }
+.timer-display { z-index: 1; grid-area: 1/1; text-align: center; }
+.timer-display strong { display: block; color: var(--navy); font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: 48px; line-height: 1; font-variant-numeric: tabular-nums; }
+.timer-display span { display: block; margin-top: 6px; color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }
+.focus-task-box { margin: 14px 0; padding: 12px; background: #f7fafd; border: 1px solid var(--line); border-left: 4px solid var(--yellow); border-radius: 8px; }
+.focus-task-box label { display: block; margin-bottom: 6px; color: var(--navy); font-size: 10px; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
+.focus-task-box select { width: 100%; }
+.focus-controls { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 8px; }
+.pomo-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin: 16px 0; }
+.pomo-stat { padding: 10px 6px; background: var(--navy); border-radius: 7px 7px 2px 7px; color: white; text-align: center; }
+.pomo-stat strong { display: block; color: var(--yellow); font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: 22px; }
+.pomo-stat span { display: block; margin-top: 2px; color: #dce8ff; font-size: 9px; text-transform: uppercase; }
+.focus-empty { padding: 14px; color: var(--muted); background: var(--soft); border-radius: 7px; text-align: center; font-size: 11px; }
 .footer { display: flex; justify-content: space-between; gap: 20px; padding: 15px clamp(20px,3vw,48px); color: #dce8ff; background: var(--navy); font-size: 11px; flex-wrap: wrap; }
 .footer strong { color: var(--yellow); }
 .banner { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 18px; padding: 11px 15px; background: #eefbfe; border: 1px solid #b8eaf3; border-radius: 8px; color: var(--navy); font-size: 12px; flex-wrap: wrap; }
@@ -199,6 +260,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
     <button class="view-tab" id="tab-my" data-view="my" role="tab" aria-selected="true">My Tasks <span class="nav-count">47</span></button>
     <button class="view-tab" id="tab-others" data-view="others" role="tab" aria-selected="false">Waiting on Others <span class="nav-count">11</span></button>
     <button class="view-tab" id="tab-emails" data-view="emails" role="tab" aria-selected="false">Follow-ups &amp; Emails <span class="nav-count">13</span></button>
+    <button class="view-tab" id="tab-materials" data-view="materials" role="tab" aria-selected="false">Draft Materials <span class="nav-count">13</span></button>
     <button class="view-tab" id="tab-calendar" data-view="calendar" role="tab" aria-selected="false">Calendar</button>
     <button class="view-tab" id="tab-notes" data-view="notes" role="tab" aria-selected="false">All Notes</button>
   </nav>
@@ -296,427 +358,427 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
           <table>
             <thead><tr><th></th><th>Task</th><th>Priority</th><th>Owner</th><th>Due</th><th>Type</th><th>Lane</th></tr></thead>
             <tbody id="taskBody" artifact-sync>
-<tr class="task-row" data-task-id="c6effe1b-713a-48f1-8937-25415a547407" data-lane="Leadership Retreat" data-priority="medium" data-top="1" data-search="purchase retreat ingredients and supplies retreat logistics and food planning. re: re: orientation recap locked in 2026 | the woods (follow up &amp; teams)">
+<tr class="task-row" data-task-id="c6effe1b-713a-48f1-8937-25415a547407" data-lane="Leadership Retreat" data-priority="medium" data-top="1" data-due="2026-07-13T00:00:00+00:00" data-search="purchase retreat ingredients and supplies retreat logistics and food planning. re: re: orientation recap locked in 2026 | the woods (follow up &amp; teams)">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Purchase retreat ingredients and supplies done"></td>
 <td data-label="Task"><span class="task-number">01</span><span class="task-name">Purchase retreat ingredients and supplies</span><div class="task-detail">Retreat logistics and food planning.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 13, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 13, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Purchase%20retreat%20ingredients%20and%20supplies&amp;dates=20260713T000000Z/20260713T000000Z&amp;details=Retreat%20logistics%20and%20food%20planning." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--navy)"></span>Leadership Retreat</td>
 </tr>
-<tr class="task-row" data-task-id="18de8d51-9a9d-4eaf-9006-ec9e16d6bce0" data-lane="Leadership Retreat" data-priority="high" data-top="1" data-search="connect darnell with na foundation supporting a youth leader in housing crisis. payroll schedule and retreat prep">
+<tr class="task-row" data-task-id="18de8d51-9a9d-4eaf-9006-ec9e16d6bce0" data-lane="Leadership Retreat" data-priority="high" data-top="1" data-due="2026-07-14T00:00:00+00:00" data-search="connect darnell with na foundation supporting a youth leader in housing crisis. payroll schedule and retreat prep">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Connect Darnell with NA Foundation done"></td>
 <td data-label="Task"><span class="task-number">02</span><span class="task-name">Connect Darnell with NA Foundation</span><div class="task-detail">Supporting a youth leader in housing crisis.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 14, 2026</span></td>
-<td data-label="Type">Send Message</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 14, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="18de8d51-9a9d-4eaf-9006-ec9e16d6bce0" type="button">Send Message ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--navy)"></span>Leadership Retreat</td>
 </tr>
-<tr class="task-row" data-task-id="be6ba35d-d1fe-4eed-89f5-964c4ce71007" data-lane="Leadership Retreat" data-priority="high" data-top="1" data-search="follow up with brooklyn and reggie youth leadership retreat accountability. payroll schedule and retreat prep">
+<tr class="task-row" data-task-id="be6ba35d-d1fe-4eed-89f5-964c4ce71007" data-lane="Leadership Retreat" data-priority="high" data-top="1" data-due="2026-07-15T00:00:00+00:00" data-search="follow up with brooklyn and reggie youth leadership retreat accountability. payroll schedule and retreat prep">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Follow up with Brooklyn and Reggie done"></td>
 <td data-label="Task"><span class="task-number">03</span><span class="task-name">Follow up with Brooklyn and Reggie</span><div class="task-detail">Youth leadership retreat accountability.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 15, 2026</span></td>
-<td data-label="Type">Send Message</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 15, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="be6ba35d-d1fe-4eed-89f5-964c4ce71007" type="button">Send Message ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--navy)"></span>Leadership Retreat</td>
 </tr>
-<tr class="task-row" data-task-id="2ba97765-66de-4757-9b61-389af6840149" data-lane="Leadership Retreat" data-priority="medium" data-top="1" data-search="confirm suv/van rental size retreat transportation logistics. payroll schedule and retreat prep">
+<tr class="task-row" data-task-id="2ba97765-66de-4757-9b61-389af6840149" data-lane="Leadership Retreat" data-priority="medium" data-top="1" data-due="2026-07-15T00:00:00+00:00" data-search="confirm suv/van rental size retreat transportation logistics. payroll schedule and retreat prep">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Confirm SUV/Van rental size done"></td>
 <td data-label="Task"><span class="task-number">04</span><span class="task-name">Confirm SUV/Van rental size</span><div class="task-detail">Retreat transportation logistics.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 15, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 15, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Confirm%20SUV/Van%20rental%20size&amp;dates=20260715T000000Z/20260715T000000Z&amp;details=Retreat%20transportation%20logistics." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--navy)"></span>Leadership Retreat</td>
 </tr>
-<tr class="task-row" data-task-id="1fb263cd-1dbe-4358-a1eb-fdcb8c5061a9" data-lane="Leadership Retreat" data-priority="high" data-top="1" data-search="finalize retreat logistics anthony needs to finalize the logistics for the leadership retreat. leadership retreat planning walkthrough">
+<tr class="task-row" data-task-id="1fb263cd-1dbe-4358-a1eb-fdcb8c5061a9" data-lane="Leadership Retreat" data-priority="high" data-top="1" data-due="2026-07-15T00:00:00+00:00" data-search="finalize retreat logistics anthony needs to finalize the logistics for the leadership retreat. leadership retreat planning walkthrough">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Finalize retreat logistics done"></td>
 <td data-label="Task"><span class="task-number">05</span><span class="task-name">Finalize retreat logistics</span><div class="task-detail">Anthony needs to finalize the logistics for the leadership retreat.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 15, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 15, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Finalize%20retreat%20logistics&amp;dates=20260715T000000Z/20260715T000000Z&amp;details=Anthony%20needs%20to%20finalize%20the%20logistics%20for%20the%20leadership%20retreat." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--navy)"></span>Leadership Retreat</td>
 </tr>
-<tr class="task-row" data-task-id="37c64eb0-a5f0-4bbd-a412-88c676a34892" data-lane="Leadership Retreat" data-priority="high" data-top="1" data-search="finish leadership retreat prep and empower hour materials anthony needs to finalize his own tasks before the upcoming leadership retreat. updating foster youth resource hub form">
+<tr class="task-row" data-task-id="37c64eb0-a5f0-4bbd-a412-88c676a34892" data-lane="Leadership Retreat" data-priority="high" data-top="1" data-due="2026-07-16T00:00:00+00:00" data-search="finish leadership retreat prep and empower hour materials anthony needs to finalize his own tasks before the upcoming leadership retreat. updating foster youth resource hub form">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Finish leadership retreat prep and Empower Hour materials done"></td>
 <td data-label="Task"><span class="task-number">06</span><span class="task-name">Finish leadership retreat prep and Empower Hour materials</span><div class="task-detail">Anthony needs to finalize his own tasks before the upcoming leadership retreat.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 16, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 16, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Finish%20leadership%20retreat%20prep%20and%20Empower%20Hour%20materials&amp;dates=20260716T000000Z/20260716T000000Z&amp;details=Anthony%20needs%20to%20finalize%20his%20own%20tasks%20before%20the%20upcoming%20leadership%20retreat." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--navy)"></span>Leadership Retreat</td>
 </tr>
-<tr class="task-row" data-task-id="c7beaa74-2b46-4112-b55e-d4506858fe53" data-lane="Youth Support" data-priority="medium" data-top="1" data-search="email resource hub documentation to colleague anthony is helping a colleague fill out a resource hub spreadsheet for foster youth services. updating foster youth resource hub form">
+<tr class="task-row" data-task-id="c7beaa74-2b46-4112-b55e-d4506858fe53" data-lane="Youth Support" data-priority="medium" data-top="1" data-due="2026-07-16T00:00:00+00:00" data-search="email resource hub documentation to colleague anthony is helping a colleague fill out a resource hub spreadsheet for foster youth services. updating foster youth resource hub form">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Email resource hub documentation to colleague done"></td>
 <td data-label="Task"><span class="task-number">07</span><span class="task-name">Email resource hub documentation to colleague</span><div class="task-detail">Anthony is helping a colleague fill out a resource hub spreadsheet for foster youth services.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 16, 2026</span></td>
-<td data-label="Type">Draft Email</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 16, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="c7beaa74-2b46-4112-b55e-d4506858fe53" type="button">Draft Email ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--coral)"></span>Youth Support</td>
 </tr>
-<tr class="task-row" data-task-id="c204d562-9a2a-4afa-a83f-6baeb5e2f703" data-lane="Leadership Retreat" data-priority="medium" data-top="1" data-search="purchase retreat food and supplies retreat food logistics. payroll schedule and retreat prep">
+<tr class="task-row" data-task-id="c204d562-9a2a-4afa-a83f-6baeb5e2f703" data-lane="Leadership Retreat" data-priority="medium" data-top="1" data-due="2026-07-16T00:00:00+00:00" data-search="purchase retreat food and supplies retreat food logistics. payroll schedule and retreat prep">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Purchase retreat food and supplies done"></td>
 <td data-label="Task"><span class="task-number">08</span><span class="task-name">Purchase retreat food and supplies</span><div class="task-detail">Retreat food logistics.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 16, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 16, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Purchase%20retreat%20food%20and%20supplies&amp;dates=20260716T000000Z/20260716T000000Z&amp;details=Retreat%20food%20logistics." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--navy)"></span>Leadership Retreat</td>
 </tr>
-<tr class="task-row" data-task-id="7b941858-de48-4360-853a-58ebd2666b52" data-lane="Leadership Retreat" data-priority="low" data-top="0" data-search="check cabin hygiene supplies on arrival retreat logistics and safety. payroll schedule and retreat prep">
+<tr class="task-row" data-task-id="7b941858-de48-4360-853a-58ebd2666b52" data-lane="Leadership Retreat" data-priority="low" data-top="0" data-due="2026-07-16T00:00:00+00:00" data-search="check cabin hygiene supplies on arrival retreat logistics and safety. payroll schedule and retreat prep">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Check cabin hygiene supplies on arrival done"></td>
 <td data-label="Task"><span class="task-number">09</span><span class="task-name">Check cabin hygiene supplies on arrival</span><div class="task-detail">Retreat logistics and safety.</div></td>
 <td data-label="Priority"><span class="priority low">Low</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 16, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 16, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Check%20cabin%20hygiene%20supplies%20on%20arrival&amp;dates=20260716T000000Z/20260716T000000Z&amp;details=Retreat%20logistics%20and%20safety." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--navy)"></span>Leadership Retreat</td>
 </tr>
-<tr class="task-row" data-task-id="a119684e-b106-4aa6-8e2a-43f626c6a2c6" data-lane="Personal &amp; Home" data-priority="medium" data-top="1" data-search="update vet on samson&#x27;s progress samson&#x27;s veterinary follow-up regarding his neck and breathing. follow-up dog neck and x-ray plan">
+<tr class="task-row" data-task-id="a119684e-b106-4aa6-8e2a-43f626c6a2c6" data-lane="Personal &amp; Home" data-priority="medium" data-top="1" data-due="2026-07-24T00:00:00+00:00" data-search="update vet on samson&#x27;s progress samson&#x27;s veterinary follow-up regarding his neck and breathing. follow-up dog neck and x-ray plan">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Update vet on Samson&#x27;s progress done"></td>
 <td data-label="Task"><span class="task-number">10</span><span class="task-name">Update vet on Samson&#x27;s progress</span><div class="task-detail">Samson&#x27;s veterinary follow-up regarding his neck and breathing.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 24, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 24, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Update%20vet%20on%20Samson%27s%20progress&amp;dates=20260724T000000Z/20260724T000000Z&amp;details=Samson%27s%20veterinary%20follow-up%20regarding%20his%20neck%20and%20breathing." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#8b4bd7"></span>Personal &amp; Home</td>
 </tr>
-<tr class="task-row" data-task-id="db24bc89-6c3a-44d6-987e-534d5558a04e" data-lane="Personal &amp; Home" data-priority="medium" data-top="1" data-search="update vet on samson&#x27;s progress (mobility) samson&#x27;s veterinary visit regarding mobility and liver enzymes. dog meds and joint treatment plan">
+<tr class="task-row" data-task-id="db24bc89-6c3a-44d6-987e-534d5558a04e" data-lane="Personal &amp; Home" data-priority="medium" data-top="1" data-due="2026-07-24T00:00:00+00:00" data-search="update vet on samson&#x27;s progress (mobility) samson&#x27;s veterinary visit regarding mobility and liver enzymes. dog meds and joint treatment plan">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Update vet on Samson&#x27;s progress (mobility) done"></td>
 <td data-label="Task"><span class="task-number">11</span><span class="task-name">Update vet on Samson&#x27;s progress (mobility)</span><div class="task-detail">Samson&#x27;s veterinary visit regarding mobility and liver enzymes.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 24, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 24, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Update%20vet%20on%20Samson%27s%20progress%20%28mobility%29&amp;dates=20260724T000000Z/20260724T000000Z&amp;details=Samson%27s%20veterinary%20visit%20regarding%20mobility%20and%20liver%20enzymes." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#8b4bd7"></span>Personal &amp; Home</td>
 </tr>
-<tr class="task-row" data-task-id="f88d1ba8-6bff-4862-8524-58477ce535db" data-lane="Personal &amp; Home" data-priority="medium" data-top="1" data-search="administer samson&#x27;s medication loading dose veterinary visit for samson regarding mobility issues. samson joint pain and treatment plan">
+<tr class="task-row" data-task-id="f88d1ba8-6bff-4862-8524-58477ce535db" data-lane="Personal &amp; Home" data-priority="medium" data-top="1" data-due="2026-07-28T00:00:00+00:00" data-search="administer samson&#x27;s medication loading dose veterinary visit for samson regarding mobility issues. samson joint pain and treatment plan">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Administer Samson&#x27;s medication loading dose done"></td>
 <td data-label="Task"><span class="task-number">12</span><span class="task-name">Administer Samson&#x27;s medication loading dose</span><div class="task-detail">Veterinary visit for Samson regarding mobility issues.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 28, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 28, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Administer%20Samson%27s%20medication%20loading%20dose&amp;dates=20260728T000000Z/20260728T000000Z&amp;details=Veterinary%20visit%20for%20Samson%20regarding%20mobility%20issues." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#8b4bd7"></span>Personal &amp; Home</td>
 </tr>
-<tr class="task-row" data-task-id="0bb31d2a-e491-4cf9-8742-5f8778d34c06" data-lane="Org Ops &amp; Finance" data-priority="medium" data-top="1" data-search="email devin rudy for child tax credit form iman mentioned a form for the child tax credit available through georgia empowerment. georgia empowerment introduction discussion">
+<tr class="task-row" data-task-id="0bb31d2a-e491-4cf9-8742-5f8778d34c06" data-lane="Org Ops &amp; Finance" data-priority="medium" data-top="1" data-due="2026-07-31T00:00:00+00:00" data-search="email devin rudy for child tax credit form iman mentioned a form for the child tax credit available through georgia empowerment. georgia empowerment introduction discussion">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Email Devin Rudy for Child Tax Credit form done"></td>
 <td data-label="Task"><span class="task-number">13</span><span class="task-name">Email Devin Rudy for Child Tax Credit form</span><div class="task-detail">Iman mentioned a form for the Child Tax Credit available through Georgia EmpowerMEnt.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Jul 31, 2026</span></td>
-<td data-label="Type">Draft Email</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Jul 31, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="0bb31d2a-e491-4cf9-8742-5f8778d34c06" type="button">Draft Email ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--green)"></span>Org Ops &amp; Finance</td>
 </tr>
-<tr class="task-row" data-task-id="cd8bda42-a5bc-4ec9-a027-4879923d8c7b" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="1" data-search="get partner agency list from renee the user needs to coordinate with renee to get the list of partner agencies and volunteer tasks. academy day format and scheduling review">
+<tr class="task-row" data-task-id="cd8bda42-a5bc-4ec9-a027-4879923d8c7b" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="1" data-due="2026-08-03T00:00:00+00:00" data-search="get partner agency list from renee the user needs to coordinate with renee to get the list of partner agencies and volunteer tasks. academy day format and scheduling review">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Get partner agency list from Renee done"></td>
 <td data-label="Task"><span class="task-number">14</span><span class="task-name">Get partner agency list from Renee</span><div class="task-detail">The user needs to coordinate with Renee to get the list of partner agencies and volunteer tasks.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Aug 3, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Aug 3, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Get%20partner%20agency%20list%20from%20Renee&amp;dates=20260803T000000Z/20260803T000000Z&amp;details=The%20user%20needs%20to%20coordinate%20with%20Renee%20to%20get%20the%20list%20of%20partner%20agencies%20and%20volunteer%20tasks." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--purple)"></span>Ambassadors &amp; Regions</td>
 </tr>
-<tr class="task-row" data-task-id="cfe9c398-bda8-408b-8b1f-11c37072f883" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="1" data-search="remind team about social responsibility day regarding the upcoming social responsibility day on august 7th. academy day format and scheduling review">
+<tr class="task-row" data-task-id="cfe9c398-bda8-408b-8b1f-11c37072f883" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="1" data-due="2026-08-03T00:00:00+00:00" data-search="remind team about social responsibility day regarding the upcoming social responsibility day on august 7th. academy day format and scheduling review">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Remind team about social responsibility day done"></td>
 <td data-label="Task"><span class="task-number">15</span><span class="task-name">Remind team about social responsibility day</span><div class="task-detail">Regarding the upcoming social responsibility day on August 7th.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Aug 3, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Aug 3, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Remind%20team%20about%20social%20responsibility%20day&amp;dates=20260803T000000Z/20260803T000000Z&amp;details=Regarding%20the%20upcoming%20social%20responsibility%20day%20on%20August%207th." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--purple)"></span>Ambassadors &amp; Regions</td>
 </tr>
-<tr class="task-row" data-task-id="b601854a-05eb-4267-b64f-591fbc9d5645" data-lane="Policy &amp; Courts (J4C)" data-priority="medium" data-top="1" data-search="attend joint study committee meeting senate study committee on out-of-home care. j4c meeting">
+<tr class="task-row" data-task-id="b601854a-05eb-4267-b64f-591fbc9d5645" data-lane="Policy &amp; Courts (J4C)" data-priority="medium" data-top="1" data-due="2026-08-13T00:00:00+00:00" data-search="attend joint study committee meeting senate study committee on out-of-home care. j4c meeting">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Attend joint study committee meeting done"></td>
 <td data-label="Task"><span class="task-number">16</span><span class="task-name">Attend joint study committee meeting</span><div class="task-detail">Senate Study Committee on out-of-home care.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Aug 13, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Aug 13, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Attend%20joint%20study%20committee%20meeting&amp;dates=20260813T000000Z/20260813T000000Z&amp;details=Senate%20Study%20Committee%20on%20out-of-home%20care." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#f28b00"></span>Policy &amp; Courts (J4C)</td>
 </tr>
-<tr class="task-row" data-task-id="31a98732-ebb6-461f-a8d5-af898388a342" data-lane="School (KSU)" data-priority="medium" data-top="0" data-search="check ksu calendar for conflicts anthony needs to check his kennesaw state university schedule to see if it conflicts with the requested childcare dates. shadow pickup help discussion">
+<tr class="task-row" data-task-id="31a98732-ebb6-461f-a8d5-af898388a342" data-lane="School (KSU)" data-priority="medium" data-top="0" data-due="2026-08-15T00:00:00+00:00" data-search="check ksu calendar for conflicts anthony needs to check his kennesaw state university schedule to see if it conflicts with the requested childcare dates. shadow pickup help discussion">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Check KSU calendar for conflicts done"></td>
 <td data-label="Task"><span class="task-number">17</span><span class="task-name">Check KSU calendar for conflicts</span><div class="task-detail">Anthony needs to check his Kennesaw State University schedule to see if it conflicts with the requested childcare dates.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Aug 15, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Aug 15, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Check%20KSU%20calendar%20for%20conflicts&amp;dates=20260815T000000Z/20260815T000000Z&amp;details=Anthony%20needs%20to%20check%20his%20Kennesaw%20State%20University%20schedule%20to%20see%20if%20it%20conflicts%20with%20the%20requested%20childcare%20dates." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#3355dd"></span>School (KSU)</td>
 </tr>
-<tr class="task-row" data-task-id="8ea24d98-0d8b-4f92-b3a9-c59ec039a243" data-lane="Personal &amp; Home" data-priority="medium" data-top="0" data-search="review childcare request with char anthony&#x27;s friend requested help with childcare for her son, shadow, on alternating thursdays due to a new job schedule. shadow pickup help discussion">
+<tr class="task-row" data-task-id="8ea24d98-0d8b-4f92-b3a9-c59ec039a243" data-lane="Personal &amp; Home" data-priority="medium" data-top="0" data-due="2026-08-15T00:00:00+00:00" data-search="review childcare request with char anthony&#x27;s friend requested help with childcare for her son, shadow, on alternating thursdays due to a new job schedule. shadow pickup help discussion">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Review childcare request with Char done"></td>
 <td data-label="Task"><span class="task-number">18</span><span class="task-name">Review childcare request with Char</span><div class="task-detail">Anthony&#x27;s friend requested help with childcare for her son, Shadow, on alternating Thursdays due to a new job schedule.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Aug 15, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Aug 15, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Review%20childcare%20request%20with%20Char&amp;dates=20260815T000000Z/20260815T000000Z&amp;details=Anthony%27s%20friend%20requested%20help%20with%20childcare%20for%20her%20son%2C%20Shadow%2C%20on%20alternating%20Thursdays%20due%20to%20a%20new%20job%20schedule." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#8b4bd7"></span>Personal &amp; Home</td>
 </tr>
-<tr class="task-row" data-task-id="0c283684-aba5-4d40-a787-b3b229b3dea3" data-lane="Policy &amp; Courts (J4C)" data-priority="high" data-top="1" data-search="complete 2026 self-assessment the supreme court&#x27;s committee on justice for children meeting. j4c meeting">
+<tr class="task-row" data-task-id="0c283684-aba5-4d40-a787-b3b229b3dea3" data-lane="Policy &amp; Courts (J4C)" data-priority="high" data-top="1" data-due="2026-08-17T00:00:00+00:00" data-search="complete 2026 self-assessment the supreme court&#x27;s committee on justice for children meeting. j4c meeting">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Complete 2026 self-assessment done"></td>
 <td data-label="Task"><span class="task-number">19</span><span class="task-name">Complete 2026 self-assessment</span><div class="task-detail">The Supreme Court&#x27;s Committee on Justice for Children meeting.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date urgent">OVERDUE · Aug 17, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date urgent">OVERDUE · Aug 17, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Complete%202026%20self-assessment&amp;dates=20260817T000000Z/20260817T000000Z&amp;details=The%20Supreme%20Court%27s%20Committee%20on%20Justice%20for%20Children%20meeting." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#f28b00"></span>Policy &amp; Courts (J4C)</td>
 </tr>
-<tr class="task-row" data-task-id="cal-ksu-internship" data-lane="Internship" data-priority="medium" data-top="0" data-search="attend ksu msw internship support meeting weekly ksu msw internship placement support meeting (wednesdays, noon). ksu msw internship support(noon placement meeting)">
+<tr class="task-row" data-task-id="cal-ksu-internship" data-lane="Internship" data-priority="medium" data-top="0" data-due="2026-08-19T16:00:00+00:00" data-search="attend ksu msw internship support meeting weekly ksu msw internship placement support meeting (wednesdays, noon). ksu msw internship support(noon placement meeting)">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Attend KSU MSW Internship Support meeting done"></td>
 <td data-label="Task"><span class="task-number">20</span><span class="task-name">Attend KSU MSW Internship Support meeting</span><div class="task-detail">Weekly KSU MSW internship placement support meeting (Wednesdays, noon).</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">Aug 19, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">Aug 19, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Attend%20KSU%20MSW%20Internship%20Support%20meeting&amp;dates=20260819T160000Z/20260819T160000Z&amp;details=Weekly%20KSU%20MSW%20internship%20placement%20support%20meeting%20%28Wednesdays%2C%20noon%29." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#c2185b"></span>Internship</td>
 </tr>
-<tr class="task-row" data-task-id="cal-navy-duties" data-lane="Navy Reserve" data-priority="medium" data-top="0" data-search="navy duties — nrc atlanta navy reserve duties at nrc atlanta. navy duties">
+<tr class="task-row" data-task-id="cal-navy-duties" data-lane="Navy Reserve" data-priority="medium" data-top="0" data-due="2026-08-21T00:00:00+00:00" data-search="navy duties — nrc atlanta navy reserve duties at nrc atlanta. navy duties">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Navy Duties — NRC Atlanta done"></td>
 <td data-label="Task"><span class="task-number">21</span><span class="task-name">Navy Duties — NRC Atlanta</span><div class="task-detail">Navy Reserve duties at NRC Atlanta.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">Aug 21, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">Aug 21, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Navy%20Duties%20%E2%80%94%20NRC%20Atlanta&amp;dates=20260821T000000Z/20260821T000000Z&amp;details=Navy%20Reserve%20duties%20at%20NRC%20Atlanta." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#3a4a5a"></span>Navy Reserve</td>
 </tr>
-<tr class="task-row" data-task-id="cal-drill" data-lane="Navy Reserve" data-priority="medium" data-top="0" data-search="drill weekend scheduled navy reserve drill weekend. drill">
+<tr class="task-row" data-task-id="cal-drill" data-lane="Navy Reserve" data-priority="medium" data-top="0" data-due="2026-08-22T00:00:00+00:00" data-search="drill weekend scheduled navy reserve drill weekend. drill">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Drill weekend done"></td>
 <td data-label="Task"><span class="task-number">22</span><span class="task-name">Drill weekend</span><div class="task-detail">Scheduled Navy Reserve drill weekend.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">Aug 22, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">Aug 22, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Drill%20weekend&amp;dates=20260822T000000Z/20260822T000000Z&amp;details=Scheduled%20Navy%20Reserve%20drill%20weekend." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#3a4a5a"></span>Navy Reserve</td>
 </tr>
-<tr class="task-row" data-task-id="b253f13a-df6e-4941-ac23-78ef365d66d9" data-lane="Training &amp; Curriculum" data-priority="medium" data-top="0" data-search="check nathaniel&#x27;s ida registration anthony stover discussing the upcoming ida day on september 12th. empowerment website and training q&amp;a">
+<tr class="task-row" data-task-id="b253f13a-df6e-4941-ac23-78ef365d66d9" data-lane="Training &amp; Curriculum" data-priority="medium" data-top="0" data-due="2026-09-12T00:00:00+00:00" data-search="check nathaniel&#x27;s ida registration anthony stover discussing the upcoming ida day on september 12th. empowerment website and training q&amp;a">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Check Nathaniel&#x27;s IDA registration done"></td>
 <td data-label="Task"><span class="task-number">23</span><span class="task-name">Check Nathaniel&#x27;s IDA registration</span><div class="task-detail">Anthony Stover discussing the upcoming IDA Day on September 12th.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">Sep 12, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">Sep 12, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Check%20Nathaniel%27s%20IDA%20registration&amp;dates=20260912T000000Z/20260912T000000Z&amp;details=Anthony%20Stover%20discussing%20the%20upcoming%20IDA%20Day%20on%20September%2012th." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#0b9fc4"></span>Training &amp; Curriculum</td>
 </tr>
-<tr class="task-row" data-task-id="cal-nyc-trip" data-lane="Vacation &amp; Travel" data-priority="low" data-top="0" data-search="new york trip personal trip. new york- v">
+<tr class="task-row" data-task-id="cal-nyc-trip" data-lane="Vacation &amp; Travel" data-priority="low" data-top="0" data-due="2026-09-12T00:00:00+00:00" data-search="new york trip personal trip. new york- v">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark New York trip done"></td>
 <td data-label="Task"><span class="task-number">24</span><span class="task-name">New York trip</span><div class="task-detail">Personal trip.</div></td>
 <td data-label="Priority"><span class="priority low">Low</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">Sep 12, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">Sep 12, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=New%20York%20trip&amp;dates=20260912T000000Z/20260912T000000Z&amp;details=Personal%20trip." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#0e9e8a"></span>Vacation &amp; Travel</td>
 </tr>
-<tr class="task-row" data-task-id="cal-drill-exam" data-lane="Navy Reserve" data-priority="medium" data-top="0" data-search="drill exam / pfa make-up navy reserve drill exam / pfa makeup. drillexam/pfa make up">
+<tr class="task-row" data-task-id="cal-drill-exam" data-lane="Navy Reserve" data-priority="medium" data-top="0" data-due="2026-09-19T00:00:00+00:00" data-search="drill exam / pfa make-up navy reserve drill exam / pfa makeup. drillexam/pfa make up">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Drill Exam / PFA make-up done"></td>
 <td data-label="Task"><span class="task-number">25</span><span class="task-name">Drill Exam / PFA make-up</span><div class="task-detail">Navy Reserve drill exam / PFA makeup.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">Sep 19, 2026</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">Sep 19, 2026</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Drill%20Exam%20/%20PFA%20make-up&amp;dates=20260919T000000Z/20260919T000000Z&amp;details=Navy%20Reserve%20drill%20exam%20/%20PFA%20makeup." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#3a4a5a"></span>Navy Reserve</td>
 </tr>
-<tr class="task-row" data-task-id="96f624e1-ec31-4014-b657-e954d339ac0a" data-lane="Ambassadors &amp; Regions" data-priority="high" data-top="1" data-search="request hilton and ghi budget balances from finance anthony needs to request budget balances for hilton and other grants. ambassadors role and event planning">
+<tr class="task-row" data-task-id="96f624e1-ec31-4014-b657-e954d339ac0a" data-lane="Ambassadors &amp; Regions" data-priority="high" data-top="1" data-due="" data-search="request hilton and ghi budget balances from finance anthony needs to request budget balances for hilton and other grants. ambassadors role and event planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Request Hilton and GHI budget balances from Finance done"></td>
 <td data-label="Task"><span class="task-number">26</span><span class="task-name">Request Hilton and GHI budget balances from Finance</span><div class="task-detail">Anthony needs to request budget balances for Hilton and other grants.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Draft Email</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="96f624e1-ec31-4014-b657-e954d339ac0a" type="button">Draft Email ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--purple)"></span>Ambassadors &amp; Regions</td>
 </tr>
-<tr class="task-row" data-task-id="9d97b02c-6c6f-47ab-9682-f58a6c2f059d" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="ask lindsay for salesforce applicant list recommendations anthony needs to get the list of new applicants from salesforce for the ambassadors. ambassadors role and event planning">
+<tr class="task-row" data-task-id="9d97b02c-6c6f-47ab-9682-f58a6c2f059d" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-due="" data-search="ask lindsay for salesforce applicant list recommendations anthony needs to get the list of new applicants from salesforce for the ambassadors. ambassadors role and event planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Ask Lindsay for Salesforce applicant list recommendations done"></td>
 <td data-label="Task"><span class="task-number">27</span><span class="task-name">Ask Lindsay for Salesforce applicant list recommendations</span><div class="task-detail">Anthony needs to get the list of new applicants from Salesforce for the ambassadors.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Ask%20Lindsay%20for%20Salesforce%20applicant%20list%20recommendations&amp;details=Anthony%20needs%20to%20get%20the%20list%20of%20new%20applicants%20from%20Salesforce%20for%20the%20ambassadors." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--purple)"></span>Ambassadors &amp; Regions</td>
 </tr>
-<tr class="task-row" data-task-id="5faa738e-546e-4c6d-863f-15c04ba9910e" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="schedule ambassador planning meeting for august 20th anthony needs to set up the next planning meeting. ambassadors role and event planning">
+<tr class="task-row" data-task-id="5faa738e-546e-4c6d-863f-15c04ba9910e" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-due="" data-search="schedule ambassador planning meeting for august 20th anthony needs to set up the next planning meeting. ambassadors role and event planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Schedule Ambassador planning meeting for August 20th done"></td>
 <td data-label="Task"><span class="task-number">28</span><span class="task-name">Schedule Ambassador planning meeting for August 20th</span><div class="task-detail">Anthony needs to set up the next planning meeting.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Schedule%20Ambassador%20planning%20meeting%20for%20August%2020th&amp;details=Anthony%20needs%20to%20set%20up%20the%20next%20planning%20meeting." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--purple)"></span>Ambassadors &amp; Regions</td>
 </tr>
-<tr class="task-row" data-task-id="36b9cc6b-1592-4294-9a23-dde4f123c89a" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="email kendall and victoria about savannah bananas outreach anthony needs to coordinate with development regarding the savannah bananas outreach. ambassadors role and event planning">
+<tr class="task-row" data-task-id="36b9cc6b-1592-4294-9a23-dde4f123c89a" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-due="" data-search="email kendall and victoria about savannah bananas outreach anthony needs to coordinate with development regarding the savannah bananas outreach. ambassadors role and event planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Email Kendall and Victoria about Savannah Bananas outreach done"></td>
 <td data-label="Task"><span class="task-number">29</span><span class="task-name">Email Kendall and Victoria about Savannah Bananas outreach</span><div class="task-detail">Anthony needs to coordinate with development regarding the Savannah Bananas outreach.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Draft Email</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="36b9cc6b-1592-4294-9a23-dde4f123c89a" type="button">Draft Email ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--purple)"></span>Ambassadors &amp; Regions</td>
 </tr>
-<tr class="task-row" data-task-id="cb77f92e-f962-4d8e-bac3-2e290762938f" data-lane="Training &amp; Curriculum" data-priority="medium" data-top="0" data-search="send training slides to georgia appleseed anthony needs to share the training slides with the georgia appleseed team as requested by darlene. ga appleseed staff training authentic youth engagement and abd">
+<tr class="task-row" data-task-id="cb77f92e-f962-4d8e-bac3-2e290762938f" data-lane="Training &amp; Curriculum" data-priority="medium" data-top="0" data-due="" data-search="send training slides to georgia appleseed anthony needs to share the training slides with the georgia appleseed team as requested by darlene. ga appleseed staff training authentic youth engagement and abd">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Send training slides to Georgia Appleseed done"></td>
 <td data-label="Task"><span class="task-number">30</span><span class="task-name">Send training slides to Georgia Appleseed</span><div class="task-detail">Anthony needs to share the training slides with the Georgia Appleseed team as requested by Darlene.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Draft Email</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="cb77f92e-f962-4d8e-bac3-2e290762938f" type="button">Draft Email ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:#0b9fc4"></span>Training &amp; Curriculum</td>
 </tr>
-<tr class="task-row" data-task-id="8bb41aad-feab-4bed-ac43-8badf7d79885" data-lane="Training &amp; Curriculum" data-priority="low" data-top="0" data-search="schedule follow-up for training quiz follow up with the georgia appleseed team regarding the interactive &#x27;family feud&#x27; style quiz that was skipped due to time constraints. ga appleseed staff training authentic youth engagement and abd">
+<tr class="task-row" data-task-id="8bb41aad-feab-4bed-ac43-8badf7d79885" data-lane="Training &amp; Curriculum" data-priority="low" data-top="0" data-due="" data-search="schedule follow-up for training quiz follow up with the georgia appleseed team regarding the interactive &#x27;family feud&#x27; style quiz that was skipped due to time constraints. ga appleseed staff training authentic youth engagement and abd">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Schedule follow-up for training quiz done"></td>
 <td data-label="Task"><span class="task-number">31</span><span class="task-name">Schedule follow-up for training quiz</span><div class="task-detail">Follow up with the Georgia Appleseed team regarding the interactive &#x27;Family Feud&#x27; style quiz that was skipped due to time constraints.</div></td>
 <td data-label="Priority"><span class="priority low">Low</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Schedule%20follow-up%20for%20training%20quiz&amp;details=Follow%20up%20with%20the%20Georgia%20Appleseed%20team%20regarding%20the%20interactive%20%27Family%20Feud%27%20style%20quiz%20that%20was%20skipped%20due%20to%20time%20constraints." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#0b9fc4"></span>Training &amp; Curriculum</td>
 </tr>
-<tr class="task-row" data-task-id="81183fd3-9f9e-4654-b870-37b6f835d5dd" data-lane="Vacation &amp; Travel" data-priority="medium" data-top="0" data-search="email ms. taylor regarding region 10 scheduling anthony needs to coordinate with ms. taylor regarding moving the region 10 event to august 29th to avoid travel congestion before the hawaii trip. fun and learn training planning">
+<tr class="task-row" data-task-id="81183fd3-9f9e-4654-b870-37b6f835d5dd" data-lane="Vacation &amp; Travel" data-priority="medium" data-top="0" data-due="" data-search="email ms. taylor regarding region 10 scheduling anthony needs to coordinate with ms. taylor regarding moving the region 10 event to august 29th to avoid travel congestion before the hawaii trip. fun and learn training planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Email Ms. Taylor regarding Region 10 scheduling done"></td>
 <td data-label="Task"><span class="task-number">32</span><span class="task-name">Email Ms. Taylor regarding Region 10 scheduling</span><div class="task-detail">Anthony needs to coordinate with Ms. Taylor regarding moving the Region 10 event to August 29th to avoid travel congestion before the Hawaii trip.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Draft Email</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="81183fd3-9f9e-4654-b870-37b6f835d5dd" type="button">Draft Email ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:#0e9e8a"></span>Vacation &amp; Travel</td>
 </tr>
-<tr class="task-row" data-task-id="afd69d22-b73b-43a1-b54d-16c835bad49c" data-lane="Fun &amp; Learn Events" data-priority="low" data-top="0" data-search="check with kathleen about august 20th training anthony needs to verify if he is involved in the home stretch staff training for region 5 on august 20th. fun and learn training planning">
+<tr class="task-row" data-task-id="afd69d22-b73b-43a1-b54d-16c835bad49c" data-lane="Fun &amp; Learn Events" data-priority="low" data-top="0" data-due="" data-search="check with kathleen about august 20th training anthony needs to verify if he is involved in the home stretch staff training for region 5 on august 20th. fun and learn training planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Check with Kathleen about August 20th training done"></td>
 <td data-label="Task"><span class="task-number">33</span><span class="task-name">Check with Kathleen about August 20th training</span><div class="task-detail">Anthony needs to verify if he is involved in the Home Stretch staff training for Region 5 on August 20th.</div></td>
 <td data-label="Priority"><span class="priority low">Low</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Send Message</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="afd69d22-b73b-43a1-b54d-16c835bad49c" type="button">Send Message ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--cyan)"></span>Fun &amp; Learn Events</td>
 </tr>
-<tr class="task-row" data-task-id="735f55f8-f1c9-4341-ab43-54b31aea9cb7" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-search="conduct training data assessment with devin and team anthony and devin planned a deep dive on august 5th to assess training numbers against their september 30th goals. fun and learn training planning">
+<tr class="task-row" data-task-id="735f55f8-f1c9-4341-ab43-54b31aea9cb7" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-due="" data-search="conduct training data assessment with devin and team anthony and devin planned a deep dive on august 5th to assess training numbers against their september 30th goals. fun and learn training planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Conduct training data assessment with Devin and team done"></td>
 <td data-label="Task"><span class="task-number">34</span><span class="task-name">Conduct training data assessment with Devin and team</span><div class="task-detail">Anthony and Devin planned a deep dive on August 5th to assess training numbers against their September 30th goals.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Conduct%20training%20data%20assessment%20with%20Devin%20and%20team&amp;details=Anthony%20and%20Devin%20planned%20a%20deep%20dive%20on%20August%205th%20to%20assess%20training%20numbers%20against%20their%20September%2030th%20goals." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--cyan)"></span>Fun &amp; Learn Events</td>
 </tr>
-<tr class="task-row" data-task-id="128b928d-6568-40de-89b7-dec89295bb0e" data-lane="Youth Support" data-priority="high" data-top="1" data-search="contact anay about darnell assistance anthony needs to follow up with anay regarding assistance for darnell, who is currently living out of his car. fun and learn training planning">
+<tr class="task-row" data-task-id="128b928d-6568-40de-89b7-dec89295bb0e" data-lane="Youth Support" data-priority="high" data-top="1" data-due="" data-search="contact anay about darnell assistance anthony needs to follow up with anay regarding assistance for darnell, who is currently living out of his car. fun and learn training planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Contact Anay about Darnell assistance done"></td>
 <td data-label="Task"><span class="task-number">35</span><span class="task-name">Contact Anay about Darnell assistance</span><div class="task-detail">Anthony needs to follow up with Anay regarding assistance for Darnell, who is currently living out of his car.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Send Message</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="128b928d-6568-40de-89b7-dec89295bb0e" type="button">Send Message ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--coral)"></span>Youth Support</td>
 </tr>
-<tr class="task-row" data-task-id="6f7b9d7c-a1a1-42b4-b66c-f55f7f8f475f" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-search="send empowerment training assessment template to devin anthony mentioned sending a training assessment template to devin to be converted into a digital form. fun and learn training planning">
+<tr class="task-row" data-task-id="6f7b9d7c-a1a1-42b4-b66c-f55f7f8f475f" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-due="" data-search="send empowerment training assessment template to devin anthony mentioned sending a training assessment template to devin to be converted into a digital form. fun and learn training planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Send empowerment training assessment template to Devin done"></td>
 <td data-label="Task"><span class="task-number">36</span><span class="task-name">Send empowerment training assessment template to Devin</span><div class="task-detail">Anthony mentioned sending a training assessment template to Devin to be converted into a digital form.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Draft Email</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="6f7b9d7c-a1a1-42b4-b66c-f55f7f8f475f" type="button">Draft Email ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--cyan)"></span>Fun &amp; Learn Events</td>
 </tr>
-<tr class="task-row" data-task-id="2debb8bf-ab63-47ae-8619-002baf998a28" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="email ms. taylor meeting summary and links anthony needs to follow up with ms. taylor with a summary and registration links. region 10 fun and learn planning">
+<tr class="task-row" data-task-id="2debb8bf-ab63-47ae-8619-002baf998a28" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-due="" data-search="email ms. taylor meeting summary and links anthony needs to follow up with ms. taylor with a summary and registration links. region 10 fun and learn planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Email Ms. Taylor meeting summary and links done"></td>
 <td data-label="Task"><span class="task-number">37</span><span class="task-name">Email Ms. Taylor meeting summary and links</span><div class="task-detail">Anthony needs to follow up with Ms. Taylor with a summary and registration links.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Draft Email</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="2debb8bf-ab63-47ae-8619-002baf998a28" type="button">Draft Email ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--purple)"></span>Ambassadors &amp; Regions</td>
 </tr>
-<tr class="task-row" data-task-id="f47fb2c4-c2c7-42fa-8c07-dd49716dd41a" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="host region 10 prep session anthony is scheduling the first prep session for the region 10 event. region 10 fun and learn planning">
+<tr class="task-row" data-task-id="f47fb2c4-c2c7-42fa-8c07-dd49716dd41a" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-due="" data-search="host region 10 prep session anthony is scheduling the first prep session for the region 10 event. region 10 fun and learn planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Host Region 10 prep session done"></td>
 <td data-label="Task"><span class="task-number">38</span><span class="task-name">Host Region 10 prep session</span><div class="task-detail">Anthony is scheduling the first prep session for the Region 10 event.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Host%20Region%2010%20prep%20session&amp;details=Anthony%20is%20scheduling%20the%20first%20prep%20session%20for%20the%20Region%2010%20event." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--purple)"></span>Ambassadors &amp; Regions</td>
 </tr>
-<tr class="task-row" data-task-id="18e0ee0b-e1d9-44ab-b7e9-d099d9239595" data-lane="D&amp;D Campaign" data-priority="medium" data-top="0" data-search="level up d&amp;d character to 16 the user needs to prepare for the next d&amp;d campaign session in two weeks. d&amp;d session: circle of the owl">
+<tr class="task-row" data-task-id="18e0ee0b-e1d9-44ab-b7e9-d099d9239595" data-lane="D&amp;D Campaign" data-priority="medium" data-top="0" data-due="" data-search="level up d&amp;d character to 16 the user needs to prepare for the next d&amp;d campaign session in two weeks. d&amp;d session: circle of the owl">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Level up D&amp;D character to 16 done"></td>
 <td data-label="Task"><span class="task-number">39</span><span class="task-name">Level up D&amp;D character to 16</span><div class="task-detail">The user needs to prepare for the next D&amp;D campaign session in two weeks.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Level%20up%20D%26D%20character%20to%2016&amp;details=The%20user%20needs%20to%20prepare%20for%20the%20next%20D%26D%20campaign%20session%20in%20two%20weeks." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#7a2e2e"></span>D&amp;D Campaign</td>
 </tr>
-<tr class="task-row" data-task-id="baeddc6b-1479-49bb-9a05-0c6d3faa1680" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-search="send meeting notes anthony plans to send out meeting notes and follow-up details. fun and learn plan debrief">
+<tr class="task-row" data-task-id="baeddc6b-1479-49bb-9a05-0c6d3faa1680" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-due="" data-search="send meeting notes anthony plans to send out meeting notes and follow-up details. fun and learn plan debrief">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Send meeting notes done"></td>
 <td data-label="Task"><span class="task-number">40</span><span class="task-name">Send meeting notes</span><div class="task-detail">Anthony plans to send out meeting notes and follow-up details.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Send%20meeting%20notes&amp;details=Anthony%20plans%20to%20send%20out%20meeting%20notes%20and%20follow-up%20details." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--cyan)"></span>Fun &amp; Learn Events</td>
 </tr>
-<tr class="task-row" data-task-id="55a37161-b105-42b4-ac9a-cd25aa2a9be7" data-lane="Fun &amp; Learn Events" data-priority="high" data-top="1" data-search="finalize fun and learn agenda anthony needs to finalize the agenda and logistics for the upcoming fun and learn event on monday. fun and learn plan debrief">
+<tr class="task-row" data-task-id="55a37161-b105-42b4-ac9a-cd25aa2a9be7" data-lane="Fun &amp; Learn Events" data-priority="high" data-top="1" data-due="" data-search="finalize fun and learn agenda anthony needs to finalize the agenda and logistics for the upcoming fun and learn event on monday. fun and learn plan debrief">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Finalize Fun and Learn agenda done"></td>
 <td data-label="Task"><span class="task-number">41</span><span class="task-name">Finalize Fun and Learn agenda</span><div class="task-detail">Anthony needs to finalize the agenda and logistics for the upcoming Fun and Learn event on Monday.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Finalize%20Fun%20and%20Learn%20agenda&amp;details=Anthony%20needs%20to%20finalize%20the%20agenda%20and%20logistics%20for%20the%20upcoming%20Fun%20and%20Learn%20event%20on%20Monday." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--cyan)"></span>Fun &amp; Learn Events</td>
 </tr>
-<tr class="task-row" data-task-id="01169662-dad8-4c7a-b515-5d9bbda88a06" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-search="update jeopardy game content anthony needs to update the jeopardy game content for the upcoming workshop. fun and learn plan debrief">
+<tr class="task-row" data-task-id="01169662-dad8-4c7a-b515-5d9bbda88a06" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-due="" data-search="update jeopardy game content anthony needs to update the jeopardy game content for the upcoming workshop. fun and learn plan debrief">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Update Jeopardy game content done"></td>
 <td data-label="Task"><span class="task-number">42</span><span class="task-name">Update Jeopardy game content</span><div class="task-detail">Anthony needs to update the Jeopardy game content for the upcoming workshop.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Update%20Jeopardy%20game%20content&amp;details=Anthony%20needs%20to%20update%20the%20Jeopardy%20game%20content%20for%20the%20upcoming%20workshop." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--cyan)"></span>Fun &amp; Learn Events</td>
 </tr>
-<tr class="task-row" data-task-id="71765981-dcfa-4020-b125-86ef6f3cef81" data-lane="Leadership Retreat" data-priority="low" data-top="0" data-search="post retreat photos to facebook anthony needs to post photos from the recent retreat to the organization&#x27;s facebook page. fun and learn plan debrief">
+<tr class="task-row" data-task-id="71765981-dcfa-4020-b125-86ef6f3cef81" data-lane="Leadership Retreat" data-priority="low" data-top="0" data-due="" data-search="post retreat photos to facebook anthony needs to post photos from the recent retreat to the organization&#x27;s facebook page. fun and learn plan debrief">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Post retreat photos to Facebook done"></td>
 <td data-label="Task"><span class="task-number">43</span><span class="task-name">Post retreat photos to Facebook</span><div class="task-detail">Anthony needs to post photos from the recent retreat to the organization&#x27;s Facebook page.</div></td>
 <td data-label="Priority"><span class="priority low">Low</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Post%20retreat%20photos%20to%20Facebook&amp;details=Anthony%20needs%20to%20post%20photos%20from%20the%20recent%20retreat%20to%20the%20organization%27s%20Facebook%20page." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--navy)"></span>Leadership Retreat</td>
 </tr>
-<tr class="task-row" data-task-id="af8bcded-b0d9-414f-9106-b216169b33cd" data-lane="Fun &amp; Learn Events" data-priority="high" data-top="1" data-search="register mason for sept 12 training anthony needs to ensure mason is registered for the training on september 12th. fun and learn plan debrief">
+<tr class="task-row" data-task-id="af8bcded-b0d9-414f-9106-b216169b33cd" data-lane="Fun &amp; Learn Events" data-priority="high" data-top="1" data-due="" data-search="register mason for sept 12 training anthony needs to ensure mason is registered for the training on september 12th. fun and learn plan debrief">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Register Mason for Sept 12 training done"></td>
 <td data-label="Task"><span class="task-number">44</span><span class="task-name">Register Mason for Sept 12 training</span><div class="task-detail">Anthony needs to ensure Mason is registered for the training on September 12th.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Register%20Mason%20for%20Sept%2012%20training&amp;details=Anthony%20needs%20to%20ensure%20Mason%20is%20registered%20for%20the%20training%20on%20September%2012th." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--cyan)"></span>Fun &amp; Learn Events</td>
 </tr>
-<tr class="task-row" data-task-id="08f4d995-1f8b-4906-a5fa-0a634c0d8f4e" data-lane="Org Ops &amp; Finance" data-priority="medium" data-top="0" data-search="send meeting poll to committee zara requested a poll to finalize the recurring meeting time for the governance committee. governance committee orientation check-in">
+<tr class="task-row" data-task-id="08f4d995-1f8b-4906-a5fa-0a634c0d8f4e" data-lane="Org Ops &amp; Finance" data-priority="medium" data-top="0" data-due="" data-search="send meeting poll to committee zara requested a poll to finalize the recurring meeting time for the governance committee. governance committee orientation check-in">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Send meeting poll to committee done"></td>
 <td data-label="Task"><span class="task-number">45</span><span class="task-name">Send meeting poll to committee</span><div class="task-detail">Zara requested a poll to finalize the recurring meeting time for the governance committee.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Send Message</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><button class="type-jump" data-jump-tab="emails" data-jump-target="08f4d995-1f8b-4906-a5fa-0a634c0d8f4e" type="button">Send Message ↗</button></td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--green)"></span>Org Ops &amp; Finance</td>
 </tr>
-<tr class="task-row" data-task-id="ff-hawaii-1" data-lane="Vacation &amp; Travel" data-priority="medium" data-top="0" data-search="schedule 2-3 group meeting dates to finalize hawaii trip hawaii trip group planning — from fireflies (not yet in pocket). hawaii trip excursion coordination meeting">
+<tr class="task-row" data-task-id="ff-hawaii-1" data-lane="Vacation &amp; Travel" data-priority="medium" data-top="0" data-due="" data-search="schedule 2-3 group meeting dates to finalize hawaii trip hawaii trip group planning — from fireflies (not yet in pocket). hawaii trip excursion coordination meeting">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Schedule 2-3 group meeting dates to finalize Hawaii trip done"></td>
 <td data-label="Task"><span class="task-number">46</span><span class="task-name">Schedule 2-3 group meeting dates to finalize Hawaii trip</span><div class="task-detail">Hawaii trip group planning — from Fireflies (not yet in Pocket).</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Schedule%202-3%20group%20meeting%20dates%20to%20finalize%20Hawaii%20trip&amp;details=Hawaii%20trip%20group%20planning%20%E2%80%94%20from%20Fireflies%20%28not%20yet%20in%20Pocket%29." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#0e9e8a"></span>Vacation &amp; Travel</td>
 </tr>
-<tr class="task-row" data-task-id="ff-dnd-underdark" data-lane="D&amp;D Campaign" data-priority="low" data-top="0" data-search="prep for underdark arc: drow encampment follow-up underdark campaign arc — prep for next d&amp;d session. campaign progress and tactical developments">
+<tr class="task-row" data-task-id="ff-dnd-underdark" data-lane="D&amp;D Campaign" data-priority="low" data-top="0" data-due="" data-search="prep for underdark arc: drow encampment follow-up underdark campaign arc — prep for next d&amp;d session. campaign progress and tactical developments">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Prep for Underdark arc: drow encampment follow-up done"></td>
 <td data-label="Task"><span class="task-number">47</span><span class="task-name">Prep for Underdark arc: drow encampment follow-up</span><div class="task-detail">Underdark campaign arc — prep for next D&amp;D session.</div></td>
 <td data-label="Priority"><span class="priority low">Low</span></td>
 <td data-label="Owner">Anthony</td>
-<td data-label="Due"><span class="date">No due date</span></td>
-<td data-label="Type">Create Reminder</td>
+<td data-label="Due"><span class="date">No due date</span><span class="soon-badge" hidden>⏳ Coming up</span></td>
+<td data-label="Type"><a class="type-jump" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Prep%20for%20Underdark%20arc%3A%20drow%20encampment%20follow-up&amp;details=Underdark%20campaign%20arc%20%E2%80%94%20prep%20for%20next%20D%26D%20session." target="_blank" rel="noopener">Create Reminder ↗</a></td>
 <td data-label="Lane"><span class="event-dot" style="background:#7a2e2e"></span>D&amp;D Campaign</td>
 </tr>
             </tbody>
@@ -727,55 +789,55 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
           <div class="side-panel">
             <h3>Progress by Lane</h3>
             <div id="eventProgress">
-<div class="event-progress-item" data-lane-progress="Leadership Retreat" style="--event:var(--navy)">
+<div class="event-progress-item" data-lane-progress="Leadership Retreat" role="button" tabindex="0" style="--event:var(--navy)">
 <div class="progress-row"><strong>Leadership Retreat</strong><span><span class="lp-done">0</span>/12</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Ambassadors &amp; Regions" style="--event:var(--purple)">
+<div class="event-progress-item" data-lane-progress="Ambassadors &amp; Regions" role="button" tabindex="0" style="--event:var(--purple)">
 <div class="progress-row"><strong>Ambassadors &amp; Regions</strong><span><span class="lp-done">0</span>/11</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Fun &amp; Learn Events" style="--event:var(--cyan)">
+<div class="event-progress-item" data-lane-progress="Fun &amp; Learn Events" role="button" tabindex="0" style="--event:var(--cyan)">
 <div class="progress-row"><strong>Fun &amp; Learn Events</strong><span><span class="lp-done">0</span>/7</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Policy &amp; Courts (J4C)" style="--event:#f28b00">
+<div class="event-progress-item" data-lane-progress="Policy &amp; Courts (J4C)" role="button" tabindex="0" style="--event:#f28b00">
 <div class="progress-row"><strong>Policy &amp; Courts (J4C)</strong><span><span class="lp-done">0</span>/5</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Personal &amp; Home" style="--event:#8b4bd7">
+<div class="event-progress-item" data-lane-progress="Personal &amp; Home" role="button" tabindex="0" style="--event:#8b4bd7">
 <div class="progress-row"><strong>Personal &amp; Home</strong><span><span class="lp-done">0</span>/4</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Vacation &amp; Travel" style="--event:#0e9e8a">
+<div class="event-progress-item" data-lane-progress="Vacation &amp; Travel" role="button" tabindex="0" style="--event:#0e9e8a">
 <div class="progress-row"><strong>Vacation &amp; Travel</strong><span><span class="lp-done">0</span>/4</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Org Ops &amp; Finance" style="--event:var(--green)">
+<div class="event-progress-item" data-lane-progress="Org Ops &amp; Finance" role="button" tabindex="0" style="--event:var(--green)">
 <div class="progress-row"><strong>Org Ops &amp; Finance</strong><span><span class="lp-done">0</span>/3</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Training &amp; Curriculum" style="--event:#0b9fc4">
+<div class="event-progress-item" data-lane-progress="Training &amp; Curriculum" role="button" tabindex="0" style="--event:#0b9fc4">
 <div class="progress-row"><strong>Training &amp; Curriculum</strong><span><span class="lp-done">0</span>/3</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Navy Reserve" style="--event:#3a4a5a">
+<div class="event-progress-item" data-lane-progress="Navy Reserve" role="button" tabindex="0" style="--event:#3a4a5a">
 <div class="progress-row"><strong>Navy Reserve</strong><span><span class="lp-done">0</span>/3</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Youth Support" style="--event:var(--coral)">
+<div class="event-progress-item" data-lane-progress="Youth Support" role="button" tabindex="0" style="--event:var(--coral)">
 <div class="progress-row"><strong>Youth Support</strong><span><span class="lp-done">0</span>/2</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="D&amp;D Campaign" style="--event:#7a2e2e">
+<div class="event-progress-item" data-lane-progress="D&amp;D Campaign" role="button" tabindex="0" style="--event:#7a2e2e">
 <div class="progress-row"><strong>D&amp;D Campaign</strong><span><span class="lp-done">0</span>/2</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="School (KSU)" style="--event:#3355dd">
+<div class="event-progress-item" data-lane-progress="School (KSU)" role="button" tabindex="0" style="--event:#3355dd">
 <div class="progress-row"><strong>School (KSU)</strong><span><span class="lp-done">0</span>/1</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Internship" style="--event:#c2185b">
+<div class="event-progress-item" data-lane-progress="Internship" role="button" tabindex="0" style="--event:#c2185b">
 <div class="progress-row"><strong>Internship</strong><span><span class="lp-done">0</span>/1</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
@@ -901,68 +963,134 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
       <div class="section-head">
         <div>
           <h2 class="section-title">Follow-ups &amp; Email Drafts</h2>
-          <p class="section-subtitle">Ready-to-send messages pulled from your notes. Check off once sent.</p>
+          <p class="section-subtitle">Edit To / Subject / Body right here — it saves as you type. Check "Sent" once it's out the door.</p>
         </div>
+        <label class="search-wrap"><input class="field" id="emailSearch" type="search" placeholder="Search drafts…"></label>
       </div>
       <div class="email-panel-list" id="emailList" artifact-sync>
-<div class="email-row" data-task-id="c7beaa74-2b46-4112-b55e-d4506858fe53" data-search="resource hub documentation and links i&amp;#x27;m sending over those documents we discussed for the resource hub. they were too large for the zoom chat, so i&amp;#x27;ve attached them here as links. let me know if you have any trouble accessing them.">
-<input type="checkbox" class="sent-check" aria-label="Mark Resource Hub Documentation and Links as sent">
-<div><strong>Resource Hub Documentation and Links</strong><span>Email · To: (add recipient)</span><span>I&#x27;m sending over those documents we discussed for the resource hub. They were too large for the Zoom chat, so I&#x27;ve attached them here as links. Let me…</span></div>
+<article class="email-card" id="email-c7beaa74-2b46-4112-b55e-d4506858fe53" data-task-id="c7beaa74-2b46-4112-b55e-d4506858fe53" style="--event:var(--coral)" data-search="resource hub documentation and links i&amp;#x27;m sending over those documents we discussed for the resource hub. they were too large for the zoom chat, so i&amp;#x27;ve attached them here as links. let me know if you have any trouble accessing them. ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--coral)"></span>
+  <strong>Email resource hub documentation to colleague</strong>
+  <span class="kind-badge">Email</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Resource Hub Documentation and Links as sent"> Sent</label>
 </div>
-<div class="email-row" data-task-id="0bb31d2a-e491-4cf9-8742-5f8778d34c06" data-search="request: child tax credit form and documents hi devin, iman mentioned you have the form for the child tax credit and other documents related to youth services programs. could you please send those over? thanks, anthony.">
-<input type="checkbox" class="sent-check" aria-label="Mark Request: Child Tax Credit Form and Documents as sent">
-<div><strong>Request: Child Tax Credit Form and Documents</strong><span>Email · To: devin@georgiaempowerment.org</span><span>Hi Devin, Iman mentioned you have the form for the Child Tax Credit and other documents related to youth services programs. Could you please send those over? Th…</span></div>
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Resource Hub Documentation and Links"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true">I&#x27;m sending over those documents we discussed for the resource hub. They were too large for the Zoom chat, so I&#x27;ve attached them here as links. Let me know if you have any trouble accessing them.</div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-0bb31d2a-e491-4cf9-8742-5f8778d34c06" data-task-id="0bb31d2a-e491-4cf9-8742-5f8778d34c06" style="--event:var(--green)" data-search="request: child tax credit form and documents hi devin, iman mentioned you have the form for the child tax credit and other documents related to youth services programs. could you please send those over? thanks, anthony. devin@georgiaempowerment.org">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--green)"></span>
+  <strong>Email Devin Rudy for Child Tax Credit form</strong>
+  <span class="kind-badge">Email</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Request: Child Tax Credit Form and Documents as sent"> Sent</label>
 </div>
-<div class="email-row" data-task-id="96f624e1-ec31-4014-b657-e954d339ac0a" data-search="budget balance request: hilton and ghi hi finance team,
+<div class="email-field"><label>To</label><input class="field email-to" value="devin@georgiaempowerment.org" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Request: Child Tax Credit Form and Documents"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true">Hi Devin, Iman mentioned you have the form for the Child Tax Credit and other documents related to youth services programs. Could you please send those over? Thanks, Anthony.</div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-96f624e1-ec31-4014-b657-e954d339ac0a" data-task-id="96f624e1-ec31-4014-b657-e954d339ac0a" style="--event:var(--purple)" data-search="budget balance request: hilton and ghi hi finance team,
 
 could you please provide the current balances for the ghi and hilton grants?
 
 we are planning upcoming regional events and need to know the available budget for hilton in particular, as the new cycle started july 1st. also, please let me know when we can expect the final numbers following the audit.
 
 thanks,
-anthony">
-<input type="checkbox" class="sent-check" aria-label="Mark Budget Balance Request: Hilton and GHI as sent">
-<div><strong>Budget Balance Request: Hilton and GHI</strong><span>Email · To: (add recipient)</span><span>Hi Finance Team,
+anthony ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--purple)"></span>
+  <strong>Request Hilton and GHI budget balances from Finance</strong>
+  <span class="kind-badge">Email</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Budget Balance Request: Hilton and GHI as sent"> Sent</label>
+</div>
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Budget Balance Request: Hilton and GHI"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true">Hi Finance Team,
 
 Could you please provide the current balances for the GHI and Hilton grants?
 
-We are planning upcoming regional events and need to know the av…</span></div>
-</div>
-<div class="email-row" data-task-id="36b9cc6b-1592-4294-9a23-dde4f123c89a" data-search="coordination: savannah bananas engagement hi kendall and victoria,
+We are planning upcoming regional events and need to know the available budget for Hilton in particular, as the new cycle started July 1st. Also, please let me know when we can expect the final numbers following the audit.
+
+Thanks,
+Anthony</div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-36b9cc6b-1592-4294-9a23-dde4f123c89a" data-task-id="36b9cc6b-1592-4294-9a23-dde4f123c89a" style="--event:var(--purple)" data-search="coordination: savannah bananas engagement hi kendall and victoria,
 
 i wanted to loop you in on a potential engagement with the savannah bananas for our upcoming region 12 event.
 
 we want to make sure this outreach is coordinated with the development team. could you let me know the best way to move forward with this or if you&amp;#x27;d like to handle the initial contact?
 
 best,
-anthony">
-<input type="checkbox" class="sent-check" aria-label="Mark Coordination: Savannah Bananas Engagement as sent">
-<div><strong>Coordination: Savannah Bananas Engagement</strong><span>Email · To: (add recipient)</span><span>Hi Kendall and Victoria,
+anthony ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--purple)"></span>
+  <strong>Email Kendall and Victoria about Savannah Bananas outreach</strong>
+  <span class="kind-badge">Email</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Coordination: Savannah Bananas Engagement as sent"> Sent</label>
+</div>
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Coordination: Savannah Bananas Engagement"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true">Hi Kendall and Victoria,
 
 I wanted to loop you in on a potential engagement with the Savannah Bananas for our upcoming Region 12 event.
 
-We want to make sure th…</span></div>
-</div>
-<div class="email-row" data-task-id="cb77f92e-f962-4d8e-bac3-2e290762938f" data-search="georgia empowerment training slides hi darlene,
+We want to make sure this outreach is coordinated with the development team. Could you let me know the best way to move forward with this or if you&#x27;d like to handle the initial contact?
+
+Best,
+Anthony</div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-cb77f92e-f962-4d8e-bac3-2e290762938f" data-task-id="cb77f92e-f962-4d8e-bac3-2e290762938f" style="--event:#0b9fc4" data-search="georgia empowerment training slides hi darlene,
 
 it was great training with your team today. as requested, i have attached the slides from our presentation on authentic youth engagement and adolescent brain development.
 
 best,
-anthony">
-<input type="checkbox" class="sent-check" aria-label="Mark Georgia Empowerment Training Slides as sent">
-<div><strong>Georgia Empowerment Training Slides</strong><span>Email · To: dlynch@gaappleseed.org</span><span>Hi Darlene,
+anthony dlynch@gaappleseed.org">
+<div class="email-card-head">
+  <span class="event-dot" style="background:#0b9fc4"></span>
+  <strong>Send training slides to Georgia Appleseed</strong>
+  <span class="kind-badge">Email</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Georgia Empowerment Training Slides as sent"> Sent</label>
+</div>
+<div class="email-field"><label>To</label><input class="field email-to" value="dlynch@gaappleseed.org" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Georgia Empowerment Training Slides"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true">Hi Darlene,
 
-It was great training with your team today. As requested, I have attached the slides from our presentation on authentic youth engagement and adoles…</span></div>
+It was great training with your team today. As requested, I have attached the slides from our presentation on authentic youth engagement and adolescent brain development.
+
+Best,
+Anthony</div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-81183fd3-9f9e-4654-b870-37b6f835d5dd" data-task-id="81183fd3-9f9e-4654-b870-37b6f835d5dd" style="--event:#0e9e8a" data-search="region 10 scheduling - august 29th hi ms. taylor, we are looking at the schedule for region 10. would it be possible to move that session to august 29th? we have significant travel starting september 28th and want to ensure we have adequate coverage. ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:#0e9e8a"></span>
+  <strong>Email Ms. Taylor regarding Region 10 scheduling</strong>
+  <span class="kind-badge">Email</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Region 10 Scheduling - August 29th as sent"> Sent</label>
 </div>
-<div class="email-row" data-task-id="81183fd3-9f9e-4654-b870-37b6f835d5dd" data-search="region 10 scheduling - august 29th hi ms. taylor, we are looking at the schedule for region 10. would it be possible to move that session to august 29th? we have significant travel starting september 28th and want to ensure we have adequate coverage.">
-<input type="checkbox" class="sent-check" aria-label="Mark Region 10 Scheduling - August 29th as sent">
-<div><strong>Region 10 Scheduling - August 29th</strong><span>Email · To: (add recipient)</span><span>Hi Ms. Taylor, we are looking at the schedule for Region 10. Would it be possible to move that session to August 29th? We have significant travel starting Septe…</span></div>
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Region 10 Scheduling - August 29th"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true">Hi Ms. Taylor, we are looking at the schedule for Region 10. Would it be possible to move that session to August 29th? We have significant travel starting September 28th and want to ensure we have adequate coverage.</div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-6f7b9d7c-a1a1-42b4-b66c-f55f7f8f475f" data-task-id="6f7b9d7c-a1a1-42b4-b66c-f55f7f8f475f" style="--event:var(--cyan)" data-search="empowerment training assessment template hi devin, as discussed, here is the empowerment training assessment template we developed with tomasa. let me know if you need help converting this for the website or crowd party. ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--cyan)"></span>
+  <strong>Send empowerment training assessment template to Devin</strong>
+  <span class="kind-badge">Email</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Empowerment Training Assessment Template as sent"> Sent</label>
 </div>
-<div class="email-row" data-task-id="6f7b9d7c-a1a1-42b4-b66c-f55f7f8f475f" data-search="empowerment training assessment template hi devin, as discussed, here is the empowerment training assessment template we developed with tomasa. let me know if you need help converting this for the website or crowd party.">
-<input type="checkbox" class="sent-check" aria-label="Mark Empowerment Training Assessment Template as sent">
-<div><strong>Empowerment Training Assessment Template</strong><span>Email · To: (add recipient)</span><span>Hi Devin, as discussed, here is the empowerment training assessment template we developed with Tomasa. Let me know if you need help converting this for the webs…</span></div>
-</div>
-<div class="email-row" data-task-id="2debb8bf-ab63-47ae-8619-002baf998a28" data-search="follow-up: region 10 fun and learn planning hi ms. taylor,
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Empowerment Training Assessment Template"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true">Hi Devin, as discussed, here is the empowerment training assessment template we developed with Tomasa. Let me know if you need help converting this for the website or Crowd Party.</div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-2debb8bf-ab63-47ae-8619-002baf998a28" data-task-id="2debb8bf-ab63-47ae-8619-002baf998a28" style="--event:var(--purple)" data-search="follow-up: region 10 fun and learn planning hi ms. taylor,
 
 it was great connecting today to discuss the region 10 expansion.
 
@@ -971,34 +1099,249 @@ as discussed, we have penciled in september 26th for the one-day fun and learn e
 i will follow up shortly with the summary and the registration links for the young people to sign up for the prep. looking forward to partnering with you on this.
 
 best,
-anthony">
-<input type="checkbox" class="sent-check" aria-label="Mark Follow-up: Region 10 Fun and Learn Planning as sent">
-<div><strong>Follow-up: Region 10 Fun and Learn Planning</strong><span>Email · To: (add recipient)</span><span>Hi Ms. Taylor,
+anthony ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--purple)"></span>
+  <strong>Email Ms. Taylor meeting summary and links</strong>
+  <span class="kind-badge">Email</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Follow-up: Region 10 Fun and Learn Planning as sent"> Sent</label>
+</div>
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Follow-up: Region 10 Fun and Learn Planning"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true">Hi Ms. Taylor,
 
 It was great connecting today to discuss the Region 10 expansion.
 
-As discussed, we have penciled in September 26th for the one-day Fun and Lear…</span></div>
+As discussed, we have penciled in September 26th for the one-day Fun and Learn event. I have also scheduled our first prep session for August 5th at 5:30 PM.
+
+I will follow up shortly with the summary and the registration links for the young people to sign up for the prep. Looking forward to partnering with you on this.
+
+Best,
+Anthony</div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-18de8d51-9a9d-4eaf-9006-ec9e16d6bce0" data-task-id="18de8d51-9a9d-4eaf-9006-ec9e16d6bce0" style="--event:var(--navy)" data-search="connect darnell with na foundation  ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--navy)"></span>
+  <strong>Connect Darnell with NA Foundation</strong>
+  <span class="kind-badge">Message</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Connect Darnell with NA Foundation as sent"> Sent</label>
 </div>
-<div class="email-row" data-task-id="18de8d51-9a9d-4eaf-9006-ec9e16d6bce0" data-search="connect darnell with na foundation ">
-<input type="checkbox" class="sent-check" aria-label="Mark Connect Darnell with NA Foundation as sent">
-<div><strong>Connect Darnell with NA Foundation</strong><span>Message · To: (add recipient)</span><span></span></div>
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Connect Darnell with NA Foundation"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true"></div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-be6ba35d-d1fe-4eed-89f5-964c4ce71007" data-task-id="be6ba35d-d1fe-4eed-89f5-964c4ce71007" style="--event:var(--navy)" data-search="follow up with brooklyn and reggie  ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--navy)"></span>
+  <strong>Follow up with Brooklyn and Reggie</strong>
+  <span class="kind-badge">Message</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Follow up with Brooklyn and Reggie as sent"> Sent</label>
 </div>
-<div class="email-row" data-task-id="be6ba35d-d1fe-4eed-89f5-964c4ce71007" data-search="follow up with brooklyn and reggie ">
-<input type="checkbox" class="sent-check" aria-label="Mark Follow up with Brooklyn and Reggie as sent">
-<div><strong>Follow up with Brooklyn and Reggie</strong><span>Message · To: (add recipient)</span><span></span></div>
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Follow up with Brooklyn and Reggie"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true"></div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-afd69d22-b73b-43a1-b54d-16c835bad49c" data-task-id="afd69d22-b73b-43a1-b54d-16c835bad49c" style="--event:var(--cyan)" data-search="check with kathleen about august 20th training  ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--cyan)"></span>
+  <strong>Check with Kathleen about August 20th training</strong>
+  <span class="kind-badge">Message</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Check with Kathleen about August 20th training as sent"> Sent</label>
 </div>
-<div class="email-row" data-task-id="afd69d22-b73b-43a1-b54d-16c835bad49c" data-search="check with kathleen about august 20th training ">
-<input type="checkbox" class="sent-check" aria-label="Mark Check with Kathleen about August 20th training as sent">
-<div><strong>Check with Kathleen about August 20th training</strong><span>Message · To: (add recipient)</span><span></span></div>
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Check with Kathleen about August 20th training"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true"></div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-128b928d-6568-40de-89b7-dec89295bb0e" data-task-id="128b928d-6568-40de-89b7-dec89295bb0e" style="--event:var(--coral)" data-search="contact anay about darnell assistance  ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--coral)"></span>
+  <strong>Contact Anay about Darnell assistance</strong>
+  <span class="kind-badge">Message</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Contact Anay about Darnell assistance as sent"> Sent</label>
 </div>
-<div class="email-row" data-task-id="128b928d-6568-40de-89b7-dec89295bb0e" data-search="contact anay about darnell assistance ">
-<input type="checkbox" class="sent-check" aria-label="Mark Contact Anay about Darnell assistance as sent">
-<div><strong>Contact Anay about Darnell assistance</strong><span>Message · To: (add recipient)</span><span></span></div>
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Contact Anay about Darnell assistance"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true"></div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+<article class="email-card" id="email-08f4d995-1f8b-4906-a5fa-0a634c0d8f4e" data-task-id="08f4d995-1f8b-4906-a5fa-0a634c0d8f4e" style="--event:var(--green)" data-search="send meeting poll to committee  ">
+<div class="email-card-head">
+  <span class="event-dot" style="background:var(--green)"></span>
+  <strong>Send meeting poll to committee</strong>
+  <span class="kind-badge">Message</span>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark Send meeting poll to committee as sent"> Sent</label>
 </div>
-<div class="email-row" data-task-id="08f4d995-1f8b-4906-a5fa-0a634c0d8f4e" data-search="send meeting poll to committee ">
-<input type="checkbox" class="sent-check" aria-label="Mark Send meeting poll to committee as sent">
-<div><strong>Send meeting poll to committee</strong><span>Message · To: (add recipient)</span><span></span></div>
-</div>
+<div class="email-field"><label>To</label><input class="field email-to" value="" placeholder="Add recipient email"></div>
+<div class="email-field"><label>Subject</label><input class="field email-subject" value="Send meeting poll to committee"></div>
+<div class="email-field"><label>Body</label><div class="field email-body" contenteditable="true" role="textbox" aria-multiline="true"></div></div>
+<div class="email-actions"><button class="action-btn secondary copy-email-btn" type="button">Copy full email</button></div>
+</article>
+      </div>
+    </section>
+
+    <section class="view" id="view-materials" role="tabpanel" hidden>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Draft Materials</h2>
+          <p class="section-subtitle">One editable brief per lane, built from the real open tasks in it. Edit headline/subhead/body inline.</p>
+        </div>
+        <label class="search-wrap"><input class="field" id="materialSearch" type="search" placeholder="Search materials…"></label>
+      </div>
+      <div class="materials-grid" id="materialsGrid" artifact-sync>
+<article class="material-card" id="material-leadership-retreat" style="--material:var(--navy)" data-search="leadership retreat">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">LEADERSHIP RETREAT</h3>
+    <p class="material-subhead" contenteditable="true">9 open items · next due Jul 13, 2026</p>
+    <div class="material-body" contenteditable="true">- Purchase retreat ingredients and supplies
+- Connect Darnell with NA Foundation
+- Follow up with Brooklyn and Reggie
+- Confirm SUV/Van rental size
+- Finalize retreat logistics
+- Finish leadership retreat prep and Empower Hour materials
+- Purchase retreat food and supplies
+- Check cabin hygiene supplies on arrival</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-ambassadors-regions" style="--material:var(--purple)" data-search="ambassadors &amp; regions">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">AMBASSADORS &amp; REGIONS</h3>
+    <p class="material-subhead" contenteditable="true">8 open items · next due Aug 3, 2026</p>
+    <div class="material-body" contenteditable="true">- Get partner agency list from Renee
+- Remind team about social responsibility day
+- Request Hilton and GHI budget balances from Finance
+- Ask Lindsay for Salesforce applicant list recommendations
+- Schedule Ambassador planning meeting for August 20th
+- Email Kendall and Victoria about Savannah Bananas outreach
+- Email Ms. Taylor meeting summary and links
+- Host Region 10 prep session</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-fun-learn-events" style="--material:var(--cyan)" data-search="fun &amp; learn events">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">FUN &amp; LEARN EVENTS</h3>
+    <p class="material-subhead" contenteditable="true">7 open items · next due No date set yet</p>
+    <div class="material-body" contenteditable="true">- Check with Kathleen about August 20th training
+- Conduct training data assessment with Devin and team
+- Send empowerment training assessment template to Devin
+- Send meeting notes
+- Finalize Fun and Learn agenda
+- Update Jeopardy game content
+- Register Mason for Sept 12 training</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-personal-home" style="--material:#8b4bd7" data-search="personal &amp; home">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">PERSONAL &amp; HOME</h3>
+    <p class="material-subhead" contenteditable="true">4 open items · next due Jul 24, 2026</p>
+    <div class="material-body" contenteditable="true">- Update vet on Samson&#x27;s progress
+- Update vet on Samson&#x27;s progress (mobility)
+- Administer Samson&#x27;s medication loading dose
+- Review childcare request with Char</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-navy-reserve" style="--material:#3a4a5a" data-search="navy reserve">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">NAVY RESERVE</h3>
+    <p class="material-subhead" contenteditable="true">3 open items · next due Aug 21, 2026</p>
+    <div class="material-body" contenteditable="true">- Navy Duties — NRC Atlanta
+- Drill weekend
+- Drill Exam / PFA make-up</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-training-curriculum" style="--material:#0b9fc4" data-search="training &amp; curriculum">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">TRAINING &amp; CURRICULUM</h3>
+    <p class="material-subhead" contenteditable="true">3 open items · next due Sep 12, 2026</p>
+    <div class="material-body" contenteditable="true">- Check Nathaniel&#x27;s IDA registration
+- Send training slides to Georgia Appleseed
+- Schedule follow-up for training quiz</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-vacation-travel" style="--material:#0e9e8a" data-search="vacation &amp; travel">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">VACATION &amp; TRAVEL</h3>
+    <p class="material-subhead" contenteditable="true">3 open items · next due Sep 12, 2026</p>
+    <div class="material-body" contenteditable="true">- New York trip
+- Email Ms. Taylor regarding Region 10 scheduling
+- Schedule 2-3 group meeting dates to finalize Hawaii trip</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-youth-support" style="--material:var(--coral)" data-search="youth support">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">YOUTH SUPPORT</h3>
+    <p class="material-subhead" contenteditable="true">2 open items · next due Jul 16, 2026</p>
+    <div class="material-body" contenteditable="true">- Email resource hub documentation to colleague
+- Contact Anay about Darnell assistance</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-org-ops-finance" style="--material:var(--green)" data-search="org ops &amp; finance">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">ORG OPS &amp; FINANCE</h3>
+    <p class="material-subhead" contenteditable="true">2 open items · next due Jul 31, 2026</p>
+    <div class="material-body" contenteditable="true">- Email Devin Rudy for Child Tax Credit form
+- Send meeting poll to committee</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-policy-courts-j4c" style="--material:#f28b00" data-search="policy &amp; courts (j4c)">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">POLICY &amp; COURTS (J4C)</h3>
+    <p class="material-subhead" contenteditable="true">2 open items · next due Aug 13, 2026</p>
+    <div class="material-body" contenteditable="true">- Attend joint study committee meeting
+- Complete 2026 self-assessment</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-d-d-campaign" style="--material:#7a2e2e" data-search="d&amp;d campaign">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">D&amp;D CAMPAIGN</h3>
+    <p class="material-subhead" contenteditable="true">2 open items · next due No date set yet</p>
+    <div class="material-body" contenteditable="true">- Level up D&amp;D character to 16
+- Prep for Underdark arc: drow encampment follow-up</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-school-ksu" style="--material:#3355dd" data-search="school (ksu)">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">SCHOOL (KSU)</h3>
+    <p class="material-subhead" contenteditable="true">1 open item · next due Aug 15, 2026</p>
+    <div class="material-body" contenteditable="true">- Check KSU calendar for conflicts</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
+<article class="material-card" id="material-internship" style="--material:#c2185b" data-search="internship">
+  <div class="material-preview">
+    <span class="material-brand">Str8Jacket Brain Control</span>
+    <h3 class="material-headline" contenteditable="true">INTERNSHIP</h3>
+    <p class="material-subhead" contenteditable="true">1 open item · next due Aug 19, 2026</p>
+    <div class="material-body" contenteditable="true">- Attend KSU MSW Internship Support meeting</div>
+  </div>
+  <div class="material-actions"><button class="action-btn secondary copy-material-btn" type="button">Copy draft</button></div>
+</article>
       </div>
     </section>
 
@@ -1010,53 +1353,65 @@ As discussed, we have penciled in September 26th for the one-day Fun and Lear…
         </div>
       </div>
       <div class="cal-list">
-<div class="cal-row">
+<div class="cal-row" data-due="2026-08-19T16:00:00">
 <span class="event-dot" style="background:#c2185b"></span>
 <div><strong>KSU MSW Internship Support (Noon Placement Meeting)</strong><span>Wed, Aug 19 · 12:00 PM ET · weekly · Internship</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-08-21T00:00:00">
 <span class="event-dot" style="background:#3a4a5a"></span>
 <div><strong>Navy Duties — NRC Atlanta</strong><span>Fri, Aug 21 (all day) · Navy Reserve</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-08-22T00:00:00">
 <span class="event-dot" style="background:#3a4a5a"></span>
 <div><strong>Drill</strong><span>Sat, Aug 22 (all day) · Navy Reserve</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-08-26T16:00:00">
 <span class="event-dot" style="background:#c2185b"></span>
 <div><strong>KSU MSW Internship Support (Noon Placement Meeting)</strong><span>Wed, Aug 26 · 12:00 PM ET · weekly · Internship</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-09-01T13:30:00">
 <span class="event-dot" style="background:var(--green)"></span>
 <div><strong>Monthly Avengers Assembly (EmpowerMEnt)</strong><span>Tue, Sep 1 · 9:30 AM ET · Org Ops &amp; Finance</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-09-02T16:00:00">
 <span class="event-dot" style="background:#c2185b"></span>
 <div><strong>KSU MSW Internship Support (Noon Placement Meeting)</strong><span>Wed, Sep 2 · 12:00 PM ET · weekly · Internship</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-09-09T16:00:00">
 <span class="event-dot" style="background:#c2185b"></span>
 <div><strong>KSU MSW Internship Support (Noon Placement Meeting)</strong><span>Wed, Sep 9 · 12:00 PM ET · weekly · Internship</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-09-12T00:00:00">
 <span class="event-dot" style="background:#0e9e8a"></span>
 <div><strong>New York trip</strong><span>Sat, Sep 12 (all day) · Vacation &amp; Travel</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-09-16T16:00:00">
 <span class="event-dot" style="background:#c2185b"></span>
 <div><strong>KSU MSW Internship Support (Noon Placement Meeting)</strong><span>Wed, Sep 16 · 12:00 PM ET · weekly · Internship</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-09-17T00:00:00">
 <span class="event-dot" style="background:#8b4bd7"></span>
 <div><strong>Anniversary</strong><span>Thu, Sep 17 (all day) · Personal &amp; Home</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-09-19T00:00:00">
 <span class="event-dot" style="background:#3a4a5a"></span>
 <div><strong>Drill Exam / PFA Make-up</strong><span>Sat, Sep 19 (all day) · Navy Reserve</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
-<div class="cal-row">
+<div class="cal-row" data-due="2026-09-19T12:00:00">
 <span class="event-dot" style="background:#8b4bd7"></span>
 <div><strong>Stover monthly budget</strong><span>Sat, Sep 19 · 8:00 AM ET · Personal &amp; Home</span></div>
+<span class="soon-badge" hidden>⏳ Coming up</span>
 </div>
       </div>
     </section>
@@ -1236,6 +1591,42 @@ As discussed, we have penciled in September 26th for the one-day Fun and Lear…
   </footer>
 </div>
 
+<button class="focus-launch" id="focusLaunch" aria-controls="focusPanel" aria-expanded="false">
+  <span class="focus-launch-icon" aria-hidden="true">⏱</span>
+  <span><span id="focusMiniTime">25:00</span></span>
+</button>
+<div class="focus-backdrop" id="focusBackdrop"></div>
+<aside class="focus-panel" id="focusPanel" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="focus-head">
+    <div><h2>Focus Station</h2><p>One task. One timer.</p></div>
+    <button class="focus-close" id="focusClose" aria-label="Close focus timer">×</button>
+  </div>
+  <div class="focus-content">
+    <div class="pomo-modes">
+      <button class="pomo-mode" data-pomo-mode="focus" aria-pressed="true">Focus • 25</button>
+      <button class="pomo-mode" data-pomo-mode="short" aria-pressed="false">Short • 5</button>
+      <button class="pomo-mode" data-pomo-mode="long" aria-pressed="false">Long • 15</button>
+    </div>
+    <div class="timer-ring" id="timerRing"><div class="timer-display"><strong id="timerText">25:00</strong><span id="timerModeLabel">Focus Session</span></div></div>
+    <div class="focus-task-box">
+      <label for="focusTaskSelect">Task for this session</label>
+      <select class="field" id="focusTaskSelect"></select>
+    </div>
+    <div class="focus-controls">
+      <button class="action-btn" id="timerStart">Start Focus</button>
+      <button class="action-btn secondary" id="timerReset">Reset</button>
+      <button class="action-btn secondary" id="timerSkip">Skip</button>
+    </div>
+    <button class="action-btn secondary" style="width:100%;margin-top:10px" id="completeFocusTask">Check off this task</button>
+    <div class="pomo-stats">
+      <div class="pomo-stat"><strong id="pomoSessionCount">0</strong><span>Sessions</span></div>
+      <div class="pomo-stat"><strong id="pomoMinuteCount">0</strong><span>Minutes</span></div>
+      <div class="pomo-stat"><strong id="pomoCycleCount">0/4</strong><span>Cycle</span></div>
+    </div>
+  </div>
+</aside>
+
+<script>window.__POMO_TASKS__ = [{"id": "c6effe1b-713a-48f1-8937-25415a547407", "title": "Purchase retreat ingredients and supplies", "lane": "Leadership Retreat"}, {"id": "18de8d51-9a9d-4eaf-9006-ec9e16d6bce0", "title": "Connect Darnell with NA Foundation", "lane": "Leadership Retreat"}, {"id": "be6ba35d-d1fe-4eed-89f5-964c4ce71007", "title": "Follow up with Brooklyn and Reggie", "lane": "Leadership Retreat"}, {"id": "2ba97765-66de-4757-9b61-389af6840149", "title": "Confirm SUV/Van rental size", "lane": "Leadership Retreat"}, {"id": "1fb263cd-1dbe-4358-a1eb-fdcb8c5061a9", "title": "Finalize retreat logistics", "lane": "Leadership Retreat"}, {"id": "37c64eb0-a5f0-4bbd-a412-88c676a34892", "title": "Finish leadership retreat prep and Empower Hour materials", "lane": "Leadership Retreat"}, {"id": "c7beaa74-2b46-4112-b55e-d4506858fe53", "title": "Email resource hub documentation to colleague", "lane": "Youth Support"}, {"id": "c204d562-9a2a-4afa-a83f-6baeb5e2f703", "title": "Purchase retreat food and supplies", "lane": "Leadership Retreat"}, {"id": "7b941858-de48-4360-853a-58ebd2666b52", "title": "Check cabin hygiene supplies on arrival", "lane": "Leadership Retreat"}, {"id": "a119684e-b106-4aa6-8e2a-43f626c6a2c6", "title": "Update vet on Samson's progress", "lane": "Personal & Home"}, {"id": "db24bc89-6c3a-44d6-987e-534d5558a04e", "title": "Update vet on Samson's progress (mobility)", "lane": "Personal & Home"}, {"id": "f88d1ba8-6bff-4862-8524-58477ce535db", "title": "Administer Samson's medication loading dose", "lane": "Personal & Home"}, {"id": "0bb31d2a-e491-4cf9-8742-5f8778d34c06", "title": "Email Devin Rudy for Child Tax Credit form", "lane": "Org Ops & Finance"}, {"id": "cd8bda42-a5bc-4ec9-a027-4879923d8c7b", "title": "Get partner agency list from Renee", "lane": "Ambassadors & Regions"}, {"id": "cfe9c398-bda8-408b-8b1f-11c37072f883", "title": "Remind team about social responsibility day", "lane": "Ambassadors & Regions"}, {"id": "b601854a-05eb-4267-b64f-591fbc9d5645", "title": "Attend joint study committee meeting", "lane": "Policy & Courts (J4C)"}, {"id": "31a98732-ebb6-461f-a8d5-af898388a342", "title": "Check KSU calendar for conflicts", "lane": "School (KSU)"}, {"id": "8ea24d98-0d8b-4f92-b3a9-c59ec039a243", "title": "Review childcare request with Char", "lane": "Personal & Home"}, {"id": "0c283684-aba5-4d40-a787-b3b229b3dea3", "title": "Complete 2026 self-assessment", "lane": "Policy & Courts (J4C)"}, {"id": "cal-ksu-internship", "title": "Attend KSU MSW Internship Support meeting", "lane": "Internship"}, {"id": "cal-navy-duties", "title": "Navy Duties \u2014 NRC Atlanta", "lane": "Navy Reserve"}, {"id": "cal-drill", "title": "Drill weekend", "lane": "Navy Reserve"}, {"id": "b253f13a-df6e-4941-ac23-78ef365d66d9", "title": "Check Nathaniel's IDA registration", "lane": "Training & Curriculum"}, {"id": "cal-nyc-trip", "title": "New York trip", "lane": "Vacation & Travel"}, {"id": "cal-drill-exam", "title": "Drill Exam / PFA make-up", "lane": "Navy Reserve"}, {"id": "96f624e1-ec31-4014-b657-e954d339ac0a", "title": "Request Hilton and GHI budget balances from Finance", "lane": "Ambassadors & Regions"}, {"id": "9d97b02c-6c6f-47ab-9682-f58a6c2f059d", "title": "Ask Lindsay for Salesforce applicant list recommendations", "lane": "Ambassadors & Regions"}, {"id": "5faa738e-546e-4c6d-863f-15c04ba9910e", "title": "Schedule Ambassador planning meeting for August 20th", "lane": "Ambassadors & Regions"}, {"id": "36b9cc6b-1592-4294-9a23-dde4f123c89a", "title": "Email Kendall and Victoria about Savannah Bananas outreach", "lane": "Ambassadors & Regions"}, {"id": "cb77f92e-f962-4d8e-bac3-2e290762938f", "title": "Send training slides to Georgia Appleseed", "lane": "Training & Curriculum"}, {"id": "8bb41aad-feab-4bed-ac43-8badf7d79885", "title": "Schedule follow-up for training quiz", "lane": "Training & Curriculum"}, {"id": "81183fd3-9f9e-4654-b870-37b6f835d5dd", "title": "Email Ms. Taylor regarding Region 10 scheduling", "lane": "Vacation & Travel"}, {"id": "afd69d22-b73b-43a1-b54d-16c835bad49c", "title": "Check with Kathleen about August 20th training", "lane": "Fun & Learn Events"}, {"id": "735f55f8-f1c9-4341-ab43-54b31aea9cb7", "title": "Conduct training data assessment with Devin and team", "lane": "Fun & Learn Events"}, {"id": "128b928d-6568-40de-89b7-dec89295bb0e", "title": "Contact Anay about Darnell assistance", "lane": "Youth Support"}, {"id": "6f7b9d7c-a1a1-42b4-b66c-f55f7f8f475f", "title": "Send empowerment training assessment template to Devin", "lane": "Fun & Learn Events"}, {"id": "2debb8bf-ab63-47ae-8619-002baf998a28", "title": "Email Ms. Taylor meeting summary and links", "lane": "Ambassadors & Regions"}, {"id": "f47fb2c4-c2c7-42fa-8c07-dd49716dd41a", "title": "Host Region 10 prep session", "lane": "Ambassadors & Regions"}, {"id": "18e0ee0b-e1d9-44ab-b7e9-d099d9239595", "title": "Level up D&D character to 16", "lane": "D&D Campaign"}, {"id": "baeddc6b-1479-49bb-9a05-0c6d3faa1680", "title": "Send meeting notes", "lane": "Fun & Learn Events"}, {"id": "55a37161-b105-42b4-ac9a-cd25aa2a9be7", "title": "Finalize Fun and Learn agenda", "lane": "Fun & Learn Events"}, {"id": "01169662-dad8-4c7a-b515-5d9bbda88a06", "title": "Update Jeopardy game content", "lane": "Fun & Learn Events"}, {"id": "71765981-dcfa-4020-b125-86ef6f3cef81", "title": "Post retreat photos to Facebook", "lane": "Leadership Retreat"}, {"id": "af8bcded-b0d9-414f-9106-b216169b33cd", "title": "Register Mason for Sept 12 training", "lane": "Fun & Learn Events"}, {"id": "08f4d995-1f8b-4906-a5fa-0a634c0d8f4e", "title": "Send meeting poll to committee", "lane": "Org Ops & Finance"}, {"id": "ff-hawaii-1", "title": "Schedule 2-3 group meeting dates to finalize Hawaii trip", "lane": "Vacation & Travel"}, {"id": "ff-dnd-underdark", "title": "Prep for Underdark arc: drow encampment follow-up", "lane": "D&D Campaign"}];</script>
 <script>
 (function () {
   var taskBody = document.getElementById('taskBody');
@@ -1326,28 +1717,182 @@ As discussed, we have penciled in September 26th for the one-day Fun and Lear…
     applyFilters();
   });
 
-  document.querySelectorAll('.view-tab').forEach(function(tab) {
-    tab.addEventListener('click', function() {
-      document.querySelectorAll('.view-tab').forEach(function(t) { t.setAttribute('aria-selected', 'false'); });
-      document.querySelectorAll('.view').forEach(function(v) { v.hidden = true; });
-      tab.setAttribute('aria-selected', 'true');
-      document.getElementById('view-' + tab.dataset.view).hidden = false;
-    });
-  });
-
-  var notesSearch = document.getElementById('notesSearch');
-  if (notesSearch) {
-    notesSearch.addEventListener('input', function() {
-      var q = notesSearch.value.trim().toLowerCase();
-      document.querySelectorAll('.note-card').forEach(function(card) {
+  function wireSearch(inputId, cardSelector) {
+    var input = document.getElementById(inputId);
+    if (!input) return;
+    input.addEventListener('input', function() {
+      var q = input.value.trim().toLowerCase();
+      document.querySelectorAll(cardSelector).forEach(function(card) {
         card.dataset.localHidden = (!q || card.dataset.search.indexOf(q) !== -1) ? 'false' : 'true';
       });
     });
   }
+  wireSearch('notesSearch', '.note-card');
+  wireSearch('emailSearch', '.email-card');
+  wireSearch('materialSearch', '.material-card');
 
   document.getElementById('refreshBtn').addEventListener('click', function() {
     alert('This button flags the refresh for Claude to pick up. Automatic hourly refreshes already keep this page current — ask Claude in your session for an instant one if you need it sooner.');
   });
+
+  // ---- Clickable "Progress by Lane" side panel: syncs with the lane rail filter ----
+  document.getElementById('eventProgress').addEventListener('click', function(e) {
+    var item = e.target.closest('[data-lane-progress]');
+    if (!item) return;
+    activateLane(item.dataset.laneProgress);
+  });
+  document.getElementById('eventProgress').addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var item = e.target.closest('[data-lane-progress]');
+    if (!item) return;
+    e.preventDefault();
+    activateLane(item.dataset.laneProgress);
+  });
+  function activateLane(lane) {
+    var chip = document.querySelector('.lane-filter[data-lane="' + CSS.escape(lane) + '"]');
+    var wasOn = chip && chip.getAttribute('aria-pressed') === 'true';
+    document.querySelectorAll('.lane-filter').forEach(function(b) { b.setAttribute('aria-pressed', 'false'); });
+    if (chip && !wasOn) chip.setAttribute('aria-pressed', 'true');
+    document.querySelectorAll('[data-lane-progress]').forEach(function(el) {
+      el.setAttribute('aria-pressed', String(el.dataset.laneProgress === lane && !wasOn));
+    });
+    applyFilters();
+    setView('my');
+  }
+
+  // ---- Tab switching + jump-to helper ----
+  function setView(view) {
+    document.querySelectorAll('.view-tab').forEach(function(t) { t.setAttribute('aria-selected', String(t.dataset.view === view)); });
+    document.querySelectorAll('.view').forEach(function(v) { v.hidden = (v.id !== 'view-' + view); });
+  }
+  document.querySelectorAll('.view-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() { setView(tab.dataset.view); });
+  });
+
+  // ---- "Type" jump: click a Draft Email / Send Message badge to jump straight to that draft ----
+  document.getElementById('taskBody').addEventListener('click', function(e) {
+    var btn = e.target.closest('.type-jump[data-jump-tab]');
+    if (!btn) return;
+    setView(btn.dataset.jumpTab);
+    var target = document.getElementById('email-' + btn.dataset.jumpTarget);
+    if (target) {
+      target.dataset.localHidden = 'false';
+      var search = document.getElementById('emailSearch'); if (search) search.value = '';
+      document.querySelectorAll('.email-card').forEach(function(c) { c.dataset.localHidden = 'false'; });
+      target.scrollIntoView({behavior: 'smooth', block: 'center'});
+      target.animate([{boxShadow: '0 0 0 4px rgba(8,191,230,.55)'}, {boxShadow: '0 0 0 0 rgba(8,191,230,0)'}], {duration: 1200});
+    }
+  });
+
+  // ---- Coming-up highlight: computed fresh on every load, never synced ----
+  var SOON_DAYS = 14;
+  function markSoon(el) {
+    var iso = el.dataset.due;
+    if (!iso) return;
+    var due = new Date(iso);
+    var now = new Date();
+    var diffDays = (due - now) / 86400000;
+    var badge = el.querySelector('.soon-badge');
+    if (diffDays >= 0 && diffDays <= SOON_DAYS) {
+      el.classList.add('is-soon');
+      if (badge) { badge.hidden = false; badge.textContent = '⏳ ' + Math.ceil(diffDays) + 'd out'; }
+    }
+  }
+  document.querySelectorAll('.task-row[data-due]').forEach(markSoon);
+  document.querySelectorAll('.cal-row[data-due]').forEach(markSoon);
+
+  // ---- Copy buttons (email + material) ----
+  function copyText(text, btn) {
+    var done = function() { var old = btn.textContent; btn.textContent = 'Copied ✓'; setTimeout(function() { btn.textContent = old; }, 1500); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done); else done();
+  }
+  document.getElementById('emailList').addEventListener('click', function(e) {
+    var btn = e.target.closest('.copy-email-btn');
+    if (!btn) return;
+    var card = btn.closest('.email-card');
+    var to = card.querySelector('.email-to').value;
+    var subj = card.querySelector('.email-subject').value;
+    var body = card.querySelector('.email-body').innerText;
+    copyText('To: ' + to + '\nSubject: ' + subj + '\n\n' + body, btn);
+  });
+  document.getElementById('materialsGrid').addEventListener('click', function(e) {
+    var btn = e.target.closest('.copy-material-btn');
+    if (!btn) return;
+    var card = btn.closest('.material-card');
+    var text = card.querySelector('.material-headline').innerText + '\n' + card.querySelector('.material-subhead').innerText + '\n\n' + card.querySelector('.material-body').innerText;
+    copyText(text, btn);
+  });
+
+  // ---- Pomodoro focus timer (per-browser via localStorage; not part of the shared doc) ----
+  (function () {
+    var DURATIONS = {focus: 25*60, short: 5*60, long: 15*60};
+    var KEY = 'sjbc-pomo-v1';
+    var state = Object.assign({mode: 'focus', remaining: DURATIONS.focus, running: false, endAt: null, sessions: 0, selectedTask: null}, JSON.parse(localStorage.getItem(KEY) || '{}'));
+    var tasks = window.__POMO_TASKS__ || [];
+    var sel = document.getElementById('focusTaskSelect');
+    sel.innerHTML = tasks.map(function(t) { return '<option value="' + t.id + '">' + (t.title.length > 46 ? t.title.slice(0,46) + '…' : t.title) + '</option>'; }).join('');
+    if (state.selectedTask && tasks.some(function(t) { return t.id === state.selectedTask; })) sel.value = state.selectedTask;
+    else if (tasks.length) state.selectedTask = tasks[0].id;
+
+    function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+    function fmt(sec) { sec = Math.max(0, Math.ceil(sec)); return String(Math.floor(sec/60)).padStart(2,'0') + ':' + String(sec%60).padStart(2,'0'); }
+    function label(mode) { return mode === 'focus' ? 'Focus Session' : mode === 'short' ? 'Short Break' : 'Long Break'; }
+    function render() {
+      if (state.running && state.endAt) state.remaining = Math.max(0, Math.ceil((state.endAt - Date.now())/1000));
+      var total = DURATIONS[state.mode];
+      var pct = total ? Math.min(100, Math.max(0, (1 - state.remaining/total) * 100)) : 0;
+      var t = fmt(state.remaining);
+      document.getElementById('timerRing').style.setProperty('--timer-pct', pct);
+      document.getElementById('timerText').textContent = t;
+      document.getElementById('timerModeLabel').textContent = label(state.mode);
+      document.getElementById('focusMiniTime').textContent = t;
+      document.getElementById('timerStart').textContent = state.running ? 'Pause' : (state.mode === 'focus' ? 'Start Focus' : 'Start Break');
+      document.getElementById('pomoSessionCount').textContent = state.sessions;
+      document.getElementById('pomoMinuteCount').textContent = state.sessions * 25;
+      document.getElementById('pomoCycleCount').textContent = (state.sessions % 4) + '/4';
+      document.querySelectorAll('.pomo-mode').forEach(function(b) { b.setAttribute('aria-pressed', String(b.dataset.pomoMode === state.mode)); });
+    }
+    function setMode(mode) { state.mode = mode; state.running = false; state.endAt = null; state.remaining = DURATIONS[mode]; save(); render(); }
+    function toggle() {
+      if (state.running) { state.remaining = Math.max(0, Math.ceil((state.endAt - Date.now())/1000)); state.running = false; state.endAt = null; }
+      else { if (state.remaining <= 0) state.remaining = DURATIONS[state.mode]; state.running = true; state.endAt = Date.now() + state.remaining*1000; }
+      save(); render();
+    }
+    function complete() {
+      if (state.mode === 'focus') state.sessions += 1;
+      var next = state.mode === 'focus' ? (state.sessions % 4 === 0 ? 'long' : 'short') : 'focus';
+      state.mode = next; state.remaining = DURATIONS[next]; state.running = false; state.endAt = null;
+      save(); render();
+    }
+    document.getElementById('focusLaunch').addEventListener('click', function() {
+      document.getElementById('focusPanel').classList.add('open');
+      document.getElementById('focusBackdrop').classList.add('open');
+      document.getElementById('focusPanel').setAttribute('aria-hidden', 'false');
+    });
+    function closeFocus() {
+      document.getElementById('focusPanel').classList.remove('open');
+      document.getElementById('focusBackdrop').classList.remove('open');
+      document.getElementById('focusPanel').setAttribute('aria-hidden', 'true');
+    }
+    document.getElementById('focusClose').addEventListener('click', closeFocus);
+    document.getElementById('focusBackdrop').addEventListener('click', closeFocus);
+    document.querySelectorAll('.pomo-mode').forEach(function(b) { b.addEventListener('click', function() { setMode(b.dataset.pomoMode); }); });
+    document.getElementById('timerStart').addEventListener('click', toggle);
+    document.getElementById('timerReset').addEventListener('click', function() { state.running = false; state.endAt = null; state.remaining = DURATIONS[state.mode]; save(); render(); });
+    document.getElementById('timerSkip').addEventListener('click', complete);
+    sel.addEventListener('change', function() { state.selectedTask = sel.value; save(); });
+    document.getElementById('completeFocusTask').addEventListener('click', function() {
+      var row = document.querySelector('.task-row[data-task-id="' + sel.value + '"]');
+      if (row) { var cb = row.querySelector('.check'); if (cb && !cb.checked) { cb.checked = true; cb.dispatchEvent(new Event('change', {bubbles: true})); } }
+    });
+    setInterval(function() {
+      if (!state.running) return;
+      var remaining = Math.max(0, Math.ceil((state.endAt - Date.now())/1000));
+      if (remaining !== state.remaining) { state.remaining = remaining; render(); }
+      if (remaining <= 0) complete();
+    }, 250);
+    render();
+  })();
 
   recompute();
   applyFilters();
