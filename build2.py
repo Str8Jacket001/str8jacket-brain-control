@@ -49,7 +49,7 @@ h1 {{ max-width: 760px; margin: 5px 0 8px; font-family: Impact, Haettenschweiler
 .stat:nth-child(2) strong {{ color: var(--yellow); }}
 .stat:nth-child(3) strong {{ color: var(--coral); }}
 .stat span {{ display: block; margin-top: 5px; color: #dce8ff; font-size: 11px; }}
-.view-nav {{ display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); background: white; border-bottom: 1px solid var(--line); }}
+.view-nav {{ display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); background: white; border-bottom: 1px solid var(--line); }}
 .view-tab {{ position: relative; display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 62px; padding: 14px; color: var(--navy); background: white; border: 0; font-weight: 900; font-size: 15px; text-transform: uppercase; }}
 .view-tab::after {{ content: ""; position: absolute; right: 15%; bottom: -1px; left: 15%; height: 5px; border-radius: 4px 4px 0 0; background: transparent; }}
 .view-tab[aria-selected="true"] {{ background: #f9fbfe; }}
@@ -136,6 +136,19 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
 .email-row:has(.sent-check:checked) {{ opacity: .5; }}
 .email-row:has(.sent-check:checked) strong {{ text-decoration: line-through; }}
 .sent-check {{ width: 19px; height: 19px; margin-top: 2px; accent-color: var(--green); cursor: pointer; }}
+.cal-list {{ display: grid; gap: 8px; }}
+.cal-row {{ display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; padding: 11px 12px; background: white; border: 1px solid var(--line); border-radius: 8px; }}
+.cal-row .event-dot {{ margin-top: 5px; }}
+.cal-row strong {{ display: block; color: var(--navy); font-size: 13px; }}
+.cal-row span {{ display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }}
+.notes-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 14px; }}
+.note-card {{ --event: var(--navy); padding: 13px 14px; background: white; border: 1px solid var(--line); border-left: 4px solid var(--event); border-radius: 8px; }}
+.note-card[data-local-hidden="true"] {{ display: none; }}
+.note-card-head {{ display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }}
+.note-card-head strong {{ flex: 1; color: var(--navy); font-size: 13px; line-height: 1.25; }}
+.note-summary {{ margin: 0 0 8px; color: var(--muted); font-size: 12px; line-height: 1.4; }}
+.note-card ul {{ margin: 0; padding-left: 18px; color: var(--ink); font-size: 12px; line-height: 1.5; }}
+.notes-legend {{ display: flex; gap: 14px; margin-bottom: 14px; color: var(--muted); font-size: 12px; flex-wrap: wrap; }}
 .footer {{ display: flex; justify-content: space-between; gap: 20px; padding: 15px clamp(20px,3vw,48px); color: #dce8ff; background: var(--navy); font-size: 11px; flex-wrap: wrap; }}
 .footer strong {{ color: var(--yellow); }}
 .banner {{ display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 18px; padding: 11px 15px; background: #eefbfe; border: 1px solid #b8eaf3; border-radius: 8px; color: var(--navy); font-size: 12px; flex-wrap: wrap; }}
@@ -191,6 +204,8 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
     <button class="view-tab" id="tab-my" data-view="my" role="tab" aria-selected="true">My Tasks <span class="nav-count">{frag['total_mine']}</span></button>
     <button class="view-tab" id="tab-others" data-view="others" role="tab" aria-selected="false">Waiting on Others <span class="nav-count">{frag['total_others']}</span></button>
     <button class="view-tab" id="tab-emails" data-view="emails" role="tab" aria-selected="false">Follow-ups &amp; Emails <span class="nav-count">{frag['total_emails']}</span></button>
+    <button class="view-tab" id="tab-calendar" data-view="calendar" role="tab" aria-selected="false">Calendar</button>
+    <button class="view-tab" id="tab-notes" data-view="notes" role="tab" aria-selected="false">All Notes</button>
   </nav>
 
   <main class="main">
@@ -285,6 +300,37 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
       </div>
       <div class="email-panel-list" id="emailList" artifact-sync>
 {frag['email_cards']}
+      </div>
+    </section>
+
+    <section class="view" id="view-calendar" role="tabpanel" hidden>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Upcoming Appointments</h2>
+          <p class="section-subtitle">Pulled from Google Calendar (primary calendar, next ~5 weeks). Read-only — edit in Google Calendar directly.</p>
+        </div>
+      </div>
+      <div class="cal-list">
+{frag['calendar']}
+      </div>
+    </section>
+
+    <section class="view" id="view-notes" role="tabpanel" hidden>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">All Notes, Combined</h2>
+          <p class="section-subtitle">Every source meeting/note, matched by title where they overlap.</p>
+        </div>
+        <label class="search-wrap"><input class="field" id="notesSearch" type="search" placeholder="Search notes…"></label>
+      </div>
+      <div class="notes-legend">
+        <span>✅ Pocket &amp; Fireflies — live</span>
+        <span>⏳ Zoom — token expired, needs reconnect</span>
+        <span>⏳ Notion — connected, nothing relevant found yet</span>
+        <span>✕ Google Keep — not connected</span>
+      </div>
+      <div class="notes-grid" id="notesGrid">
+{frag['notes']}
       </div>
     </section>
   </main>
@@ -393,6 +439,16 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
       document.getElementById('view-' + tab.dataset.view).hidden = false;
     }});
   }});
+
+  var notesSearch = document.getElementById('notesSearch');
+  if (notesSearch) {{
+    notesSearch.addEventListener('input', function() {{
+      var q = notesSearch.value.trim().toLowerCase();
+      document.querySelectorAll('.note-card').forEach(function(card) {{
+        card.dataset.localHidden = (!q || card.dataset.search.indexOf(q) !== -1) ? 'false' : 'true';
+      }});
+    }});
+  }}
 
   document.getElementById('refreshBtn').addEventListener('click', function() {{
     alert('This button flags the refresh for Claude to pick up. Automatic hourly refreshes already keep this page current — ask Claude in your session for an instant one if you need it sooner.');

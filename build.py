@@ -15,16 +15,31 @@ LANES = {
     "Org Ops & Finance": dict(color="var(--green)"),
     "Training & Curriculum": dict(color="#0b9fc4"),
     "Personal & Home": dict(color="#8b4bd7"),
+    "D&D Campaign": dict(color="#7a2e2e"),
+    "Vacation & Travel": dict(color="#0e9e8a"),
+    "School (KSU)": dict(color="#3355dd"),
+    "Internship": dict(color="#c2185b"),
+    "Navy Reserve": dict(color="#3a4a5a"),
 }
 
 def lane_for(it):
     t = (it.get("recordingTitle") or "") + " " + it.get("label","") + " " + it.get("context","")
     tl = t.lower()
+    if "d&d" in tl or "dungeon" in tl or "underdark" in tl or "campaign" in tl and "avengers" not in tl:
+        return "D&D Campaign"
+    if "hawaii" in tl or "excursion" in tl or "new york" in tl or "vacation" in tl:
+        return "Vacation & Travel"
+    if "internship support" in tl or "placement" in tl:
+        return "Internship"
+    if "ksu" in tl or "kennesaw" in tl or "msw" in tl:
+        return "School (KSU)"
+    if "navy" in tl or "drill" in tl or "pfa" in tl:
+        return "Navy Reserve"
     if "retreat" in tl or "orientation recap" in tl:
         return "Leadership Retreat"
-    if "samson" in tl or "dog" in tl or "d&d" in tl or "shadow pickup" in tl or "childcare" in tl:
+    if "samson" in tl or " dog " in (" "+tl+" ") or "shadow pickup" in tl or "childcare" in tl or "anniversary" in tl or "budget cal" in tl:
         return "Personal & Home"
-    if "j4c" in tl or "committee" in tl and "governance" not in tl:
+    if "j4c" in tl or ("committee" in tl and "governance" not in tl):
         return "Policy & Courts (J4C)"
     if "ambassador" in tl or "region 10" in tl or "region 12" in tl or "academy day" in tl:
         return "Ambassadors & Regions"
@@ -32,7 +47,7 @@ def lane_for(it):
         return "Training & Curriculum"
     if "resource hub" in tl or "darnell" in tl or "housing" in tl or "na foundation" in tl:
         return "Youth Support"
-    if "governance" in tl or "budget" in tl or "finance" in tl or "hilton" in tl or "ghi" in tl:
+    if "governance" in tl or "budget" in tl or "finance" in tl or "hilton" in tl or "ghi" in tl or "avengers" in tl:
         return "Org Ops & Finance"
     if "fun and learn" in tl:
         return "Fun & Learn Events"
@@ -187,12 +202,73 @@ def progress_item(lane, count):
 
 progress_html = "\n".join(progress_item(l, c) for l, c in sorted(lane_counts.items(), key=lambda x:-x[1]))
 
+# ---------- Calendar (Google Calendar, next ~5 weeks) ----------
+CALENDAR_EVENTS = [
+    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Aug 19 · 12:00 PM ET", lane="Internship", recurring=True),
+    dict(title="Navy Duties — NRC Atlanta", when="Fri, Aug 21 (all day)", lane="Navy Reserve"),
+    dict(title="Drill", when="Sat, Aug 22 (all day)", lane="Navy Reserve"),
+    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Aug 26 · 12:00 PM ET", lane="Internship", recurring=True),
+    dict(title="Monthly Avengers Assembly (EmpowerMEnt)", when="Tue, Sep 1 · 9:30 AM ET", lane="Org Ops & Finance"),
+    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Sep 2 · 12:00 PM ET", lane="Internship", recurring=True),
+    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Sep 9 · 12:00 PM ET", lane="Internship", recurring=True),
+    dict(title="New York trip", when="Sat, Sep 12 (all day)", lane="Vacation & Travel"),
+    dict(title="KSU MSW Internship Support (Noon Placement Meeting)", when="Wed, Sep 16 · 12:00 PM ET", lane="Internship", recurring=True),
+    dict(title="Anniversary", when="Thu, Sep 17 (all day)", lane="Personal & Home"),
+    dict(title="Drill Exam / PFA Make-up", when="Sat, Sep 19 (all day)", lane="Navy Reserve"),
+    dict(title="Stover monthly budget", when="Sat, Sep 19 · 8:00 AM ET", lane="Personal & Home"),
+]
+
+def cal_row(ev):
+    color = LANES[ev["lane"]]["color"]
+    tag = " · weekly" if ev.get("recurring") else ""
+    return f'''<div class="cal-row">
+<span class="event-dot" style="background:{color}"></span>
+<div><strong>{esc(ev['title'])}</strong><span>{esc(ev['when'])}{tag} · {esc(ev['lane'])}</span></div>
+</div>'''
+
+calendar_html = "\n".join(cal_row(e) for e in CALENDAR_EVENTS)
+
+# ---------- Combined notes digest (Pocket + Fireflies; Zoom/Notion/Keep pending) ----------
+by_recording = {}
+for it in items:
+    by_recording.setdefault(it["recordingTitle"], []).append(it)
+
+FIREFLIES_ONLY_SUMMARIES = {
+    "Youth Events Planning and Updates Meeting": "Welcomed intern Madison; planned Sept 26 Fun and Learns for Regions 10/12, venue talks, mandatory presenter training, grant data roles.",
+    "Prep Session and Event Logistics Meeting": "Finalized Aug 5-6 training prep: mandatory attendance, virtual branding, strategic-sharing safety practices, role assignments.",
+    "Leadership Retreat Planning and Guidelines": "Confirmed 12-15 person retreat roster, travel/sleeping logistics, Welcoming Committee, Wix migration off Constant Contact.",
+    "Event Planning and Engagement Strategies": "Monday youth event: icebreakers, Jeopardy game, Empower University training, venue/tech/food logistics for 15-18 attendees.",
+}
+
+def note_card(title, its):
+    src = "fireflies" if any(i.get("source") == "fireflies" for i in its) or title in FIREFLIES_ONLY_SUMMARIES else "pocket"
+    lane = its[0]["lane"] if its else "Org Ops & Finance"
+    color = LANES.get(lane, {"color": "var(--navy)"})["color"]
+    items_html = "".join(f"<li>{esc(i['label'])}</li>" for i in its[:6])
+    extra = FIREFLIES_ONLY_SUMMARIES.get(title, "")
+    extra_html = f'<p class="note-summary">{esc(extra)}</p>' if extra else ""
+    badge = "Fireflies" if src == "fireflies" else "Pocket"
+    return f'''<div class="note-card" style="--event:{color}" data-search="{esc((title+" "+extra).lower())}">
+<div class="note-card-head"><span class="event-dot" style="background:{color}"></span><strong>{esc(title)}</strong><span class="status">{badge}</span></div>
+{extra_html}
+<ul>{items_html}</ul>
+</div>'''
+
+note_cards = [note_card(title, its) for title, its in by_recording.items()]
+for title, summary in FIREFLIES_ONLY_SUMMARIES.items():
+    if title not in by_recording:
+        note_cards.append(note_card(title, []))
+
+notes_html = "\n".join(note_cards)
+
 out = dict(
     task_rows=task_rows_html,
     dep_rows=dep_rows_html,
     email_cards=email_cards_html,
     lane_chips=lane_chips_html,
     progress=progress_html,
+    calendar=calendar_html,
+    notes=notes_html,
     total_mine=len(mine),
     total_others=len(others),
     total_emails=len(emails)+len(messages),

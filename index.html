@@ -44,7 +44,7 @@ h1 { max-width: 760px; margin: 5px 0 8px; font-family: Impact, Haettenschweiler,
 .stat:nth-child(2) strong { color: var(--yellow); }
 .stat:nth-child(3) strong { color: var(--coral); }
 .stat span { display: block; margin-top: 5px; color: #dce8ff; font-size: 11px; }
-.view-nav { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); background: white; border-bottom: 1px solid var(--line); }
+.view-nav { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); background: white; border-bottom: 1px solid var(--line); }
 .view-tab { position: relative; display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 62px; padding: 14px; color: var(--navy); background: white; border: 0; font-weight: 900; font-size: 15px; text-transform: uppercase; }
 .view-tab::after { content: ""; position: absolute; right: 15%; bottom: -1px; left: 15%; height: 5px; border-radius: 4px 4px 0 0; background: transparent; }
 .view-tab[aria-selected="true"] { background: #f9fbfe; }
@@ -131,6 +131,19 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 .email-row:has(.sent-check:checked) { opacity: .5; }
 .email-row:has(.sent-check:checked) strong { text-decoration: line-through; }
 .sent-check { width: 19px; height: 19px; margin-top: 2px; accent-color: var(--green); cursor: pointer; }
+.cal-list { display: grid; gap: 8px; }
+.cal-row { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; padding: 11px 12px; background: white; border: 1px solid var(--line); border-radius: 8px; }
+.cal-row .event-dot { margin-top: 5px; }
+.cal-row strong { display: block; color: var(--navy); font-size: 13px; }
+.cal-row span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+.notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 14px; }
+.note-card { --event: var(--navy); padding: 13px 14px; background: white; border: 1px solid var(--line); border-left: 4px solid var(--event); border-radius: 8px; }
+.note-card[data-local-hidden="true"] { display: none; }
+.note-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.note-card-head strong { flex: 1; color: var(--navy); font-size: 13px; line-height: 1.25; }
+.note-summary { margin: 0 0 8px; color: var(--muted); font-size: 12px; line-height: 1.4; }
+.note-card ul { margin: 0; padding-left: 18px; color: var(--ink); font-size: 12px; line-height: 1.5; }
+.notes-legend { display: flex; gap: 14px; margin-bottom: 14px; color: var(--muted); font-size: 12px; flex-wrap: wrap; }
 .footer { display: flex; justify-content: space-between; gap: 20px; padding: 15px clamp(20px,3vw,48px); color: #dce8ff; background: var(--navy); font-size: 11px; flex-wrap: wrap; }
 .footer strong { color: var(--yellow); }
 .banner { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 18px; padding: 11px 15px; background: #eefbfe; border: 1px solid #b8eaf3; border-radius: 8px; color: var(--navy); font-size: 12px; flex-wrap: wrap; }
@@ -173,7 +186,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
         <div>
           <h2 class="stat-title">Overall Progress</h2>
           <div class="stat-grid">
-            <div class="stat"><strong id="totalTasks">40</strong><span>Total Tasks</span></div>
+            <div class="stat"><strong id="totalTasks">47</strong><span>Total Tasks</span></div>
             <div class="stat"><strong id="doneTasks">0</strong><span>Completed</span></div>
             <div class="stat"><strong id="overdueTasks">19</strong><span>Overdue</span></div>
           </div>
@@ -183,9 +196,11 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
   </header>
 
   <nav class="view-nav" role="tablist" aria-label="Mission control views">
-    <button class="view-tab" id="tab-my" data-view="my" role="tab" aria-selected="true">My Tasks <span class="nav-count">40</span></button>
-    <button class="view-tab" id="tab-others" data-view="others" role="tab" aria-selected="false">Waiting on Others <span class="nav-count">10</span></button>
+    <button class="view-tab" id="tab-my" data-view="my" role="tab" aria-selected="true">My Tasks <span class="nav-count">47</span></button>
+    <button class="view-tab" id="tab-others" data-view="others" role="tab" aria-selected="false">Waiting on Others <span class="nav-count">11</span></button>
     <button class="view-tab" id="tab-emails" data-view="emails" role="tab" aria-selected="false">Follow-ups &amp; Emails <span class="nav-count">13</span></button>
+    <button class="view-tab" id="tab-calendar" data-view="calendar" role="tab" aria-selected="false">Calendar</button>
+    <button class="view-tab" id="tab-notes" data-view="notes" role="tab" aria-selected="false">All Notes</button>
   </nav>
 
   <main class="main">
@@ -210,19 +225,23 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </button>
 <button class="event-filter lane-filter" style="--event:var(--purple)" data-lane="Ambassadors &amp; Regions" aria-pressed="false">
 <span class="event-icon">●</span>
-<span><strong>Ambassadors &amp; Regions</strong><small>12 tasks</small></span>
+<span><strong>Ambassadors &amp; Regions</strong><small>11 tasks</small></span>
 </button>
 <button class="event-filter lane-filter" style="--event:var(--cyan)" data-lane="Fun &amp; Learn Events" aria-pressed="false">
 <span class="event-icon">●</span>
 <span><strong>Fun &amp; Learn Events</strong><small>7 tasks</small></span>
 </button>
-<button class="event-filter lane-filter" style="--event:#8b4bd7" data-lane="Personal &amp; Home" aria-pressed="false">
-<span class="event-icon">●</span>
-<span><strong>Personal &amp; Home</strong><small>6 tasks</small></span>
-</button>
 <button class="event-filter lane-filter" style="--event:#f28b00" data-lane="Policy &amp; Courts (J4C)" aria-pressed="false">
 <span class="event-icon">●</span>
 <span><strong>Policy &amp; Courts (J4C)</strong><small>5 tasks</small></span>
+</button>
+<button class="event-filter lane-filter" style="--event:#8b4bd7" data-lane="Personal &amp; Home" aria-pressed="false">
+<span class="event-icon">●</span>
+<span><strong>Personal &amp; Home</strong><small>4 tasks</small></span>
+</button>
+<button class="event-filter lane-filter" style="--event:#0e9e8a" data-lane="Vacation &amp; Travel" aria-pressed="false">
+<span class="event-icon">●</span>
+<span><strong>Vacation &amp; Travel</strong><small>4 tasks</small></span>
 </button>
 <button class="event-filter lane-filter" style="--event:var(--green)" data-lane="Org Ops &amp; Finance" aria-pressed="false">
 <span class="event-icon">●</span>
@@ -232,9 +251,25 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 <span class="event-icon">●</span>
 <span><strong>Training &amp; Curriculum</strong><small>3 tasks</small></span>
 </button>
+<button class="event-filter lane-filter" style="--event:#3a4a5a" data-lane="Navy Reserve" aria-pressed="false">
+<span class="event-icon">●</span>
+<span><strong>Navy Reserve</strong><small>3 tasks</small></span>
+</button>
 <button class="event-filter lane-filter" style="--event:var(--coral)" data-lane="Youth Support" aria-pressed="false">
 <span class="event-icon">●</span>
 <span><strong>Youth Support</strong><small>2 tasks</small></span>
+</button>
+<button class="event-filter lane-filter" style="--event:#7a2e2e" data-lane="D&amp;D Campaign" aria-pressed="false">
+<span class="event-icon">●</span>
+<span><strong>D&amp;D Campaign</strong><small>2 tasks</small></span>
+</button>
+<button class="event-filter lane-filter" style="--event:#3355dd" data-lane="School (KSU)" aria-pressed="false">
+<span class="event-icon">●</span>
+<span><strong>School (KSU)</strong><small>1 task</small></span>
+</button>
+<button class="event-filter lane-filter" style="--event:#c2185b" data-lane="Internship" aria-pressed="false">
+<span class="event-icon">●</span>
+<span><strong>Internship</strong><small>1 task</small></span>
 </button>
       </div></div>
 
@@ -247,7 +282,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
         </div>
         <div class="phase-group" aria-label="Top vs all">
           <button class="phase-btn top-btn" data-top="top" aria-pressed="true">Top 20</button>
-          <button class="phase-btn top-btn" data-top="all" aria-pressed="false">All 40</button>
+          <button class="phase-btn top-btn" data-top="all" aria-pressed="false">All 47</button>
         </div>
         <label class="search-wrap">
           <input class="field" id="taskSearch" type="search" placeholder="Search tasks…">
@@ -405,14 +440,14 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 <td data-label="Type">Create Reminder</td>
 <td data-label="Lane"><span class="event-dot" style="background:#f28b00"></span>Policy &amp; Courts (J4C)</td>
 </tr>
-<tr class="task-row" data-task-id="31a98732-ebb6-461f-a8d5-af898388a342" data-lane="Personal &amp; Home" data-priority="medium" data-top="0" data-search="check ksu calendar for conflicts anthony needs to check his kennesaw state university schedule to see if it conflicts with the requested childcare dates. shadow pickup help discussion">
+<tr class="task-row" data-task-id="31a98732-ebb6-461f-a8d5-af898388a342" data-lane="School (KSU)" data-priority="medium" data-top="0" data-search="check ksu calendar for conflicts anthony needs to check his kennesaw state university schedule to see if it conflicts with the requested childcare dates. shadow pickup help discussion">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Check KSU calendar for conflicts done"></td>
 <td data-label="Task"><span class="task-number">17</span><span class="task-name">Check KSU calendar for conflicts</span><div class="task-detail">Anthony needs to check his Kennesaw State University schedule to see if it conflicts with the requested childcare dates.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date urgent">OVERDUE · Aug 15, 2026</span></td>
 <td data-label="Type">Create Reminder</td>
-<td data-label="Lane"><span class="event-dot" style="background:#8b4bd7"></span>Personal &amp; Home</td>
+<td data-label="Lane"><span class="event-dot" style="background:#3355dd"></span>School (KSU)</td>
 </tr>
 <tr class="task-row" data-task-id="8ea24d98-0d8b-4f92-b3a9-c59ec039a243" data-lane="Personal &amp; Home" data-priority="medium" data-top="0" data-search="review childcare request with char anthony&#x27;s friend requested help with childcare for her son, shadow, on alternating thursdays due to a new job schedule. shadow pickup help discussion">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Review childcare request with Char done"></td>
@@ -432,18 +467,63 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 <td data-label="Type">Create Reminder</td>
 <td data-label="Lane"><span class="event-dot" style="background:#f28b00"></span>Policy &amp; Courts (J4C)</td>
 </tr>
+<tr class="task-row" data-task-id="cal-ksu-internship" data-lane="Internship" data-priority="medium" data-top="0" data-search="attend ksu msw internship support meeting weekly ksu msw internship placement support meeting (wednesdays, noon). ksu msw internship support(noon placement meeting)">
+<td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Attend KSU MSW Internship Support meeting done"></td>
+<td data-label="Task"><span class="task-number">20</span><span class="task-name">Attend KSU MSW Internship Support meeting</span><div class="task-detail">Weekly KSU MSW internship placement support meeting (Wednesdays, noon).</div></td>
+<td data-label="Priority"><span class="priority medium">Medium</span></td>
+<td data-label="Owner">Anthony</td>
+<td data-label="Due"><span class="date">Aug 19, 2026</span></td>
+<td data-label="Type">Create Reminder</td>
+<td data-label="Lane"><span class="event-dot" style="background:#c2185b"></span>Internship</td>
+</tr>
+<tr class="task-row" data-task-id="cal-navy-duties" data-lane="Navy Reserve" data-priority="medium" data-top="0" data-search="navy duties — nrc atlanta navy reserve duties at nrc atlanta. navy duties">
+<td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Navy Duties — NRC Atlanta done"></td>
+<td data-label="Task"><span class="task-number">21</span><span class="task-name">Navy Duties — NRC Atlanta</span><div class="task-detail">Navy Reserve duties at NRC Atlanta.</div></td>
+<td data-label="Priority"><span class="priority medium">Medium</span></td>
+<td data-label="Owner">Anthony</td>
+<td data-label="Due"><span class="date">Aug 21, 2026</span></td>
+<td data-label="Type">Create Reminder</td>
+<td data-label="Lane"><span class="event-dot" style="background:#3a4a5a"></span>Navy Reserve</td>
+</tr>
+<tr class="task-row" data-task-id="cal-drill" data-lane="Navy Reserve" data-priority="medium" data-top="0" data-search="drill weekend scheduled navy reserve drill weekend. drill">
+<td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Drill weekend done"></td>
+<td data-label="Task"><span class="task-number">22</span><span class="task-name">Drill weekend</span><div class="task-detail">Scheduled Navy Reserve drill weekend.</div></td>
+<td data-label="Priority"><span class="priority medium">Medium</span></td>
+<td data-label="Owner">Anthony</td>
+<td data-label="Due"><span class="date">Aug 22, 2026</span></td>
+<td data-label="Type">Create Reminder</td>
+<td data-label="Lane"><span class="event-dot" style="background:#3a4a5a"></span>Navy Reserve</td>
+</tr>
 <tr class="task-row" data-task-id="b253f13a-df6e-4941-ac23-78ef365d66d9" data-lane="Training &amp; Curriculum" data-priority="medium" data-top="0" data-search="check nathaniel&#x27;s ida registration anthony stover discussing the upcoming ida day on september 12th. empowerment website and training q&amp;a">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Check Nathaniel&#x27;s IDA registration done"></td>
-<td data-label="Task"><span class="task-number">20</span><span class="task-name">Check Nathaniel&#x27;s IDA registration</span><div class="task-detail">Anthony Stover discussing the upcoming IDA Day on September 12th.</div></td>
+<td data-label="Task"><span class="task-number">23</span><span class="task-name">Check Nathaniel&#x27;s IDA registration</span><div class="task-detail">Anthony Stover discussing the upcoming IDA Day on September 12th.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">Sep 12, 2026</span></td>
 <td data-label="Type">Create Reminder</td>
 <td data-label="Lane"><span class="event-dot" style="background:#0b9fc4"></span>Training &amp; Curriculum</td>
 </tr>
+<tr class="task-row" data-task-id="cal-nyc-trip" data-lane="Vacation &amp; Travel" data-priority="low" data-top="0" data-search="new york trip personal trip. new york- v">
+<td data-label="Done"><input type="checkbox" class="check" aria-label="Mark New York trip done"></td>
+<td data-label="Task"><span class="task-number">24</span><span class="task-name">New York trip</span><div class="task-detail">Personal trip.</div></td>
+<td data-label="Priority"><span class="priority low">Low</span></td>
+<td data-label="Owner">Anthony</td>
+<td data-label="Due"><span class="date">Sep 12, 2026</span></td>
+<td data-label="Type">Create Reminder</td>
+<td data-label="Lane"><span class="event-dot" style="background:#0e9e8a"></span>Vacation &amp; Travel</td>
+</tr>
+<tr class="task-row" data-task-id="cal-drill-exam" data-lane="Navy Reserve" data-priority="medium" data-top="0" data-search="drill exam / pfa make-up navy reserve drill exam / pfa makeup. drillexam/pfa make up">
+<td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Drill Exam / PFA make-up done"></td>
+<td data-label="Task"><span class="task-number">25</span><span class="task-name">Drill Exam / PFA make-up</span><div class="task-detail">Navy Reserve drill exam / PFA makeup.</div></td>
+<td data-label="Priority"><span class="priority medium">Medium</span></td>
+<td data-label="Owner">Anthony</td>
+<td data-label="Due"><span class="date">Sep 19, 2026</span></td>
+<td data-label="Type">Create Reminder</td>
+<td data-label="Lane"><span class="event-dot" style="background:#3a4a5a"></span>Navy Reserve</td>
+</tr>
 <tr class="task-row" data-task-id="96f624e1-ec31-4014-b657-e954d339ac0a" data-lane="Ambassadors &amp; Regions" data-priority="high" data-top="1" data-search="request hilton and ghi budget balances from finance anthony needs to request budget balances for hilton and other grants. ambassadors role and event planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Request Hilton and GHI budget balances from Finance done"></td>
-<td data-label="Task"><span class="task-number">21</span><span class="task-name">Request Hilton and GHI budget balances from Finance</span><div class="task-detail">Anthony needs to request budget balances for Hilton and other grants.</div></td>
+<td data-label="Task"><span class="task-number">26</span><span class="task-name">Request Hilton and GHI budget balances from Finance</span><div class="task-detail">Anthony needs to request budget balances for Hilton and other grants.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -452,7 +532,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="9d97b02c-6c6f-47ab-9682-f58a6c2f059d" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="ask lindsay for salesforce applicant list recommendations anthony needs to get the list of new applicants from salesforce for the ambassadors. ambassadors role and event planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Ask Lindsay for Salesforce applicant list recommendations done"></td>
-<td data-label="Task"><span class="task-number">22</span><span class="task-name">Ask Lindsay for Salesforce applicant list recommendations</span><div class="task-detail">Anthony needs to get the list of new applicants from Salesforce for the ambassadors.</div></td>
+<td data-label="Task"><span class="task-number">27</span><span class="task-name">Ask Lindsay for Salesforce applicant list recommendations</span><div class="task-detail">Anthony needs to get the list of new applicants from Salesforce for the ambassadors.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -461,7 +541,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="5faa738e-546e-4c6d-863f-15c04ba9910e" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="schedule ambassador planning meeting for august 20th anthony needs to set up the next planning meeting. ambassadors role and event planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Schedule Ambassador planning meeting for August 20th done"></td>
-<td data-label="Task"><span class="task-number">23</span><span class="task-name">Schedule Ambassador planning meeting for August 20th</span><div class="task-detail">Anthony needs to set up the next planning meeting.</div></td>
+<td data-label="Task"><span class="task-number">28</span><span class="task-name">Schedule Ambassador planning meeting for August 20th</span><div class="task-detail">Anthony needs to set up the next planning meeting.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -470,7 +550,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="36b9cc6b-1592-4294-9a23-dde4f123c89a" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="email kendall and victoria about savannah bananas outreach anthony needs to coordinate with development regarding the savannah bananas outreach. ambassadors role and event planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Email Kendall and Victoria about Savannah Bananas outreach done"></td>
-<td data-label="Task"><span class="task-number">24</span><span class="task-name">Email Kendall and Victoria about Savannah Bananas outreach</span><div class="task-detail">Anthony needs to coordinate with development regarding the Savannah Bananas outreach.</div></td>
+<td data-label="Task"><span class="task-number">29</span><span class="task-name">Email Kendall and Victoria about Savannah Bananas outreach</span><div class="task-detail">Anthony needs to coordinate with development regarding the Savannah Bananas outreach.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -479,7 +559,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="cb77f92e-f962-4d8e-bac3-2e290762938f" data-lane="Training &amp; Curriculum" data-priority="medium" data-top="0" data-search="send training slides to georgia appleseed anthony needs to share the training slides with the georgia appleseed team as requested by darlene. ga appleseed staff training authentic youth engagement and abd">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Send training slides to Georgia Appleseed done"></td>
-<td data-label="Task"><span class="task-number">25</span><span class="task-name">Send training slides to Georgia Appleseed</span><div class="task-detail">Anthony needs to share the training slides with the Georgia Appleseed team as requested by Darlene.</div></td>
+<td data-label="Task"><span class="task-number">30</span><span class="task-name">Send training slides to Georgia Appleseed</span><div class="task-detail">Anthony needs to share the training slides with the Georgia Appleseed team as requested by Darlene.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -488,25 +568,25 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="8bb41aad-feab-4bed-ac43-8badf7d79885" data-lane="Training &amp; Curriculum" data-priority="low" data-top="0" data-search="schedule follow-up for training quiz follow up with the georgia appleseed team regarding the interactive &#x27;family feud&#x27; style quiz that was skipped due to time constraints. ga appleseed staff training authentic youth engagement and abd">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Schedule follow-up for training quiz done"></td>
-<td data-label="Task"><span class="task-number">26</span><span class="task-name">Schedule follow-up for training quiz</span><div class="task-detail">Follow up with the Georgia Appleseed team regarding the interactive &#x27;Family Feud&#x27; style quiz that was skipped due to time constraints.</div></td>
+<td data-label="Task"><span class="task-number">31</span><span class="task-name">Schedule follow-up for training quiz</span><div class="task-detail">Follow up with the Georgia Appleseed team regarding the interactive &#x27;Family Feud&#x27; style quiz that was skipped due to time constraints.</div></td>
 <td data-label="Priority"><span class="priority low">Low</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
 <td data-label="Type">Create Reminder</td>
 <td data-label="Lane"><span class="event-dot" style="background:#0b9fc4"></span>Training &amp; Curriculum</td>
 </tr>
-<tr class="task-row" data-task-id="81183fd3-9f9e-4654-b870-37b6f835d5dd" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="email ms. taylor regarding region 10 scheduling anthony needs to coordinate with ms. taylor regarding moving the region 10 event to august 29th to avoid travel congestion before the hawaii trip. fun and learn training planning">
+<tr class="task-row" data-task-id="81183fd3-9f9e-4654-b870-37b6f835d5dd" data-lane="Vacation &amp; Travel" data-priority="medium" data-top="0" data-search="email ms. taylor regarding region 10 scheduling anthony needs to coordinate with ms. taylor regarding moving the region 10 event to august 29th to avoid travel congestion before the hawaii trip. fun and learn training planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Email Ms. Taylor regarding Region 10 scheduling done"></td>
-<td data-label="Task"><span class="task-number">27</span><span class="task-name">Email Ms. Taylor regarding Region 10 scheduling</span><div class="task-detail">Anthony needs to coordinate with Ms. Taylor regarding moving the Region 10 event to August 29th to avoid travel congestion before the Hawaii trip.</div></td>
+<td data-label="Task"><span class="task-number">32</span><span class="task-name">Email Ms. Taylor regarding Region 10 scheduling</span><div class="task-detail">Anthony needs to coordinate with Ms. Taylor regarding moving the Region 10 event to August 29th to avoid travel congestion before the Hawaii trip.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
 <td data-label="Type">Draft Email</td>
-<td data-label="Lane"><span class="event-dot" style="background:var(--purple)"></span>Ambassadors &amp; Regions</td>
+<td data-label="Lane"><span class="event-dot" style="background:#0e9e8a"></span>Vacation &amp; Travel</td>
 </tr>
 <tr class="task-row" data-task-id="afd69d22-b73b-43a1-b54d-16c835bad49c" data-lane="Fun &amp; Learn Events" data-priority="low" data-top="0" data-search="check with kathleen about august 20th training anthony needs to verify if he is involved in the home stretch staff training for region 5 on august 20th. fun and learn training planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Check with Kathleen about August 20th training done"></td>
-<td data-label="Task"><span class="task-number">28</span><span class="task-name">Check with Kathleen about August 20th training</span><div class="task-detail">Anthony needs to verify if he is involved in the Home Stretch staff training for Region 5 on August 20th.</div></td>
+<td data-label="Task"><span class="task-number">33</span><span class="task-name">Check with Kathleen about August 20th training</span><div class="task-detail">Anthony needs to verify if he is involved in the Home Stretch staff training for Region 5 on August 20th.</div></td>
 <td data-label="Priority"><span class="priority low">Low</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -515,7 +595,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="735f55f8-f1c9-4341-ab43-54b31aea9cb7" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-search="conduct training data assessment with devin and team anthony and devin planned a deep dive on august 5th to assess training numbers against their september 30th goals. fun and learn training planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Conduct training data assessment with Devin and team done"></td>
-<td data-label="Task"><span class="task-number">29</span><span class="task-name">Conduct training data assessment with Devin and team</span><div class="task-detail">Anthony and Devin planned a deep dive on August 5th to assess training numbers against their September 30th goals.</div></td>
+<td data-label="Task"><span class="task-number">34</span><span class="task-name">Conduct training data assessment with Devin and team</span><div class="task-detail">Anthony and Devin planned a deep dive on August 5th to assess training numbers against their September 30th goals.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -524,7 +604,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="128b928d-6568-40de-89b7-dec89295bb0e" data-lane="Youth Support" data-priority="high" data-top="1" data-search="contact anay about darnell assistance anthony needs to follow up with anay regarding assistance for darnell, who is currently living out of his car. fun and learn training planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Contact Anay about Darnell assistance done"></td>
-<td data-label="Task"><span class="task-number">30</span><span class="task-name">Contact Anay about Darnell assistance</span><div class="task-detail">Anthony needs to follow up with Anay regarding assistance for Darnell, who is currently living out of his car.</div></td>
+<td data-label="Task"><span class="task-number">35</span><span class="task-name">Contact Anay about Darnell assistance</span><div class="task-detail">Anthony needs to follow up with Anay regarding assistance for Darnell, who is currently living out of his car.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -533,7 +613,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="6f7b9d7c-a1a1-42b4-b66c-f55f7f8f475f" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-search="send empowerment training assessment template to devin anthony mentioned sending a training assessment template to devin to be converted into a digital form. fun and learn training planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Send empowerment training assessment template to Devin done"></td>
-<td data-label="Task"><span class="task-number">31</span><span class="task-name">Send empowerment training assessment template to Devin</span><div class="task-detail">Anthony mentioned sending a training assessment template to Devin to be converted into a digital form.</div></td>
+<td data-label="Task"><span class="task-number">36</span><span class="task-name">Send empowerment training assessment template to Devin</span><div class="task-detail">Anthony mentioned sending a training assessment template to Devin to be converted into a digital form.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -542,7 +622,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="2debb8bf-ab63-47ae-8619-002baf998a28" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="email ms. taylor meeting summary and links anthony needs to follow up with ms. taylor with a summary and registration links. region 10 fun and learn planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Email Ms. Taylor meeting summary and links done"></td>
-<td data-label="Task"><span class="task-number">32</span><span class="task-name">Email Ms. Taylor meeting summary and links</span><div class="task-detail">Anthony needs to follow up with Ms. Taylor with a summary and registration links.</div></td>
+<td data-label="Task"><span class="task-number">37</span><span class="task-name">Email Ms. Taylor meeting summary and links</span><div class="task-detail">Anthony needs to follow up with Ms. Taylor with a summary and registration links.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -551,25 +631,25 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="f47fb2c4-c2c7-42fa-8c07-dd49716dd41a" data-lane="Ambassadors &amp; Regions" data-priority="medium" data-top="0" data-search="host region 10 prep session anthony is scheduling the first prep session for the region 10 event. region 10 fun and learn planning">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Host Region 10 prep session done"></td>
-<td data-label="Task"><span class="task-number">33</span><span class="task-name">Host Region 10 prep session</span><div class="task-detail">Anthony is scheduling the first prep session for the Region 10 event.</div></td>
+<td data-label="Task"><span class="task-number">38</span><span class="task-name">Host Region 10 prep session</span><div class="task-detail">Anthony is scheduling the first prep session for the Region 10 event.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
 <td data-label="Type">Create Reminder</td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--purple)"></span>Ambassadors &amp; Regions</td>
 </tr>
-<tr class="task-row" data-task-id="18e0ee0b-e1d9-44ab-b7e9-d099d9239595" data-lane="Personal &amp; Home" data-priority="medium" data-top="0" data-search="level up d&amp;d character to 16 the user needs to prepare for the next d&amp;d campaign session in two weeks. d&amp;d session: circle of the owl">
+<tr class="task-row" data-task-id="18e0ee0b-e1d9-44ab-b7e9-d099d9239595" data-lane="D&amp;D Campaign" data-priority="medium" data-top="0" data-search="level up d&amp;d character to 16 the user needs to prepare for the next d&amp;d campaign session in two weeks. d&amp;d session: circle of the owl">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Level up D&amp;D character to 16 done"></td>
-<td data-label="Task"><span class="task-number">34</span><span class="task-name">Level up D&amp;D character to 16</span><div class="task-detail">The user needs to prepare for the next D&amp;D campaign session in two weeks.</div></td>
+<td data-label="Task"><span class="task-number">39</span><span class="task-name">Level up D&amp;D character to 16</span><div class="task-detail">The user needs to prepare for the next D&amp;D campaign session in two weeks.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
 <td data-label="Type">Create Reminder</td>
-<td data-label="Lane"><span class="event-dot" style="background:#8b4bd7"></span>Personal &amp; Home</td>
+<td data-label="Lane"><span class="event-dot" style="background:#7a2e2e"></span>D&amp;D Campaign</td>
 </tr>
 <tr class="task-row" data-task-id="baeddc6b-1479-49bb-9a05-0c6d3faa1680" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-search="send meeting notes anthony plans to send out meeting notes and follow-up details. fun and learn plan debrief">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Send meeting notes done"></td>
-<td data-label="Task"><span class="task-number">35</span><span class="task-name">Send meeting notes</span><div class="task-detail">Anthony plans to send out meeting notes and follow-up details.</div></td>
+<td data-label="Task"><span class="task-number">40</span><span class="task-name">Send meeting notes</span><div class="task-detail">Anthony plans to send out meeting notes and follow-up details.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -578,7 +658,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="55a37161-b105-42b4-ac9a-cd25aa2a9be7" data-lane="Fun &amp; Learn Events" data-priority="high" data-top="1" data-search="finalize fun and learn agenda anthony needs to finalize the agenda and logistics for the upcoming fun and learn event on monday. fun and learn plan debrief">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Finalize Fun and Learn agenda done"></td>
-<td data-label="Task"><span class="task-number">36</span><span class="task-name">Finalize Fun and Learn agenda</span><div class="task-detail">Anthony needs to finalize the agenda and logistics for the upcoming Fun and Learn event on Monday.</div></td>
+<td data-label="Task"><span class="task-number">41</span><span class="task-name">Finalize Fun and Learn agenda</span><div class="task-detail">Anthony needs to finalize the agenda and logistics for the upcoming Fun and Learn event on Monday.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -587,7 +667,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="01169662-dad8-4c7a-b515-5d9bbda88a06" data-lane="Fun &amp; Learn Events" data-priority="medium" data-top="0" data-search="update jeopardy game content anthony needs to update the jeopardy game content for the upcoming workshop. fun and learn plan debrief">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Update Jeopardy game content done"></td>
-<td data-label="Task"><span class="task-number">37</span><span class="task-name">Update Jeopardy game content</span><div class="task-detail">Anthony needs to update the Jeopardy game content for the upcoming workshop.</div></td>
+<td data-label="Task"><span class="task-number">42</span><span class="task-name">Update Jeopardy game content</span><div class="task-detail">Anthony needs to update the Jeopardy game content for the upcoming workshop.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -596,7 +676,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="71765981-dcfa-4020-b125-86ef6f3cef81" data-lane="Leadership Retreat" data-priority="low" data-top="0" data-search="post retreat photos to facebook anthony needs to post photos from the recent retreat to the organization&#x27;s facebook page. fun and learn plan debrief">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Post retreat photos to Facebook done"></td>
-<td data-label="Task"><span class="task-number">38</span><span class="task-name">Post retreat photos to Facebook</span><div class="task-detail">Anthony needs to post photos from the recent retreat to the organization&#x27;s Facebook page.</div></td>
+<td data-label="Task"><span class="task-number">43</span><span class="task-name">Post retreat photos to Facebook</span><div class="task-detail">Anthony needs to post photos from the recent retreat to the organization&#x27;s Facebook page.</div></td>
 <td data-label="Priority"><span class="priority low">Low</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -605,7 +685,7 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="af8bcded-b0d9-414f-9106-b216169b33cd" data-lane="Fun &amp; Learn Events" data-priority="high" data-top="1" data-search="register mason for sept 12 training anthony needs to ensure mason is registered for the training on september 12th. fun and learn plan debrief">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Register Mason for Sept 12 training done"></td>
-<td data-label="Task"><span class="task-number">39</span><span class="task-name">Register Mason for Sept 12 training</span><div class="task-detail">Anthony needs to ensure Mason is registered for the training on September 12th.</div></td>
+<td data-label="Task"><span class="task-number">44</span><span class="task-name">Register Mason for Sept 12 training</span><div class="task-detail">Anthony needs to ensure Mason is registered for the training on September 12th.</div></td>
 <td data-label="Priority"><span class="priority high">High</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
@@ -614,12 +694,30 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 </tr>
 <tr class="task-row" data-task-id="08f4d995-1f8b-4906-a5fa-0a634c0d8f4e" data-lane="Org Ops &amp; Finance" data-priority="medium" data-top="0" data-search="send meeting poll to committee zara requested a poll to finalize the recurring meeting time for the governance committee. governance committee orientation check-in">
 <td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Send meeting poll to committee done"></td>
-<td data-label="Task"><span class="task-number">40</span><span class="task-name">Send meeting poll to committee</span><div class="task-detail">Zara requested a poll to finalize the recurring meeting time for the governance committee.</div></td>
+<td data-label="Task"><span class="task-number">45</span><span class="task-name">Send meeting poll to committee</span><div class="task-detail">Zara requested a poll to finalize the recurring meeting time for the governance committee.</div></td>
 <td data-label="Priority"><span class="priority medium">Medium</span></td>
 <td data-label="Owner">Anthony</td>
 <td data-label="Due"><span class="date">No due date</span></td>
 <td data-label="Type">Send Message</td>
 <td data-label="Lane"><span class="event-dot" style="background:var(--green)"></span>Org Ops &amp; Finance</td>
+</tr>
+<tr class="task-row" data-task-id="ff-hawaii-1" data-lane="Vacation &amp; Travel" data-priority="medium" data-top="0" data-search="schedule 2-3 group meeting dates to finalize hawaii trip hawaii trip group planning — from fireflies (not yet in pocket). hawaii trip excursion coordination meeting">
+<td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Schedule 2-3 group meeting dates to finalize Hawaii trip done"></td>
+<td data-label="Task"><span class="task-number">46</span><span class="task-name">Schedule 2-3 group meeting dates to finalize Hawaii trip</span><div class="task-detail">Hawaii trip group planning — from Fireflies (not yet in Pocket).</div></td>
+<td data-label="Priority"><span class="priority medium">Medium</span></td>
+<td data-label="Owner">Anthony</td>
+<td data-label="Due"><span class="date">No due date</span></td>
+<td data-label="Type">Create Reminder</td>
+<td data-label="Lane"><span class="event-dot" style="background:#0e9e8a"></span>Vacation &amp; Travel</td>
+</tr>
+<tr class="task-row" data-task-id="ff-dnd-underdark" data-lane="D&amp;D Campaign" data-priority="low" data-top="0" data-search="prep for underdark arc: drow encampment follow-up underdark campaign arc — prep for next d&amp;d session. campaign progress and tactical developments">
+<td data-label="Done"><input type="checkbox" class="check" aria-label="Mark Prep for Underdark arc: drow encampment follow-up done"></td>
+<td data-label="Task"><span class="task-number">47</span><span class="task-name">Prep for Underdark arc: drow encampment follow-up</span><div class="task-detail">Underdark campaign arc — prep for next D&amp;D session.</div></td>
+<td data-label="Priority"><span class="priority low">Low</span></td>
+<td data-label="Owner">Anthony</td>
+<td data-label="Due"><span class="date">No due date</span></td>
+<td data-label="Type">Create Reminder</td>
+<td data-label="Lane"><span class="event-dot" style="background:#7a2e2e"></span>D&amp;D Campaign</td>
 </tr>
             </tbody>
           </table>
@@ -634,19 +732,23 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
 <div class="event-progress-item" data-lane-progress="Ambassadors &amp; Regions" style="--event:var(--purple)">
-<div class="progress-row"><strong>Ambassadors &amp; Regions</strong><span><span class="lp-done">0</span>/12</span></div>
+<div class="progress-row"><strong>Ambassadors &amp; Regions</strong><span><span class="lp-done">0</span>/11</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
 <div class="event-progress-item" data-lane-progress="Fun &amp; Learn Events" style="--event:var(--cyan)">
 <div class="progress-row"><strong>Fun &amp; Learn Events</strong><span><span class="lp-done">0</span>/7</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
-<div class="event-progress-item" data-lane-progress="Personal &amp; Home" style="--event:#8b4bd7">
-<div class="progress-row"><strong>Personal &amp; Home</strong><span><span class="lp-done">0</span>/6</span></div>
-<div class="bar"><span style="--w:0%"></span></div>
-</div>
 <div class="event-progress-item" data-lane-progress="Policy &amp; Courts (J4C)" style="--event:#f28b00">
 <div class="progress-row"><strong>Policy &amp; Courts (J4C)</strong><span><span class="lp-done">0</span>/5</span></div>
+<div class="bar"><span style="--w:0%"></span></div>
+</div>
+<div class="event-progress-item" data-lane-progress="Personal &amp; Home" style="--event:#8b4bd7">
+<div class="progress-row"><strong>Personal &amp; Home</strong><span><span class="lp-done">0</span>/4</span></div>
+<div class="bar"><span style="--w:0%"></span></div>
+</div>
+<div class="event-progress-item" data-lane-progress="Vacation &amp; Travel" style="--event:#0e9e8a">
+<div class="progress-row"><strong>Vacation &amp; Travel</strong><span><span class="lp-done">0</span>/4</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
 <div class="event-progress-item" data-lane-progress="Org Ops &amp; Finance" style="--event:var(--green)">
@@ -657,8 +759,24 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 <div class="progress-row"><strong>Training &amp; Curriculum</strong><span><span class="lp-done">0</span>/3</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
+<div class="event-progress-item" data-lane-progress="Navy Reserve" style="--event:#3a4a5a">
+<div class="progress-row"><strong>Navy Reserve</strong><span><span class="lp-done">0</span>/3</span></div>
+<div class="bar"><span style="--w:0%"></span></div>
+</div>
 <div class="event-progress-item" data-lane-progress="Youth Support" style="--event:var(--coral)">
 <div class="progress-row"><strong>Youth Support</strong><span><span class="lp-done">0</span>/2</span></div>
+<div class="bar"><span style="--w:0%"></span></div>
+</div>
+<div class="event-progress-item" data-lane-progress="D&amp;D Campaign" style="--event:#7a2e2e">
+<div class="progress-row"><strong>D&amp;D Campaign</strong><span><span class="lp-done">0</span>/2</span></div>
+<div class="bar"><span style="--w:0%"></span></div>
+</div>
+<div class="event-progress-item" data-lane-progress="School (KSU)" style="--event:#3355dd">
+<div class="progress-row"><strong>School (KSU)</strong><span><span class="lp-done">0</span>/1</span></div>
+<div class="bar"><span style="--w:0%"></span></div>
+</div>
+<div class="event-progress-item" data-lane-progress="Internship" style="--event:#c2185b">
+<div class="progress-row"><strong>Internship</strong><span><span class="lp-done">0</span>/1</span></div>
 <div class="bar"><span style="--w:0%"></span></div>
 </div>
             </div>
@@ -764,6 +882,14 @@ tr:has(.received-check:not(:checked)) .status::before { content: "Waiting"; }
 <td data-label="Due"><span class="date">No due date</span></td>
 <td data-label="Blocks"><span class="event-dot" style="background:var(--green)"></span>Org Ops &amp; Finance</td>
 <td data-label="Status"><label><input type="checkbox" class="received-check" aria-label="Mark received from Daren"><span class="status"></span></label></td>
+</tr>
+<tr data-task-id="ff-hawaii-2" data-lane="Vacation &amp; Travel" data-search="complete hawaii excursion sign-ups and payments (zelle/cash app) amon hawaii trip excursion sign-ups and payments.">
+<td data-label="Person"><span class="person-mark">AM</span>Amon</td>
+<td data-label="Contact">Text</td>
+<td data-label="Deliverable">Complete Hawaii excursion sign-ups and payments (Zelle/Cash App)<div class="task-detail">Hawaii trip excursion sign-ups and payments.</div></td>
+<td data-label="Due"><span class="date">No due date</span></td>
+<td data-label="Blocks"><span class="event-dot" style="background:#0e9e8a"></span>Vacation &amp; Travel</td>
+<td data-label="Status"><label><input type="checkbox" class="received-check" aria-label="Mark received from Amon"><span class="status"></span></label></td>
 </tr>
             </tbody>
           </table>
@@ -875,6 +1001,233 @@ As discussed, we have penciled in September 26th for the one-day Fun and Lear…
 </div>
       </div>
     </section>
+
+    <section class="view" id="view-calendar" role="tabpanel" hidden>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Upcoming Appointments</h2>
+          <p class="section-subtitle">Pulled from Google Calendar (primary calendar, next ~5 weeks). Read-only — edit in Google Calendar directly.</p>
+        </div>
+      </div>
+      <div class="cal-list">
+<div class="cal-row">
+<span class="event-dot" style="background:#c2185b"></span>
+<div><strong>KSU MSW Internship Support (Noon Placement Meeting)</strong><span>Wed, Aug 19 · 12:00 PM ET · weekly · Internship</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:#3a4a5a"></span>
+<div><strong>Navy Duties — NRC Atlanta</strong><span>Fri, Aug 21 (all day) · Navy Reserve</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:#3a4a5a"></span>
+<div><strong>Drill</strong><span>Sat, Aug 22 (all day) · Navy Reserve</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:#c2185b"></span>
+<div><strong>KSU MSW Internship Support (Noon Placement Meeting)</strong><span>Wed, Aug 26 · 12:00 PM ET · weekly · Internship</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:var(--green)"></span>
+<div><strong>Monthly Avengers Assembly (EmpowerMEnt)</strong><span>Tue, Sep 1 · 9:30 AM ET · Org Ops &amp; Finance</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:#c2185b"></span>
+<div><strong>KSU MSW Internship Support (Noon Placement Meeting)</strong><span>Wed, Sep 2 · 12:00 PM ET · weekly · Internship</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:#c2185b"></span>
+<div><strong>KSU MSW Internship Support (Noon Placement Meeting)</strong><span>Wed, Sep 9 · 12:00 PM ET · weekly · Internship</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:#0e9e8a"></span>
+<div><strong>New York trip</strong><span>Sat, Sep 12 (all day) · Vacation &amp; Travel</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:#c2185b"></span>
+<div><strong>KSU MSW Internship Support (Noon Placement Meeting)</strong><span>Wed, Sep 16 · 12:00 PM ET · weekly · Internship</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:#8b4bd7"></span>
+<div><strong>Anniversary</strong><span>Thu, Sep 17 (all day) · Personal &amp; Home</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:#3a4a5a"></span>
+<div><strong>Drill Exam / PFA Make-up</strong><span>Sat, Sep 19 (all day) · Navy Reserve</span></div>
+</div>
+<div class="cal-row">
+<span class="event-dot" style="background:#8b4bd7"></span>
+<div><strong>Stover monthly budget</strong><span>Sat, Sep 19 · 8:00 AM ET · Personal &amp; Home</span></div>
+</div>
+      </div>
+    </section>
+
+    <section class="view" id="view-notes" role="tabpanel" hidden>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">All Notes, Combined</h2>
+          <p class="section-subtitle">Every source meeting/note, matched by title where they overlap.</p>
+        </div>
+        <label class="search-wrap"><input class="field" id="notesSearch" type="search" placeholder="Search notes…"></label>
+      </div>
+      <div class="notes-legend">
+        <span>✅ Pocket &amp; Fireflies — live</span>
+        <span>⏳ Zoom — token expired, needs reconnect</span>
+        <span>⏳ Notion — connected, nothing relevant found yet</span>
+        <span>✕ Google Keep — not connected</span>
+      </div>
+      <div class="notes-grid" id="notesGrid">
+<div class="note-card" style="--event:var(--navy)" data-search="re: re: orientation recap locked in 2026 | the woods (follow up &amp; teams) ">
+<div class="note-card-head"><span class="event-dot" style="background:var(--navy)"></span><strong>RE: RE: Orientation Recap Locked In 2026 | The Woods (Follow Up &amp; Teams)</strong><span class="status">Pocket</span></div>
+
+<ul><li>Reggie and Brooklyn to prep questions</li><li>Purchase retreat ingredients and supplies</li></ul>
+</div>
+<div class="note-card" style="--event:var(--navy)" data-search="payroll schedule and retreat prep ">
+<div class="note-card-head"><span class="event-dot" style="background:var(--navy)"></span><strong>Payroll schedule and retreat prep</strong><span class="status">Pocket</span></div>
+
+<ul><li>Connect Darnell with NA Foundation</li><li>Check Empower University for prep/debrief quiz</li><li>Follow up with Brooklyn and Reggie</li><li>Confirm SUV/Van rental size</li><li>Purchase retreat food and supplies</li><li>Check cabin hygiene supplies on arrival</li></ul>
+</div>
+<div class="note-card" style="--event:var(--navy)" data-search="leadership retreat planning walkthrough ">
+<div class="note-card-head"><span class="event-dot" style="background:var(--navy)"></span><strong>Leadership retreat planning walkthrough</strong><span class="status">Pocket</span></div>
+
+<ul><li>Finalize retreat logistics</li><li>LaDrina: Discuss welcoming committee with Ruth and Arman</li></ul>
+</div>
+<div class="note-card" style="--event:var(--navy)" data-search="updating foster youth resource hub form ">
+<div class="note-card-head"><span class="event-dot" style="background:var(--navy)"></span><strong>Updating foster youth resource hub form</strong><span class="status">Pocket</span></div>
+
+<ul><li>Finish leadership retreat prep and Empower Hour materials</li><li>Email resource hub documentation to colleague</li></ul>
+</div>
+<div class="note-card" style="--event:#8b4bd7" data-search="follow-up dog neck and x-ray plan ">
+<div class="note-card-head"><span class="event-dot" style="background:#8b4bd7"></span><strong>Follow-up dog neck and X-ray plan</strong><span class="status">Pocket</span></div>
+
+<ul><li>Update vet on Samson&#x27;s progress</li></ul>
+</div>
+<div class="note-card" style="--event:#8b4bd7" data-search="dog meds and joint treatment plan ">
+<div class="note-card-head"><span class="event-dot" style="background:#8b4bd7"></span><strong>Dog meds and joint treatment plan</strong><span class="status">Pocket</span></div>
+
+<ul><li>Update vet on Samson&#x27;s progress (mobility)</li></ul>
+</div>
+<div class="note-card" style="--event:#8b4bd7" data-search="samson joint pain and treatment plan ">
+<div class="note-card-head"><span class="event-dot" style="background:#8b4bd7"></span><strong>Samson Joint Pain and Treatment Plan</strong><span class="status">Pocket</span></div>
+
+<ul><li>Administer Samson&#x27;s medication loading dose</li></ul>
+</div>
+<div class="note-card" style="--event:var(--green)" data-search="georgia empowerment introduction discussion ">
+<div class="note-card-head"><span class="event-dot" style="background:var(--green)"></span><strong>Georgia Empowerment introduction discussion</strong><span class="status">Pocket</span></div>
+
+<ul><li>Email Devin Rudy for Child Tax Credit form</li></ul>
+</div>
+<div class="note-card" style="--event:var(--purple)" data-search="academy day format and scheduling review ">
+<div class="note-card-head"><span class="event-dot" style="background:var(--purple)"></span><strong>Academy Day format and scheduling review</strong><span class="status">Pocket</span></div>
+
+<ul><li>Get partner agency list from Renee</li><li>Remind team about social responsibility day</li></ul>
+</div>
+<div class="note-card" style="--event:#f28b00" data-search="j4c meeting ">
+<div class="note-card-head"><span class="event-dot" style="background:#f28b00"></span><strong>J4C MEETING</strong><span class="status">Pocket</span></div>
+
+<ul><li>Attend joint study committee meeting</li><li>Complete 2026 self-assessment</li><li>Attend pilot county meeting at Lake Lanier</li><li>Review standardization progress</li><li>Draft New Judges Academy curriculum</li></ul>
+</div>
+<div class="note-card" style="--event:#3355dd" data-search="shadow pickup help discussion ">
+<div class="note-card-head"><span class="event-dot" style="background:#3355dd"></span><strong>Shadow pickup help discussion</strong><span class="status">Pocket</span></div>
+
+<ul><li>Check KSU calendar for conflicts</li><li>Review childcare request with Char</li></ul>
+</div>
+<div class="note-card" style="--event:#0b9fc4" data-search="empowerment website and training q&amp;a ">
+<div class="note-card-head"><span class="event-dot" style="background:#0b9fc4"></span><strong>Empowerment Website and Training Q&amp;A</strong><span class="status">Pocket</span></div>
+
+<ul><li>Check Nathaniel&#x27;s IDA registration</li></ul>
+</div>
+<div class="note-card" style="--event:var(--purple)" data-search="ambassadors role and event planning ">
+<div class="note-card-head"><span class="event-dot" style="background:var(--purple)"></span><strong>Ambassadors Role and Event Planning</strong><span class="status">Pocket</span></div>
+
+<ul><li>Research hotel pricing for Albany and Savannah</li><li>Provide food options for regional events</li><li>Request Hilton and GHI budget balances from Finance</li><li>Ask Lindsay for Salesforce applicant list recommendations</li><li>Schedule Ambassador planning meeting for August 20th</li><li>Email Kendall and Victoria about Savannah Bananas outreach</li></ul>
+</div>
+<div class="note-card" style="--event:#0b9fc4" data-search="ga appleseed staff training authentic youth engagement and abd ">
+<div class="note-card-head"><span class="event-dot" style="background:#0b9fc4"></span><strong>GA Appleseed Staff Training Authentic youth EngageMEnt and ABD</strong><span class="status">Pocket</span></div>
+
+<ul><li>Send training slides to Georgia Appleseed</li><li>Schedule follow-up for training quiz</li></ul>
+</div>
+<div class="note-card" style="--event:#0e9e8a" data-search="fun and learn training planning ">
+<div class="note-card-head"><span class="event-dot" style="background:#0e9e8a"></span><strong>Fun and Learn training planning</strong><span class="status">Pocket</span></div>
+
+<ul><li>Email Ms. Taylor regarding Region 10 scheduling</li><li>Check with Kathleen about August 20th training</li><li>Conduct training data assessment with Devin and team</li><li>Contact Anay about Darnell assistance</li><li>Send empowerment training assessment template to Devin</li></ul>
+</div>
+<div class="note-card" style="--event:var(--purple)" data-search="region 10 fun and learn planning ">
+<div class="note-card-head"><span class="event-dot" style="background:var(--purple)"></span><strong>Region 10 Fun and Learn Planning</strong><span class="status">Pocket</span></div>
+
+<ul><li>Email Ms. Taylor meeting summary and links</li><li>Identify youth leaders for Region 10 agenda</li><li>Host Region 10 prep session</li></ul>
+</div>
+<div class="note-card" style="--event:#7a2e2e" data-search="d&amp;d session: circle of the owl ">
+<div class="note-card-head"><span class="event-dot" style="background:#7a2e2e"></span><strong>D&amp;D Session: Circle of the Owl</strong><span class="status">Pocket</span></div>
+
+<ul><li>Level up D&amp;D character to 16</li></ul>
+</div>
+<div class="note-card" style="--event:var(--cyan)" data-search="fun and learn plan debrief ">
+<div class="note-card-head"><span class="event-dot" style="background:var(--cyan)"></span><strong>Fun and Learn plan debrief</strong><span class="status">Pocket</span></div>
+
+<ul><li>Send meeting notes</li><li>Finalize Fun and Learn agenda</li><li>Update Jeopardy game content</li><li>Post retreat photos to Facebook</li><li>Register Mason for Sept 12 training</li></ul>
+</div>
+<div class="note-card" style="--event:var(--green)" data-search="governance committee orientation check-in ">
+<div class="note-card-head"><span class="event-dot" style="background:var(--green)"></span><strong>Governance Committee Orientation Check-In</strong><span class="status">Pocket</span></div>
+
+<ul><li>Send meeting poll to committee</li><li>Provide Zara with board Zoom access</li></ul>
+</div>
+<div class="note-card" style="--event:#0e9e8a" data-search="hawaii trip excursion coordination meeting ">
+<div class="note-card-head"><span class="event-dot" style="background:#0e9e8a"></span><strong>Hawaii Trip Excursion Coordination Meeting</strong><span class="status">Fireflies</span></div>
+
+<ul><li>Schedule 2-3 group meeting dates to finalize Hawaii trip</li><li>Complete Hawaii excursion sign-ups and payments (Zelle/Cash App)</li></ul>
+</div>
+<div class="note-card" style="--event:#7a2e2e" data-search="campaign progress and tactical developments ">
+<div class="note-card-head"><span class="event-dot" style="background:#7a2e2e"></span><strong>Campaign Progress and Tactical Developments</strong><span class="status">Fireflies</span></div>
+
+<ul><li>Prep for Underdark arc: drow encampment follow-up</li></ul>
+</div>
+<div class="note-card" style="--event:#c2185b" data-search="ksu msw internship support(noon placement meeting) ">
+<div class="note-card-head"><span class="event-dot" style="background:#c2185b"></span><strong>KSU MSW Internship Support(Noon Placement Meeting)</strong><span class="status">Pocket</span></div>
+
+<ul><li>Attend KSU MSW Internship Support meeting</li></ul>
+</div>
+<div class="note-card" style="--event:#3a4a5a" data-search="navy duties ">
+<div class="note-card-head"><span class="event-dot" style="background:#3a4a5a"></span><strong>Navy Duties</strong><span class="status">Pocket</span></div>
+
+<ul><li>Navy Duties — NRC Atlanta</li></ul>
+</div>
+<div class="note-card" style="--event:#3a4a5a" data-search="drill ">
+<div class="note-card-head"><span class="event-dot" style="background:#3a4a5a"></span><strong>Drill</strong><span class="status">Pocket</span></div>
+
+<ul><li>Drill weekend</li></ul>
+</div>
+<div class="note-card" style="--event:#0e9e8a" data-search="new york- v ">
+<div class="note-card-head"><span class="event-dot" style="background:#0e9e8a"></span><strong>New york- v</strong><span class="status">Pocket</span></div>
+
+<ul><li>New York trip</li></ul>
+</div>
+<div class="note-card" style="--event:#3a4a5a" data-search="drillexam/pfa make up ">
+<div class="note-card-head"><span class="event-dot" style="background:#3a4a5a"></span><strong>DrillExam/PFA Make up</strong><span class="status">Pocket</span></div>
+
+<ul><li>Drill Exam / PFA make-up</li></ul>
+</div>
+<div class="note-card" style="--event:var(--green)" data-search="youth events planning and updates meeting welcomed intern madison; planned sept 26 fun and learns for regions 10/12, venue talks, mandatory presenter training, grant data roles.">
+<div class="note-card-head"><span class="event-dot" style="background:var(--green)"></span><strong>Youth Events Planning and Updates Meeting</strong><span class="status">Fireflies</span></div>
+<p class="note-summary">Welcomed intern Madison; planned Sept 26 Fun and Learns for Regions 10/12, venue talks, mandatory presenter training, grant data roles.</p>
+<ul></ul>
+</div>
+<div class="note-card" style="--event:var(--green)" data-search="prep session and event logistics meeting finalized aug 5-6 training prep: mandatory attendance, virtual branding, strategic-sharing safety practices, role assignments.">
+<div class="note-card-head"><span class="event-dot" style="background:var(--green)"></span><strong>Prep Session and Event Logistics Meeting</strong><span class="status">Fireflies</span></div>
+<p class="note-summary">Finalized Aug 5-6 training prep: mandatory attendance, virtual branding, strategic-sharing safety practices, role assignments.</p>
+<ul></ul>
+</div>
+<div class="note-card" style="--event:var(--green)" data-search="leadership retreat planning and guidelines confirmed 12-15 person retreat roster, travel/sleeping logistics, welcoming committee, wix migration off constant contact.">
+<div class="note-card-head"><span class="event-dot" style="background:var(--green)"></span><strong>Leadership Retreat Planning and Guidelines</strong><span class="status">Fireflies</span></div>
+<p class="note-summary">Confirmed 12-15 person retreat roster, travel/sleeping logistics, Welcoming Committee, Wix migration off Constant Contact.</p>
+<ul></ul>
+</div>
+<div class="note-card" style="--event:var(--green)" data-search="event planning and engagement strategies monday youth event: icebreakers, jeopardy game, empower university training, venue/tech/food logistics for 15-18 attendees.">
+<div class="note-card-head"><span class="event-dot" style="background:var(--green)"></span><strong>Event Planning and Engagement Strategies</strong><span class="status">Fireflies</span></div>
+<p class="note-summary">Monday youth event: icebreakers, Jeopardy game, Empower University training, venue/tech/food logistics for 15-18 attendees.</p>
+<ul></ul>
+</div>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
@@ -981,6 +1334,16 @@ As discussed, we have penciled in September 26th for the one-day Fun and Lear…
       document.getElementById('view-' + tab.dataset.view).hidden = false;
     });
   });
+
+  var notesSearch = document.getElementById('notesSearch');
+  if (notesSearch) {
+    notesSearch.addEventListener('input', function() {
+      var q = notesSearch.value.trim().toLowerCase();
+      document.querySelectorAll('.note-card').forEach(function(card) {
+        card.dataset.localHidden = (!q || card.dataset.search.indexOf(q) !== -1) ? 'false' : 'true';
+      });
+    });
+  }
 
   document.getElementById('refreshBtn').addEventListener('click', function() {
     alert('This button flags the refresh for Claude to pick up. Automatic hourly refreshes already keep this page current — ask Claude in your session for an instant one if you need it sooner.');
