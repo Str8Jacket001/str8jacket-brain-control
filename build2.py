@@ -49,7 +49,7 @@ h1 {{ max-width: 760px; margin: 5px 0 8px; font-family: Impact, Haettenschweiler
 .stat:nth-child(2) strong {{ color: var(--yellow); }}
 .stat:nth-child(3) strong {{ color: var(--coral); }}
 .stat span {{ display: block; margin-top: 5px; color: #dce8ff; font-size: 11px; }}
-.view-nav {{ display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); background: white; border-bottom: 1px solid var(--line); }}
+.view-nav {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); background: white; border-bottom: 1px solid var(--line); }}
 .view-tab {{ position: relative; display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 62px; padding: 14px; color: var(--navy); background: white; border: 0; font-weight: 900; font-size: 15px; text-transform: uppercase; }}
 .view-tab::after {{ content: ""; position: absolute; right: 15%; bottom: -1px; left: 15%; height: 5px; border-radius: 4px 4px 0 0; background: transparent; }}
 .view-tab[aria-selected="true"] {{ background: #f9fbfe; }}
@@ -210,6 +210,15 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
 .pomo-stat strong {{ display: block; color: var(--yellow); font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: 22px; }}
 .pomo-stat span {{ display: block; margin-top: 2px; color: #dce8ff; font-size: 9px; text-transform: uppercase; }}
 .focus-empty {{ padding: 14px; color: var(--muted); background: var(--soft); border-radius: 7px; text-align: center; font-size: 11px; }}
+.ai-panel {{ max-width: 780px; }}
+.ai-controls {{ display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 14px; padding: 12px 14px; background: var(--soft); border: 1px solid var(--line); border-radius: 8px; }}
+.ai-check {{ display: flex; align-items: center; gap: 7px; color: var(--ink); font-size: 12px; font-weight: 700; cursor: pointer; }}
+.ai-check input {{ width: 16px; height: 16px; accent-color: var(--cyan); cursor: pointer; }}
+.ai-question-label {{ display: block; margin: 12px 0 6px; color: var(--navy); font-size: 11px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; }}
+#aiQuestion, #aiPromptOut {{ width: 100%; line-height: 1.4; font-size: 13px; resize: vertical; }}
+#aiPromptOut {{ background: #f7f9fc; color: var(--muted); font-family: ui-monospace, "JetBrains Mono", monospace; font-size: 12px; }}
+.ai-actions {{ display: flex; flex-wrap: wrap; gap: 9px; margin-top: 10px; }}
+.ai-note {{ margin-top: 12px; color: var(--muted); font-size: 11px; line-height: 1.5; }}
 .footer {{ display: flex; justify-content: space-between; gap: 20px; padding: 15px clamp(20px,3vw,48px); color: #dce8ff; background: var(--navy); font-size: 11px; flex-wrap: wrap; }}
 .footer strong {{ color: var(--yellow); }}
 .banner {{ display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 18px; padding: 11px 15px; background: #eefbfe; border: 1px solid #b8eaf3; border-radius: 8px; color: var(--navy); font-size: 12px; flex-wrap: wrap; }}
@@ -268,6 +277,7 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
     <button class="view-tab" id="tab-materials" data-view="materials" role="tab" aria-selected="false">Draft Materials <span class="nav-count">{frag['total_materials']}</span></button>
     <button class="view-tab" id="tab-calendar" data-view="calendar" role="tab" aria-selected="false">Calendar</button>
     <button class="view-tab" id="tab-notes" data-view="notes" role="tab" aria-selected="false">All Notes</button>
+    <button class="view-tab" id="tab-ai" data-view="ai" role="tab" aria-selected="false">Ask AI</button>
   </nav>
 
   <main class="main">
@@ -282,7 +292,7 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
           <h2 class="section-title">What Needs To Happen</h2>
           <p class="section-subtitle">Check it off as you go. Everything here came straight from a real note.</p>
         </div>
-        <span class="as-of">Built from Pocket action items • Fireflies pending • Zoom needs reconnect</span>
+        <span class="as-of">Built from {frag['total_mine']+frag['total_others']} Pocket action items across every status • Fireflies cross-checked • Zoom needs reconnect</span>
       </div>
 
       <div class="lane-rail-wrap"><div class="lane-rail" id="laneRail">
@@ -409,10 +419,41 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
 {frag['notes']}
       </div>
     </section>
+
+    <section class="view" id="view-ai" role="tabpanel" hidden>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Ask AI About This</h2>
+          <p class="section-subtitle">This page can't call an AI provider on its own (no API keys live in a published page — that would leak them to anyone who opens it). Instead, build a prompt from your real data below, then send it to whichever assistant you want.</p>
+        </div>
+      </div>
+      <div class="ai-panel">
+        <div class="ai-controls">
+          <label class="ai-check"><input type="checkbox" id="aiIncludeTasks" checked> Open tasks (My Tasks tab, unchecked only)</label>
+          <label class="ai-check"><input type="checkbox" id="aiIncludeDeps" checked> Waiting on Others</label>
+          <label class="ai-check"><input type="checkbox" id="aiIncludeCal" checked> Upcoming calendar</label>
+          <label class="ai-check"><input type="checkbox" id="aiIncludeNotes"> All Notes summaries</label>
+        </div>
+        <label class="ai-question-label" for="aiQuestion">Your question</label>
+        <textarea class="field" id="aiQuestion" rows="3" placeholder="e.g. What's most at risk of slipping this week? Draft a status update on MARTA Day and the Hilton grant."></textarea>
+        <div class="ai-actions">
+          <button class="action-btn" id="aiBuildBtn" type="button">Build prompt</button>
+        </div>
+        <label class="ai-question-label">Prompt (copy or open in a provider)</label>
+        <textarea class="field" id="aiPromptOut" rows="12" readonly placeholder="Click &quot;Build prompt&quot; to assemble your question plus the checked context above."></textarea>
+        <div class="ai-actions">
+          <button class="action-btn secondary" id="aiCopyBtn" type="button">Copy prompt</button>
+          <a class="action-btn" id="aiOpenClaude" href="https://claude.ai/new" target="_blank" rel="noopener">Open in Claude</a>
+          <a class="action-btn secondary" id="aiOpenChatGPT" href="https://chatgpt.com/" target="_blank" rel="noopener">Open ChatGPT</a>
+          <a class="action-btn secondary" id="aiOpenGemini" href="https://gemini.google.com/app" target="_blank" rel="noopener">Open Gemini</a>
+        </div>
+        <p class="ai-note">Claude's link tries to prefill your prompt (best effort, not guaranteed by Claude.ai). ChatGPT and Gemini don't support prefilling from a link, so copy the prompt first and paste it once the tab opens.</p>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
-    <span>Sources: <strong>Pocket</strong> (49 action items) · <strong>Fireflies</strong> (22 transcripts scanned) · <strong>Zoom</strong> needs reconnect in claude.ai connector settings</span>
+    <span>Sources: <strong>Pocket</strong> ({frag['total_mine']+frag['total_others']} action items, all statuses) · <strong>Fireflies</strong> (cross-checked for hallmark events &amp; grants) · <strong>Zoom</strong> needs reconnect in claude.ai connector settings</span>
     <span>Str8Jacket Brain Control</span>
   </footer>
 </div>
@@ -647,6 +688,45 @@ tr:has(.received-check:not(:checked)) .status::before {{ content: "Waiting"; }}
     var card = btn.closest('.material-card');
     var text = card.querySelector('.material-headline').innerText + '\\n' + card.querySelector('.material-subhead').innerText + '\\n\\n' + card.querySelector('.material-body').innerText;
     copyText(text, btn);
+  }});
+
+  // ---- Ask AI: assemble a prompt from real page data; no API keys live in this page ----
+  document.getElementById('aiBuildBtn').addEventListener('click', function() {{
+    var parts = [];
+    var q = document.getElementById('aiQuestion').value.trim();
+    parts.push(q || '(No question typed — just summarize the context below.)');
+    if (document.getElementById('aiIncludeTasks').checked) {{
+      var openTasks = Array.prototype.slice.call(document.querySelectorAll('#taskBody .task-row')).filter(function(r) {{ return !r.querySelector('.check').checked; }});
+      parts.push('\\nOPEN TASKS (' + openTasks.length + '):');
+      openTasks.slice(0, 60).forEach(function(r) {{
+        var name = r.querySelector('.task-name').textContent.trim();
+        var due = r.querySelector('.date').textContent.trim();
+        var lane = r.dataset.lane;
+        parts.push('- [' + lane + '] ' + name + ' (due ' + due + ', priority ' + r.dataset.priority + ')');
+      }});
+    }}
+    if (document.getElementById('aiIncludeDeps').checked) {{
+      var deps = Array.prototype.slice.call(document.querySelectorAll('#dependencyBody tr')).filter(function(r) {{ var cb = r.querySelector('.received-check'); return !cb || !cb.checked; }});
+      parts.push('\\nWAITING ON OTHERS (' + deps.length + '):');
+      deps.slice(0, 40).forEach(function(r) {{
+        var cells = r.querySelectorAll('td');
+        parts.push('- ' + cells[0].textContent.trim() + ': ' + cells[2].textContent.trim());
+      }});
+    }}
+    if (document.getElementById('aiIncludeCal').checked) {{
+      parts.push('\\nUPCOMING CALENDAR:');
+      document.querySelectorAll('.cal-row').forEach(function(r) {{ parts.push('- ' + r.textContent.replace(/\\s+/g, ' ').trim()); }});
+    }}
+    if (document.getElementById('aiIncludeNotes').checked) {{
+      parts.push('\\nNOTES SUMMARIES:');
+      document.querySelectorAll('.note-card').forEach(function(c) {{ parts.push('- ' + c.textContent.replace(/\\s+/g, ' ').trim()); }});
+    }}
+    var prompt = parts.join('\\n');
+    document.getElementById('aiPromptOut').value = prompt;
+    document.getElementById('aiOpenClaude').href = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
+  }});
+  document.getElementById('aiCopyBtn').addEventListener('click', function() {{
+    copyText(document.getElementById('aiPromptOut').value, this);
   }});
 
   // ---- Pomodoro focus timer (per-browser via localStorage; not part of the shared doc) ----

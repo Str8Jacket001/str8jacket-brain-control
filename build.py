@@ -9,10 +9,13 @@ TODAY = datetime(2026, 8, 18, tzinfo=timezone.utc)
 LANES = {
     "Leadership Retreat": dict(color="var(--navy)"),
     "Fun & Learn Events": dict(color="var(--cyan)"),
+    "MARTA Day": dict(color="#f28b00"),
+    "Credit Check Game Day": dict(color="#ff5f51"),
+    "Grants & Funding": dict(color="#13a76b"),
     "Ambassadors & Regions": dict(color="var(--purple)"),
-    "Policy & Courts (J4C)": dict(color="#f28b00"),
-    "Youth Support": dict(color="var(--coral)"),
-    "Org Ops & Finance": dict(color="var(--green)"),
+    "Policy & Courts (J4C)": dict(color="#c9752f"),
+    "Youth Support": dict(color="#d1435a"),
+    "Org Ops & Finance": dict(color="#2f8f6f"),
     "Training & Curriculum": dict(color="#0b9fc4"),
     "Personal & Home": dict(color="#8b4bd7"),
     "D&D Campaign": dict(color="#7a2e2e"),
@@ -25,7 +28,13 @@ LANES = {
 def lane_for(it):
     t = (it.get("recordingTitle") or "") + " " + it.get("label","") + " " + it.get("context","")
     tl = t.lower()
-    if "d&d" in tl or "dungeon" in tl or "underdark" in tl or "campaign" in tl and "avengers" not in tl:
+    if "marta" in tl or "martyr day" in tl or "marty day" in tl:
+        return "MARTA Day"
+    if "credit check" in tl:
+        return "Credit Check Game Day"
+    if ("grant" in tl and "governance" not in tl) or "sra" in tl or "sie grant" in tl or "title iv-e" in tl or "hilton" in tl or " ghi " in (" "+tl+" "):
+        return "Grants & Funding"
+    if "d&d" in tl or "dungeon" in tl or "underdark" in tl or ("campaign" in tl and "avengers" not in tl and "grant" not in tl):
         return "D&D Campaign"
     if "hawaii" in tl or "excursion" in tl or "new york" in tl or "vacation" in tl:
         return "Vacation & Travel"
@@ -37,9 +46,9 @@ def lane_for(it):
         return "Navy Reserve"
     if "retreat" in tl or "orientation recap" in tl:
         return "Leadership Retreat"
-    if "samson" in tl or " dog " in (" "+tl+" ") or "shadow pickup" in tl or "childcare" in tl or "anniversary" in tl or "budget cal" in tl:
+    if "samson" in tl or " dog " in (" "+tl+" ") or "shadow pickup" in tl or "childcare" in tl or "anniversary" in tl or "budget cal" in tl or "allstate" in tl or "fence debris" in tl or "fitbit" in tl or "free agents" in tl:
         return "Personal & Home"
-    if "j4c" in tl or ("committee" in tl and "governance" not in tl):
+    if "j4c" in tl or ("committee" in tl and "governance" not in tl and "housing coalition" not in tl):
         return "Policy & Courts (J4C)"
     if "ambassador" in tl or "region 10" in tl or "region 12" in tl or "academy day" in tl:
         return "Ambassadors & Regions"
@@ -47,7 +56,7 @@ def lane_for(it):
         return "Training & Curriculum"
     if "resource hub" in tl or "darnell" in tl or "housing" in tl or "na foundation" in tl:
         return "Youth Support"
-    if "governance" in tl or "budget" in tl or "finance" in tl or "hilton" in tl or "ghi" in tl or "avengers" in tl:
+    if "governance" in tl or "budget" in tl or "finance" in tl or "avengers" in tl or "salesforce" in tl or "amazon requisition" in tl:
         return "Org Ops & Finance"
     if "fun and learn" in tl:
         return "Fun & Learn Events"
@@ -65,6 +74,13 @@ DEP_PERSON = {
     "e713532e-a451-48b2-906e-f8a3530c611d": "Pilot County Partners",
     "88e30699-83f1-44c3-ba33-6af024783e58": "Data Subcommittee",
     "b601854a-05eb-4267-b64f-591fbc9d5645": None,  # actually Anthony's own calendar item
+    "e28f9c96-2706-4843-a5a1-cd2e8715b609": "Sarabeth",
+    "d42b1e31-f2c2-46fe-9096-851532e8bfd8": "Megan",
+    "2979d959-8503-44c5-8e31-e70e4ddb7675": "Devin",
+    "a9ce69e6-cb23-47c9-8f54-7e70e18d560f": "Leo",
+    "ed39f07b-23ba-4e95-8f06-52eba20ffc9f": "DMPA Team",
+    "a8df3bb2-59a6-4b0c-b905-4038cadbd2fd": "Grants Office (Sophia)",
+    "2cb86f1a-cee9-4ce4-9727-a8ce741c6a83": "Devin",
 }
 SELF_OVERRIDE = {"b601854a-05eb-4267-b64f-591fbc9d5645"}  # "Attend joint study committee" is Anthony's own
 
@@ -154,8 +170,9 @@ def task_row(it, idx):
         type_cell = f'<button class="type-jump" data-jump-tab="emails" data-jump-target="{esc(it["actionItemId"])}" type="button">{at.replace("_"," ").title()} ↗</button>'
     else:
         type_cell = f'<a class="type-jump" href="{esc(gcal_quickadd_url(it))}" target="_blank" rel="noopener">Create Reminder ↗</a>'
+    checked = " checked" if it.get("status") == "COMPLETED" else ""
     return f'''<tr class="task-row" data-task-id="{esc(it['actionItemId'])}" data-lane="{esc(lane)}" data-priority="{it['priority']}" data-top="{1 if it['actionItemId'] in top_ids else 0}" data-due="{due_iso}" data-search="{esc((it['label']+' '+it['context']+' '+it['recordingTitle']).lower())}">
-<td data-label="Done"><input type="checkbox" class="check" aria-label="Mark {esc(it['label'])} done"></td>
+<td data-label="Done"><input type="checkbox" class="check" aria-label="Mark {esc(it['label'])} done"{checked}></td>
 <td data-label="Task"><span class="task-number">{idx:02d}</span><span class="task-name">{esc(it['label'])}</span><div class="task-detail">{detail}</div></td>
 <td data-label="Priority"><span class="priority {it['priority']}">{it['priority'].capitalize()}</span></td>
 <td data-label="Owner">Anthony</td>
@@ -172,13 +189,14 @@ def dep_row(it):
     due_txt = fmt_date(it["dueParsed"], it["dueDate"])
     person = it["depPerson"] or "Team"
     contact = CONTACT_METHOD.get(person, "Follow up")
+    checked = " checked" if it.get("status") == "COMPLETED" else ""
     return f'''<tr data-task-id="{esc(it['actionItemId'])}" data-lane="{esc(lane)}" data-search="{esc((it['label']+' '+person+' '+it['context']).lower())}">
 <td data-label="Person"><span class="person-mark">{esc(person[:2].upper())}</span>{esc(person)}</td>
 <td data-label="Contact">{esc(contact)}</td>
 <td data-label="Deliverable">{esc(it['label'])}<div class="task-detail">{esc(it['context'])}</div></td>
 <td data-label="Due"><span class="date">{due_txt}</span></td>
 <td data-label="Blocks"><span class="event-dot" style="background:{LANES[lane]['color']}"></span>{esc(lane)}</td>
-<td data-label="Status"><label><input type="checkbox" class="received-check" aria-label="Mark received from {esc(person)}"><span class="status"></span></label></td>
+<td data-label="Status"><label><input type="checkbox" class="received-check" aria-label="Mark received from {esc(person)}"{checked}><span class="status"></span></label></td>
 </tr>'''
 
 dep_rows_html = "\n".join(dep_row(it) for it in others)
@@ -191,12 +209,13 @@ def email_card(it, i):
     kind = "Email" if it["actionType"] == "draft_email" else "Message"
     lane = it["lane"]
     color = LANES[lane]["color"]
+    checked = " checked" if it.get("status") == "COMPLETED" else ""
     return f'''<article class="email-card" id="email-{esc(it['actionItemId'])}" data-task-id="{esc(it['actionItemId'])}" style="--event:{color}" data-search="{esc((subj+' '+body+' '+to).lower())}">
 <div class="email-card-head">
   <span class="event-dot" style="background:{color}"></span>
   <strong>{esc(it['label'])}</strong>
   <span class="kind-badge">{kind}</span>
-  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark {subj} as sent"> Sent</label>
+  <label class="sent-toggle"><input type="checkbox" class="sent-check" aria-label="Mark {subj} as sent"{checked}> Sent</label>
 </div>
 <div class="email-field"><label>To</label><input class="field email-to" value="{to}" placeholder="Add recipient email"></div>
 <div class="email-field"><label>Subject</label><input class="field email-subject" value="{subj}"></div>
